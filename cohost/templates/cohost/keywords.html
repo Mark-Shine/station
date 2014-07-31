@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{%block mod_content%}
+<h1 class="page-header">关键字</h1>
+<table class="table ">
+    <thead>
+        <tr>
+            <td>关键字</td>
+            <td>类别</td>
+        </tr>
+
+    </thead>
+    <tbody>
+    {%for d in objects %}
+        <tr>
+            <td>{{d.kword}}</td>
+            <td>{{d.cate.name}}</td>
+        </tr>
+    
+    {%endfor%}
+        
+    </tbody>
+
+</table>
+
+{{pagination}}
+
+{%endblock%}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{%block mod_content%}
+<h1 class="page-header">数据</h1>
+<table class="table ">
+    <thead>
+        <tr>
+            <td>ip</td>
+            <td>url</td>
+            <td>审核状态</td>
+            <td>标题</td>
+            <td>类别</td>
+            <td>接入商</td>
+        </tr>
+
+    </thead>
+    <tbody>
+    {%for d in objects %}
+        <tr>
+            <td>{{d.ip}}</td>
+            <td>{{d.uri}}</td>
+            <td>{{d.state}}</td>
+            <td>{{d.title}}</td>
+            <td>{{d.cate.name}}</td>
+            <td>{{d.IPS}}</td>
+        </tr>
+    
+    {%endfor%}
+        
+    </tbody>
+
+</table>
+
+{{pagination}}
+
+{%endblock%}
