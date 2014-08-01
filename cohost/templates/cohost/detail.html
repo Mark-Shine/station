@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{%block mod_content%}
+<h1 class="page-header">数据</h1>
+<table class="table ">
+    <thead>
+        <tr>
+            <td>ip</td>
+            <td>host</td>
+            <td>审核状态</td>
+            <td>标题</td>
+            <td>类别</td>
+            <td>接入商</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{object.ip}}</td>
+            <td>{{object.uri}}</td>
+            <td>{{object.get_state_display}}</td>
+            <td>{{object.title}}</td>
+            <td>{{object.cate}}</td>
+            <td>{{object.IPS}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<section class="well">
+<h3>相关编辑</h3>
+{% crispy form form.helper %}
+</section>
+
+
+{%endblock%}

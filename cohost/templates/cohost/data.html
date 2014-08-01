@@ -6,11 +6,9 @@
     <thead>
         <tr>
             <td>ip</td>
-            <td>url</td>
+            <td>host</td>
             <td>审核状态</td>
-            <td>标题</td>
-            <td>类别</td>
-            <td>接入商</td>
+            <td>操作</td>
         </tr>
 
     </thead>
@@ -20,9 +18,7 @@
             <td>{{d.ip}}</td>
             <td>{{d.uri}}</td>
             <td>{{d.state}}</td>
-            <td>{{d.title}}</td>
-            <td>{{d.cate.name}}</td>
-            <td>{{d.IPS}}</td>
+            <td><a href="{% url 'detail' pk=d.id %}">详情</a></td>
         </tr>
     
     {%endfor%}

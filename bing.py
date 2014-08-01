@@ -104,6 +104,11 @@ def BuildHostRange(strHost):
 
     return [realStartIP,realEndIP]
 
+
+def getIp(domain):
+    myaddr = socket.getaddrinfo(domain,'http')[0][4][0]
+    return myaddr
+
 def ViewResult(Keyword,curIP,nType,bSave):
     conn = MySQLdb.connect(**ConfigFile)
     #conn.text_factory=str
@@ -128,6 +133,9 @@ def ViewResult(Keyword,curIP,nType,bSave):
                         print '%s -> %s' % (lv['Url'],lv['Title'])
                     if bSave:
                         host = urllib3.get_host(lv['Url'])[1]
+                        newip = getIp(host)
+                        if newip != curIP:
+                            print "error host"
                         szSQL="Insert into Data(IP,URI,Title,Descript) values ('%s','%s','%s','%s');" % (curIP,host,lv['Title'],lv['Description'])
                         cur = conn.cursor()
                         cur.execute(szSQL)

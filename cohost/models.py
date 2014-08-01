@@ -20,6 +20,8 @@ class Keywords(models.Model):
 class Cate(models.Model):
     name = models.CharField(max_length=64, null=True, blank=True)
 
+    def __unicode__(self, ):
+        return self.name
 
 # class Iptable(models.Model):
 #     """IP段"""

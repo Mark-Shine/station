@@ -1,4 +1,5 @@
 #encoding=utf-8
+import urllib3
 from cohost.models import Data, Allkey, Cate, Keywords
 
 
@@ -26,4 +27,13 @@ def f():
             if k.kword in d.descript:
                 d.cate = k.cate
                 d.save()
+
+def url2host():
+    datas = Data.objects.all()
+    for d in datas:
+        host = urllib3.get_host(d.uri)[1]
+        print host
+        d.uri = host
+        d.save()
+
 

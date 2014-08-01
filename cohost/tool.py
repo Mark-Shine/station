@@ -69,3 +69,4 @@ lasttime = '61.164.125.2'
 for ip in result:
     os.system('python bing.py -uri %s -save' %ip)
 
+

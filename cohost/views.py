@@ -1,6 +1,7 @@
 import math
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
@@ -8,6 +9,8 @@ from django.template.context import (Context, RequestContext)
 from django.template.loader import Template
 from django.core.paginator import Paginator
 from django.template.response import TemplateResponse
+from django.core.urlresolvers import reverse
+
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -15,6 +18,9 @@ from crispy_forms.layout import Submit
 from cohost.models import Data
 from cohost.models import Keywords
 from cohost.models import Cate
+from cohost.forms import DataStateForm
+
+from cohost.models import STATE_CHOICES
 
 PAGE_SIZE = 10
 
@@ -72,8 +78,24 @@ def show_data(request):
     return TemplateResponse(request, "cohost/data.html", context)
 
 
-def change_host_state(request):
-    pass
+def show_data_detail(request, pk):
+    template = "cohost/detail.html"
+    context = {}
+    _object = get_object_or_404(Data, id=pk)
+
+    context['object'] = _object
+    form = DataStateForm()
+    form.helper.form_action = reverse("change_detail", args=[pk])
+    context['form'] = form
+    return render(request, template, context)
+
+
+def change_detail(request, pk):
+    form = DataStateForm(request.POST)
+    if form.is_valid():
+        cleaned_data = form.cleaned_data
+        Data.objects.filter(id=pk).update(**cleaned_data)
+    return HttpResponseRedirect(reverse("detail", args=[pk]))
 
 
 # @login_required()
@@ -82,7 +104,7 @@ def change_host_state(request):
 #     redirect_url = request.GET.get('next')
 
 #     if redirect_url is not None:
-#         example_form.helper.form_action = reverse('submit_survey') + '?next=' + redirectUrl
+#         example_form.helper.form_action = reverse('submit_survey')
 
 #     return render_to_response(template_name, {'example_form': example_form}, context_instance=RequestContext(request))
 
