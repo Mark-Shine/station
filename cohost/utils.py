@@ -19,7 +19,7 @@ def urldecode_to_utf8(dict_data):
 
 def f():
     """根据关键字 判断站点类型"""
-    datas = Data.objects.all()
+    datas = Data.objects.filter(cate=None)
     kwords = Keywords.objects.all()
     for d in datas:
         for k in kwords:

@@ -9,6 +9,9 @@ from django.template.loader import Template
 from django.core.paginator import Paginator
 from django.template.response import TemplateResponse
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
 from cohost.models import Data
 from cohost.models import Keywords
 from cohost.models import Cate
@@ -69,6 +72,19 @@ def show_data(request):
     return TemplateResponse(request, "cohost/data.html", context)
 
 
+def change_host_state(request):
+    pass
+
+
+# @login_required()
+# def inbox(request, template_name):
+#     example_form = ExampleForm()
+#     redirect_url = request.GET.get('next')
+
+#     if redirect_url is not None:
+#         example_form.helper.form_action = reverse('submit_survey') + '?next=' + redirectUrl
+
+#     return render_to_response(template_name, {'example_form': example_form}, context_instance=RequestContext(request))
 
 
 # def show_kwords(request):

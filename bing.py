@@ -3,13 +3,14 @@
 #Code by Anle
 import sys
 import urllib  
-import urllib2  
+import urllib2
+import urllib3  
 import base64
-import sqlite3
 import socket
 import struct
 import time
 import requests
+import MySQLdb
 from datetime import datetime,timedelta
 try:  
     import json  
@@ -22,7 +23,12 @@ skip=0
 formats='json'
 useCounts = 0
 useID = 0
-ConfigFile='%s/bing.db' % (sys.path[0])
+ConfigFile = {
+    "host": "localhost",
+    "user": "root",
+    "passwd": "",
+    "db": "bing",
+}
 
 def _usage():
     print 'Bing Domain dig Usage:'
@@ -40,28 +46,29 @@ def _usage():
     print '-export <path>\tExport data to file.\n'
 
 def CheckDatabaseExist():
+
     szSQL="SELECT name FROM sqlite_master WHERE type='table' order by name;"
     try:
-        conn=sqlite3.connect(ConfigFile)
+        conn=MySQLdb.connect(**ConfigFile)
         cursor=conn.execute(szSQL)
-    except sqlite3.Error,e:
-        print '[-] ',sqlite3.Error,e
+    except Exception, e:
+        print e
         return 0
     nTable=0
     for row in cursor:
         if row[0]=='AllKey' or row[0]=='Data':
             nTable += 1
     if nTable!=2:
-        conn.execute("Create table AllKey(ID integer PRIMARY KEY autoincrement,bActive INT NOT NULL,KeyName TEXT UNIQUE NOT NULL,VisitMonth INT default 0,UseCount INT default 0);")
+        conn.execute("Create table AllKey(id integer PRIMARY KEY autoincrement,bActive INT NOT NULL,KeyName TEXT UNIQUE NOT NULL,VisitMonth INT default 0,UseCount INT default 0);")
         conn.execute("Create table Data(ID integer PRIMARY KEY autoincrement,IP TEXT NOT NULL,URI TEXT NOT NULL,Title TEXT,Descript TEXT);")
     cursor.close()
     conn.close()
     return nTable==2
 
 def GetAccountKey():
-    conn = sqlite3.connect(ConfigFile)
+    conn = MySQLdb.connect(**ConfigFile)
     cf=conn.cursor()
-    cursor = cf.execute("Select ID,KeyName,UseCount from AllKey where bActive=1")
+    cursor = cf.execute("Select id,KeyName,UseCount from AllKey where bActive=1")
     keys=cf.fetchone()
     if keys==None:
         keys=[0,'',0]
@@ -98,7 +105,7 @@ def BuildHostRange(strHost):
     return [realStartIP,realEndIP]
 
 def ViewResult(Keyword,curIP,nType,bSave):
-    conn = sqlite3.connect(ConfigFile)
+    conn = MySQLdb.connect(**ConfigFile)
     #conn.text_factory=str
     ResData=BingSearch(Keyword)
     JsonData={}
@@ -120,10 +127,10 @@ def ViewResult(Keyword,curIP,nType,bSave):
                     elif nType==2:
                         print '%s -> %s' % (lv['Url'],lv['Title'])
                     if bSave:
-                        szSQL="Insert into Data(IP,URI,Title,Descript) values ('%s','%s','%s','%s');" % (curIP,lv['Url'],lv['Title'],lv['Description'])
-                        print "yes"
-                        print szSQL
-                        conn.execute(szSQL)
+                        host = urllib3.get_host(lv['Url'])[1]
+                        szSQL="Insert into Data(IP,URI,Title,Descript) values ('%s','%s','%s','%s');" % (curIP,host,lv['Title'],lv['Description'])
+                        cur = conn.cursor()
+                        cur.execute(szSQL)
 
                         conn.commit()
                 except Exception, e:
@@ -135,7 +142,7 @@ def ViewResult(Keyword,curIP,nType,bSave):
     conn.close()
 
 def ViewSaveData(nType):
-    conn = sqlite3.connect(ConfigFile)
+    conn = MySQLdb.connect(**ConfigFile)
     conn.text_factory=str
     cf=conn.cursor()
     cf.execute("Select IP From DATA group by IP;")
@@ -170,19 +177,20 @@ def UpdateUseCount():
     try:
         NowMonth=time.gmtime().tm_mon
         OldMonth=1
-        conn = sqlite3.connect(ConfigFile)
+        conn = MySQLdb.connect(**ConfigFile)
         cf=conn.cursor()
-        cursor = cf.execute("Select VisitMonth from AllKey where ID=%d" % useID)
+        cursor = cf.execute("Select VisitMonth from AllKey where id=%d" % useID)
         keys=cf.fetchone()
         if keys!=None:
             OldMonth=keys[0]
         cf.close()
         if NowMonth - OldMonth >= 1:
             useCounts = 1
-        szSQL="Update AllKey set useCount=%d,VisitMonth=%d where ID=%d" % (useCounts,NowMonth,useID)
-        cursor = conn.execute(szSQL)
+        szSQL="Update AllKey set useCount=%d,VisitMonth=%d where id=%d" % (useCounts,NowMonth,useID)
+        cur = conn.cursor()
+        cur.execute(szSQL)
         conn.commit()
-    except sqlite3.Error,e:
+    except Exception, e:
         print '[-] ',e
     conn.close()
     
@@ -239,8 +247,8 @@ if __name__ == '__main__':
         _usage()
         sys.exit(0)
     arg=sys.argv
-    if not CheckDatabaseExist():
-        print '[-] Database is not exist, but would auto create.'
+    # if not CheckDatabaseExist():
+    #     print '[-] Database is not exist, but would auto create.'
     
     nType=0
     strHost=""
@@ -269,9 +277,9 @@ if __name__ == '__main__':
         if arg[x]=='-view':
             bView=True
         if arg[x]=='-key':
-            conn = sqlite3.connect(ConfigFile)
+            conn = MySQLdb.connect(**ConfigFile)
             cf=conn.cursor()
-            cf.execute("SELECT ID,bActive,KeyName,UseCount from AllKey;")
+            cf.execute("SELECT id,bActive,KeyName,UseCount from AllKey;")
             keylist=[]
             keylist=cf.fetchall()
             i=0
@@ -292,14 +300,17 @@ if __name__ == '__main__':
                 print '[-] Please input a key value.\n'
                 sys.exit(0)
             NowMonth=time.gmtime().tm_mon
-            szSQL="Insert into AllKey(bActive,KeyName,VisitMonth,UseCount) values (%d,'%s',%d,%d);" % (0,keystr,NowMonth,1)
-            conn = sqlite3.connect(ConfigFile)
+            szSQL = "INSERT INTO AllKey(bActive,KeyName,VisitMonth,UseCount)  VALUES (%d,'%s',%d,%d)"  % (0,keystr,NowMonth,1)
+            conn = MySQLdb.connect(**ConfigFile)
             try:
-                conn.execute(szSQL)
+                cursor = conn.cursor()
+                cursor.execute(szSQL)
                 conn.commit()
+                cursor.close()
                 conn.close()
                 print '[+] Add a key records successfully.\r\n'
-            except:
+            except Exception, e:
+                print e
                 print '[-] This record has exsits.'
             sys.exit(0)
         if arg[x]=='-set' and argLen>2:
@@ -311,11 +322,12 @@ if __name__ == '__main__':
                 sys.exit()
             try:
                 szSQL="Update AllKey set bActive=0;"
-                conn = sqlite3.connect(ConfigFile)
-                cursor = conn.execute(szSQL)
+                conn = MySQLdb.connect(**ConfigFile)
+                cursor = conn.cursor()
+                cursor.execute(szSQL)
                 conn.commit()
-                szSQL="Update AllKey set bActive=1 where ID=%d" % (ID)
-                cursor = conn.execute(szSQL)
+                szSQL="Update AllKey set bActive=1 where id=%d" % (ID)
+                cursor.execute(szSQL)
                 conn.commit()
                 print '[+] Set success.'
             except:
@@ -329,9 +341,10 @@ if __name__ == '__main__':
                 print '[-] ID value incorrect.'
                 sys.exit()
             try:
-                szSQL = 'Delete from AllKey where ID=%d;' % (ID)
-                conn = sqlite3.connect(ConfigFile)
-                cursor = conn.execute(szSQL)
+                szSQL = 'Delete from AllKey where id=%d;' % (ID)
+                conn = MySQLdb.connect(**ConfigFile)
+                cur = conn.cursor()
+                cur.execute(szSQL)
                 conn.commit()
                 print '[+] Delete success.'
             except:
@@ -353,7 +366,7 @@ if __name__ == '__main__':
         sys.exit()
 
     # if bSave:
-    #     conn = sqlite3.connect(ConfigFile)
+    #     conn = MySQLdb.connect(**ConfigFile)
     #     conn.execute("Delete from Data where ID>0;")
     #     conn.commit()
     #     conn.close()
