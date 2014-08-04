@@ -7,6 +7,7 @@ STATE_CHOICES = (
     ('2', u'涉嫌违规'),
     ('3', u'重点监管'),
     ('4', u'处理'),
+    ('6', u'域名更新'),
     ('5', u'非管辖'),)
 
 # Create your models here.
@@ -54,12 +55,17 @@ class Data(models.Model):
     cate = models.ForeignKey("Cate", null=True, blank=True)
     IPS = models.CharField(max_length=16, null=True, blank=True)
     #备案号
-    reg_number = models.IntegerField(blank=True, default=0, null=True)
+    # reg_number = models.IntegerField(blank=True, default=0, null=True)
     #备案类型
-    reg_type = models.CharField(max_length=16, null=True, blank=True)
+    # reg_type = models.CharField(max_length=16, null=True, blank=True)
     state = models.CharField(max_length=32, blank=True, choices=STATE_CHOICES, default='0')
     contact_name = models.CharField(max_length=32, null=True, blank=True)
     time = models.DateTimeField(blank=True, null=True)
+
+    #备案信息
+    icpno = models.CharField(max_length=32, null=True, blank=True)
+    organizers_type = models.CharField(null=True, blank=True, max_length=64)
+    exadate = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'Data'

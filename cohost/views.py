@@ -84,7 +84,7 @@ def show_data_detail(request, pk):
     _object = get_object_or_404(Data, id=pk)
 
     context['object'] = _object
-    form = DataStateForm()
+    form = DataStateForm(initial={'state': _object.state, "cate": _object.cate})
     form.helper.form_action = reverse("change_detail", args=[pk])
     context['form'] = form
     return render(request, template, context)

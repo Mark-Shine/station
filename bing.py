@@ -12,11 +12,16 @@ import time
 import requests
 import MySQLdb
 from datetime import datetime,timedelta
+
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wenzhou.settings")
+from cohost.models import Data
 try:  
     import json  
 except ImportError:  
     import simplejson as json
-   
+
+
 AccountKey=''  
 top=100  
 skip=0
@@ -109,10 +114,10 @@ def getIp(domain):
     myaddr = socket.getaddrinfo(domain,'http')[0][4][0]
     return myaddr
 
-def ViewResult(Keyword,curIP,nType,bSave):
+def ViewResult(Keyword,curIP,nType,bSave, _AccountKey=None):
     conn = MySQLdb.connect(**ConfigFile)
     #conn.text_factory=str
-    ResData=BingSearch(Keyword)
+    ResData=BingSearch(Keyword, _AccountKey)
     JsonData={}
     try:
         JsonData=json.loads(ResData)
@@ -134,15 +139,29 @@ def ViewResult(Keyword,curIP,nType,bSave):
                     if bSave:
                         host = urllib3.get_host(lv['Url'])[1]
                         newip = getIp(host)
-                        if newip != curIP:
-                            print "error host"
-                        szSQL="Insert into Data(IP,URI,Title,Descript) values ('%s','%s','%s','%s');" % (curIP,host,lv['Title'],lv['Description'])
-                        cur = conn.cursor()
-                        cur.execute(szSQL)
-
-                        conn.commit()
+                        if newip == curIP:
+                            d_query_set = Data.objects.filter(ip=curIP).filter(uri=host)
+                            if d_query_set.exists():
+                                print ("update 2 ip-host : %s->%s" %(newip, host))
+                                #同个ip 如果更新域名则同步更新内容
+                                d_query = d_query_set[0]
+                                d_query.uri = host
+                                d_query.title = lv['Title']
+                                d_query.descript = lv['Description']
+                                d_query.state = '6' #域名更新
+                                d_query.save()
+                            else:
+                                print "save to database %s" % host
+                                szSQL="Insert into Data(IP,URI,Title,Descript) values ('%s','%s','%s','%s');" % (curIP,host,lv['Title'],lv['Description'])
+                                cur = conn.cursor()
+                                cur.execute(szSQL)
+                                conn.commit()
+                        else:
+                            print ("fake curip")
                 except Exception, e:
-                    raise e
+                    print e
+                finally:
+                    pass
     if nType==0:
         for l in list(set(url)):
             print l
@@ -202,7 +221,7 @@ def UpdateUseCount():
         print '[-] ',e
     conn.close()
     
-def BingSearch(query):
+def BingSearch(query, _AccountKey=None):
     global useCounts
     payload={}  
     payload['$top']=top  
@@ -210,8 +229,7 @@ def BingSearch(query):
     payload['$format']=formats  
     payload['Query']="'"+query+"'"
     url='https://api.datamarket.azure.com/Bing/Search/Web?' + urllib.urlencode(payload)       
-    sAuth='Basic '+base64.b64encode(':'+AccountKey)  
-    
+    sAuth='Basic '+base64.b64encode(':'+_AccountKey)  
     headers = { }  
     headers['Authorization']= sAuth  
     try:  
@@ -220,34 +238,10 @@ def BingSearch(query):
         the_page=response.read()
         useCounts += 1
         return the_page 
-    except:
+    except Exception, e:
+        print e
         print '[-] Connect failed.'
-
-
-# def BingSearch(query):
-#     global useCounts
-#     payload={}  
-#     payload['$top']=top  
-#     payload['$skip']=skip  
-#     payload['$format']=formats  
-#     payload['Query']="'"+query+"'"
-#     url='https://api.datamarket.azure.com/Bing/Search/Web?'      
-#     sAuth='Basic '+base64.b64encode(':'+AccountKey)  
-#     headers = {}  
-#     headers['Authorization']= sAuth  
-#     try:  
-#         res = requests.get(url, params=payload, headers=headers)
-#         print res.__dict__
-#         print type(res)
-#         print res.text
-#         print "!!!!!!!!!!!!!!!"
-#         print res.content
-#         the_page = res.content
-#         useCounts += 1
-#         return the_page 
-#     except Exception, e:
-#         print e
-#         print '[-] Connect failed.'    
+  
       
 if __name__ == '__main__':
     argLen = len(sys.argv)
@@ -266,7 +260,7 @@ if __name__ == '__main__':
     
     keyInfo=GetAccountKey()
     useID=keyInfo[0]
-    AccountKey=keyInfo[1]
+    _AccountKey=keyInfo[1]
     useCounts=keyInfo[2]
     
     for x in range(1,argLen):
@@ -394,5 +388,5 @@ if __name__ == '__main__':
         curIP=socket.inet_ntoa(struct.pack('I',socket.htonl(index)))
         SearchKeyWord='IP:' + curIP
         print '[%s]' % (curIP)
-        ViewResult(SearchKeyWord,curIP,nType,bSave)
+        ViewResult(SearchKeyWord,curIP,nType,bSave, _AccountKey)
     UpdateUseCount()

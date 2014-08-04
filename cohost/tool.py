@@ -33,10 +33,11 @@ a = """122.228.192.0 122.228.192.255
 """
 
 result = [
- "122.228.192.0-122.228.192.255",
- '122.228.193.0-122.228.193.255',
- '122.228.194.0-122.228.194.255',
- '122.228.195.0-122.228.195.255',
+ # "122.228.192.0-122.228.192.255",
+ # '122.228.193.0-122.228.193.255',
+ # '122.228.194.0-122.228.194.255',
+ # '122.228.195.0-122.228.195.255',
+ '122.228.195.193-122.228.195.255',# 后续
  '122.228.196.0-122.228.196.255',
  '122.228.197.0-122.228.197.255',
  '122.228.198.0-122.228.198.255',
@@ -64,9 +65,27 @@ result = [
  '61.164.155.144-61.164.155.159',
  '61.164.159.192-61.164.159.223',]
 
+test_result = [ "122.228.192.0-122.228.192.3",]
+
 lasttime = '61.164.125.2'
 
-for ip in result:
-    os.system('python bing.py -uri %s -save' %ip)
+# for ip in result:
+#     os.system('python bing.py -uri %s -save' %ip)
 
 
+from bing import *
+
+def foo():
+    keyInfo=GetAccountKey()
+    AccountKey =keyInfo[1]
+    useCounts=keyInfo[2]
+    bSave = True
+    nType = 1
+    for strHost in result:
+        IpRange=BuildHostRange(strHost)
+        for index in range(IpRange[0],IpRange[1]+1):
+            curIP=socket.inet_ntoa(struct.pack('I',socket.htonl(index)))
+            SearchKeyWord='IP:' + curIP
+            print '[%s]' % (curIP)
+            ViewResult(SearchKeyWord,curIP,nType,bSave, AccountKey)
+        UpdateUseCount()
