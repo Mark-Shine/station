@@ -66,6 +66,8 @@ class Data(models.Model):
     icpno = models.CharField(max_length=32, null=True, blank=True)
     organizers_type = models.CharField(null=True, blank=True, max_length=64)
     exadate = models.DateTimeField(null=True, blank=True)
+    #主办单位
+    organizers = models.CharField(null=True, blank=True, max_length=64)
 
     class Meta:
         db_table = 'Data'
