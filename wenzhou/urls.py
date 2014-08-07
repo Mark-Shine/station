@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'wenzhou.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^keywords$', views.show_kwords, name="keywords"),
-    url(r'^data$', views.show_data, name="data"),
+    url(r'^data/$', views.show_data, name="data"),
     url(r'^data/detail/(?P<pk>\d+)$', views.show_data_detail, name="detail"),
     url(r'^host/edit/(?P<pk>\d+)$', views.change_detail, name="change_detail"),
 

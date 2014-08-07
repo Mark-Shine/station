@@ -1,4 +1,6 @@
+#encoding=utf-8
 import math
+import operator
 
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
@@ -10,6 +12,7 @@ from django.template.loader import Template
 from django.core.paginator import Paginator
 from django.template.response import TemplateResponse
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 
 from crispy_forms.helper import FormHelper
@@ -19,6 +22,8 @@ from cohost.models import Data
 from cohost.models import Keywords
 from cohost.models import Cate
 from cohost.forms import DataStateForm
+from cohost.models import STATE_CHOICES
+# from cohost.forms import DataFilterForm
 
 from cohost.models import STATE_CHOICES
 
@@ -49,16 +54,24 @@ def get_pagination(request, objects, pagenum=1):
         context_instance=RequestContext(request))
     return paged_objects, pagination
 
-def build_pages(model,):
+def build_pages(model, condition=None):
     def wrraped(show_func):
         def _page(request, **kwargs):
             pagenum = request.GET.get("page", 1)
-            objecs = model.objects.all()
-            paged_objects, pagination = get_pagination(request, objecs, int(pagenum))
+            if condition is None:
+                objs = model.objects.all()
+            else:
+                objs = model.objects.filter(condition)
+            r = show_func(request)
+            #外围过滤条件
+            Qs = r.context_data.get("q", "")
+            print Qs
+            if Qs:
+                objs = objs.filter(Qs)
+            paged_objects, pagination = get_pagination(request, objs, int(pagenum))
             context = {}
             context['pagination'] = pagination
             context['objects'] = paged_objects
-            r = show_func(request)
             r.context_data.update(context) 
             result = r.render()
             return result
@@ -71,9 +84,28 @@ def show_kwords(request):
     context['keyword_active'] = "active"
     return TemplateResponse(request, 'cohost/keywords.html', context)
 
-@build_pages(model=Data)
+
+@build_pages(model=Data, condition=~Q(state="-1"))
 def show_data(request):
+    q = Q()
+    icpno = request.GET.get("icpno",)
+    cate = request.GET.get("cate")
+    state = request.GET.get("state")
+    ip = request.GET.get("ip")
+    icp_q = None
+    if icpno:
+        icp_q = ("icpno__isnull", True) if icpno == '0' else ("icpno__isnull", False)
+    predicates = [cate and ("cate",  int(cate)), state and ("state", state), ip and ("ip__startswith", ip)]
+    if icp_q:
+        predicates.append(icp_q)
+    qs = [Q(x) for x in predicates if x]
     context = {}
+    filter_context = {}
+    filter_context['cates'] = Cate.objects.all()
+    filter_context['states'] = STATE_CHOICES
+    filter_context.update(request.GET.dict())
+    context['q'] = reduce(operator.and_, qs, Q())
+    context['filter_section'] = render_to_string("include/filter_section.html", filter_context)
     context['data_active'] = "active"
     return TemplateResponse(request, "cohost/data.html", context)
 

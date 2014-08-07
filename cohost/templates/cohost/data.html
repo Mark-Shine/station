@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {%block mod_content%}
 <h1 class="page-header">数据</h1>
+<div >
+    {{filter_section}}
+</div>
 <table class="table ">
     <thead>
         <tr>
@@ -9,6 +13,8 @@
             <td>host</td>
             <td>审核状态</td>
             <td>操作</td>
+            <td>网站分类</td>
+            <td>审核状态</td>
         </tr>
 
     </thead>
@@ -19,6 +25,8 @@
             <td>{{d.uri}}</td>
             <td>{{d.get_state_display}}</td>
             <td><a href="{% url 'detail' pk=d.id %}">详情</a></td>
+            <td>{{d.cate}}</td>
+            <td>{{d.get_state_display}}</td>
         </tr>
     
     {%endfor%}

@@ -17,8 +17,6 @@ class DataStateForm(forms.Form):
         self.helper.form_class = 'form'
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Submit'))
-
-
     state = forms.TypedChoiceField(
         label = u"审核状态",
         choices = STATE_CHOICES,
@@ -33,3 +31,23 @@ class DataStateForm(forms.Form):
         initial = '0',
         required = False,
     )
+
+
+# class DataFilterForm(forms.Form):
+#     """网站类型、有无备案、站点状态、接入商、审核状态"""
+
+#     def __init__(self, *args, **kwargs):
+#         super(DataFilterForm, self).__init__(*args, **kwargs)
+#         self.helper = FormHelper()
+#         self.helper.form_id = 'id-datafilterForm'
+#         self.helper.form_class = 'form, form-inline'
+#         self.helper.form_method = 'get'
+#         self.helper.add_input(Submit('submit', 'Submit'))
+#     beian = forms.ChoiceField(
+#         label = u"备案",
+#         choices = ((True, u"有" ), (False, u"无")),
+#         widget = forms.RadioSelect,
+#         initial = '0',
+#         required = False,
+#     )
+    

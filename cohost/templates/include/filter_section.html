@@ -1,0 +1,51 @@
+<style type="text/css">
+    .block_filter ul li a.on {
+    background: #FF6600;
+    color: #fff;
+    border-radius: 3px;
+}
+
+</style>
+
+<dl class="dl-horizontal block_filter">        
+    <dd>
+        <ul class="list-inline">
+            <li>备案：</li>
+            <li><a href="{%url "data" %}?cate={{cate}}&ip={{ip}}&state={{state}}" {%if not sid %} class="on" {%endif%}>不限</a></li>
+            <li ><a href="{%url "data" %}?icpno=1&state={{state}}&cate={{cate}}&ip={{ip}}" {%if '1' == icpno %} class="on" {%endif%}>有</a></li>
+            <li><a href="{%url "data" %}?icpno=0&state={{state}}&cate={{cate}}&ip={{ip}}" {%if '0' == icpno    %} class="on" {%endif%}>无</a></li>
+        </ul> 
+        <ul class="list-inline">
+            <li>网站类型：</li>
+            <li><a href="{%url "data" %}?icpno={{icpno}}&state={{state}}&ip={{ip}}" {%if not cate %} class="on" {%endif%}>不限</a></li>
+            {%for c in cates%}
+            <li><a href="{%url "data" %}?icpno={{icpno}}&cate={{c.id}}&state={{state}}&ip={{ip}}" {%if c.id|slugify == cate %} class="on" {%endif%} >{{c.name}}</a></li>
+            {%endfor%}
+        </ul>
+        <ul class="list-inline">
+            <li>审核状态：</li>
+            <li><a href="{%url "data" %}?icpno={{icpno}}&cate={{cate}}&ip={{ip}}" {%if not sid %} class="on" {%endif%}>不限</a></li>
+            {% for sid, sname in states %}
+            <li><a href="{%url "data" %}?icpno={{icpno}}&state={{sid}}&cate={{cate}}&ip={{ip}}" {%if sid|slugify == state %} class="on" {%endif%}>{{sname}}</a></li>
+            {%endfor%}
+        </ul> 
+
+        <ul class="list-inline">
+            <li >
+                <form class="form" role="search" action="{%url "data" %}" method="get">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                          <input name="ip" type="text" class="form-control" placeholder="搜索: ip 段" value={{ip}}>
+                          <span class="input-group-btn">
+                            <button class="btn btn-default"  type="submit">Go!</button>
+                          </span>
+                        </div><!-- /input-group -->
+                    </div>
+                </form> 
+            </li>
+
+        </ul>
+        
+    </dd>
+</dl>
+

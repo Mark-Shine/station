@@ -63,7 +63,7 @@ class Data(models.Model):
     time = models.DateTimeField(blank=True, null=True)
 
     #备案信息
-    icpno = models.CharField(max_length=32, null=True, blank=True)
+    icpno = models.CharField(max_length=32, blank=True, null=True)
     organizers_type = models.CharField(null=True, blank=True, max_length=64)
     exadate = models.DateTimeField(null=True, blank=True)
     #主办单位

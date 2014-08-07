@@ -1,8 +1,12 @@
 #encoding=utf-8
+
 import urllib3
 import socket
 from cohost.models import Data, Allkey, Cate, Keywords
 import requests
+import time
+from multiprocessing import Pool
+
 
 def urldecode_to_utf8(dict_data):
     for k, v in dict_data.items():
@@ -29,7 +33,9 @@ def url2host():
         d.save()
 
 def getIp(domain):
-    print domain
+    print "ping domain :%s" % domain
+    print "##########\n"
+    socket.settimeout(3)
     myaddr = socket.getaddrinfo(domain,'http')[0][4][0]
     return myaddr
 
@@ -89,24 +95,62 @@ get_ip_info = build_api_get(querykey="ip", queryurl="http://api.k780.com:88/?app
 #         print rsp['msg']
 #         return 
 
+# from queue import Queue 
+# from functools import wraps
+
+# class Async:
+#     def __init__(self, func, args):
+#         self.func = func 
+#         self.args = args
+
+# def inlined_async(func): 
+
+#     @wraps(func)
+#     def wrapper(*args): 
+#         f = func(*args)
+#         result_queue = Queue() 
+#         result_queue.put(None) 
+#         while True:
+#             result = result_queue.get() 
+#             try:
+#                 a = f.send(result)
+#                 apply_async(a.func, a.args, callback=result_queue.put) 
+#             except StopIteration:
+#                 break 
+#     return wrapper
+def handle_obj(obj, kwords):
+    """查询ip及域名的备案信息"""
+    def wrapped(ping_ip):
+        if ping_ip != obj.ip:
+            print ("ping_ip :%s not equal curIP %s" %(ping_ip, obj.ip))
+            obj.state = "-1"
+        else:
+            host = obj.uri
+            beian = get_beian(host)
+            ip_info = get_ip_info(obj.ip)
+            if ip_info:
+                obj.IPS = ip_info.get("detailed", '')
+            if beian:
+                obj.__dict__.update(**beian)
+            for k in kwords:
+                if k.kword in obj.descript:
+                    obj.cate = k.cate
+        obj.save()
+        return 
+    return wrapped
+
 
 def makeup_info():
+    p = Pool(processes=4)
+
     datas = Data.objects.filter(cate=None).exclude(state="-1")
-    print datas
     kwords = Keywords.objects.all()
     for d in datas:
-        print d.uri
-        beian = get_beian(d.uri)
-        ip_info = get_ip_info(d.ip)
-        if ip_info:
-            d.IPS = ip_info.get("detailed", '')
-        if beian:
-            d.__dict__.update(**beian)
-        for k in kwords:
-            if k.kword in d.descript:
-                d.cate = k.cate
-        d.save()
+        r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
+    print ("GOOd bye")
 
-
-
+if __name__ == '__main__':
+    makeup_info()
+    # p = Pool(processes=4)
+    # apply_async = p.apply_async
 
