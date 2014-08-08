@@ -77,6 +77,15 @@ def build_pages(model, condition=None):
         return _page
     return wrraped
 
+
+@build_pages(model=Data)
+def show_ips(request):
+    context = {}
+    context['ips_active'] = "active"
+    context['total_count'] = Data.objects.all().count()
+    return TemplateResponse(request, 'cohost/ips.html', context)
+
+
 @login_required
 @permission_required("cohost.can_add_keyword")
 @build_pages(model=Keywords)
@@ -85,8 +94,8 @@ def show_kwords(request):
     context['keyword_active'] = "active"
     return TemplateResponse(request, 'cohost/keywords.html', context)
 
+
 @login_required
-@permission_required("cohost.can_do_stuff",)
 @build_pages(model=Data, condition=~Q(state="-1"))
 def show_data(request):
     icpno = request.GET.get("icpno",)
@@ -132,35 +141,15 @@ def change_detail(request, pk):
     return HttpResponseRedirect(reverse("detail", args=[pk]))
 
 
-# @login_required()
-# def inbox(request, template_name):
-#     example_form = ExampleForm()
-#     redirect_url = request.GET.get('next')
-
-#     if redirect_url is not None:
-#         example_form.helper.form_action = reverse('submit_survey')
-
-#     return render_to_response(template_name, {'example_form': example_form}, context_instance=RequestContext(request))
-
-
-# def show_kwords(request):
-#     context = Context()
-#     keys = Keywords.objects.all()
-#     context['keys'] = keys
-#     context['keyword_active'] = "active"
-#     page = render_to_string("cohost/keywords.html", context, context_instance=RequestContext(request, {}))
-#     return HttpResponse(page)
-
-# def show_data(request):
-#     pagenum = request.GET.get("page", 1)
-#     datas = Data.objects.all()
-#     paged_objects, pagination = get_pagination(request, datas, int(pagenum))
-#     context = Context()
-#     context['pagination'] = pagination
-#     context['datas'] = paged_objects
-#     context['data_active'] = "active"
-#     page = render(request, "cohost/data.html", context)
-#     return HttpResponse(page)
+@login_required
+def search_ip(request):
+    template = "cohost/ip.html"
+    curIP = request.GET.get("ip")
+    queryset = Data.objects.filter(ip=curIP)
+    context = {}
+    context['object'] = queryset[0] if queryset.exists() else None
+    context['ips_active'] = "active"
+    return render(request, template, context)
 
 
 

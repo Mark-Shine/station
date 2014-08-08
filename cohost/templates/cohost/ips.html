@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{%block mod_content%}
+<style type="text/css">
+    .search-block {padding: 20px}
+    .ips-table {padding: 10px}
+</style>
+<h2 class="page-header">IP库 <small> 总数：{{total_count}}</small></h2>
+
+
+<div class="search-block">
+    <form class="form" role="search" action="{%url "search_ip" %}" method="get">
+        <div class="col-lg-10">
+            <div class="input-group">
+              <input name="ip" type="text" class="form-control" placeholder="查询: ip " value={{ip}}>
+              <span class="input-group-btn">
+                <button class="btn btn-default"  type="submit">Go!</button>
+              </span>
+            </div>
+        </div>
+    </form> 
+</div>
+
+<table class="table ips-table">
+    <thead>
+        <tr>
+            <td>ip</td>
+        </tr>
+
+    </thead>
+    <tbody>
+    {%for d in objects %}
+        <tr>
+            <td>{{d.ip}}</td>
+        </tr>
+    
+    {%endfor%}
+        
+    </tbody>
+
+</table>
+
+{{pagination}}
+
+{%endblock%}

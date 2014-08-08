@@ -44,8 +44,6 @@ class Data(models.Model):
     def __unicode__(self,):
         return "ip: %s - uri: %s" %(self.ip, self.uri)
 
-    
-
     # id = models.IntegerField(db_column='ID', primary_key=True, blank=True) # Field name made lowercase.
     ip = models.TextField(db_column='IP') # Field name made lowercase.
     uri = models.TextField(db_column='URI') # Field name made lowercase.
@@ -71,9 +69,10 @@ class Data(models.Model):
 
     class Meta:
         db_table = 'Data'
-        
+
         permissions = (
-            ("can_see_log", u"查看日志"),
+            # ("can_see_log", u"查看日志"),
             ("can_do_stuff", u"处理相应的IP"),
-            ("can_add_keyword", u"添加关键字"),
         )
+
+

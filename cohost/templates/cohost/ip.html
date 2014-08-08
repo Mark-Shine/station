@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{%block mod_content%}
+{%if object%}
+<h3 class="page-header">查询结果</h3>
+<table class="table ">
+    <thead>
+        <tr>
+            <td>ip</td>
+            <td>host</td>
+            <td>审核状态</td>
+            <td>标题</td>
+            <td>类别</td>
+            <td>接入商</td>
+            <td>备案号</td>
+            <td>主办单位</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{object.ip}}</td>
+            <td>{{object.uri}}</td>
+            <td>{{object.get_state_display}}</td>
+            <td>{{object.title}}</td>
+            <td>{{object.cate}}</td>
+            <td>{{object.IPS}}</td>
+            <td>{{object.icpno}}</td>
+            <td>{{object.organizers}}</td>
+        </tr>
+    </tbody>
+</table>
+{%else%}
+<div class="well">
+    <div class="pull-center"> 
+        <h3>出错啦</h3>
+        <p>抱歉，找不到该记录 <b><a href="{%url 'ips'%}">返回</a></b></p>
+    </div>
+</div>
+{%endif%}
+{{pagination}}
+
+{%endblock%}

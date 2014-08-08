@@ -118,6 +118,7 @@ get_ip_info = build_api_get(querykey="ip", queryurl="http://api.k780.com:88/?app
 #             except StopIteration:
 #                 break 
 #     return wrapper
+
 def handle_obj(obj, kwords):
     """查询ip及域名的备案信息"""
     def wrapped(ping_ip):
@@ -140,7 +141,7 @@ def handle_obj(obj, kwords):
     return wrapped
 
 
-def makeup_info():
+def makeup_info_bulk():
     p = Pool(processes=4)
 
     datas = Data.objects.filter(cate=None).exclude(state="-1")
@@ -149,8 +150,9 @@ def makeup_info():
         r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
     print ("GOOd bye")
 
+
 if __name__ == '__main__':
-    makeup_info()
+    makeup_info_bulk()
     # p = Pool(processes=4)
     # apply_async = p.apply_async
 
