@@ -50,7 +50,6 @@ class Data(models.Model):
     title = models.TextField(db_column='Title', blank=True) # Field name made lowercase.
     descript = models.TextField(db_column='Descript', blank=True) # Field name made lowercase.
     
-    cate = models.ForeignKey("Cate", null=True, blank=True)
     IPS = models.CharField(max_length=16, null=True, blank=True)
     #备案号
     # reg_number = models.IntegerField(blank=True, default=0, null=True)
@@ -66,7 +65,8 @@ class Data(models.Model):
     exadate = models.DateTimeField(null=True, blank=True)
     #主办单位
     organizers = models.CharField(null=True, blank=True, max_length=64)
-
+    cate = models.ForeignKey("Cate", null=True, blank=True)
+    area = models.ForeignKey("Area", null=True, blank=True)
     class Meta:
         db_table = 'Data'
 
@@ -74,5 +74,17 @@ class Data(models.Model):
             # ("can_see_log", u"查看日志"),
             ("can_do_stuff", u"处理相应的IP"),
         )
+
+class Area(models.Model):
+    #区域名称
+    def __unicode__(self,):
+        return "地区: %s" %(self.name)
+
+    name = models.CharField(max_length=64, blank=True, null=True)
+
+class Ippiece(models.Model):
+    """IP片段"""
+    piece = models.CharField(max_length=64, blank=True, null=True)
+    area = models.ForeignKey("Area", null=True, blank=True)
 
 

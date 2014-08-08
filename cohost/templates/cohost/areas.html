@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{%block mod_content%}
+<h2 class="page-header">区域管理</h2>
+<div class="panel-group" id="accordion">
+    {%for obj in objects%}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{obj.id}}">
+            {{obj.name}}
+            </a>
+          </h4>
+        </div>
+        <div id="collapse-{{obj.id}}" class="panel-collapse collapse in">
+          <div class="panel-body">
+                {% if obj.ippiece_set.all %}
+                <table class="table">
+                    <tbody>
+                    {%for d in obj.ippiece_set.all%}
+                        <tr>
+                            <td>{{d.piece}}</td>
+                            <td>
+                                <form class="form" method="POST" action={%url 'manage_area'%} >
+                                    {%csrf_token%}
+
+                                    <input class="hidden" name="action" value="delete">
+                                    <input class="hidden" name="id" value="{{d.id}}">
+                                    <button class="btn btn-link btn-sm">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {%endfor%}
+                    </tbody>
+                </table>
+                {%else%}
+                {%endif%}
+                <form class="form" action="{%url "manage_area" %}" method="POST">
+                    {%csrf_token%}
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                          <input class="hidden" name="action" value="create">
+                          <input name="ip_piece" type="text" class="form-control" placeholder="ip 段" value={{ip}}>
+                          <input class="hidden" name="area" value={{obj.id}}>
+                          <span class="input-group-btn">
+                            <button class="btn btn-default"  type="submit">新增</button>
+                          </span>
+                        </div>
+                    </div>
+                </form>
+          </div>
+        </div>
+      </div>
+  {%endfor%}
+
+  
+</div>
+
+{{pagination}}
+
+<script type="text/javascript">
+    $('.collapse').collapse()
+</script>
+{%endblock%}

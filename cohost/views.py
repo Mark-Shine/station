@@ -21,8 +21,10 @@ from crispy_forms.layout import Submit
 from cohost.models import Data
 from cohost.models import Keywords
 from cohost.models import Cate
-from cohost.forms import DataStateForm
+from cohost.models import Area
+from cohost.forms import DataStateForm, AreaForm
 from cohost.models import STATE_CHOICES
+from cohost.models import Ippiece
 # from cohost.forms import DataFilterForm
 
 from cohost.models import STATE_CHOICES
@@ -151,9 +153,36 @@ def search_ip(request):
     context['ips_active'] = "active"
     return render(request, template, context)
 
+@build_pages(model=Area)
+def show_areas(request):
+    context = {}
+    context['area_active'] = "active"
+    return TemplateResponse(request, "cohost/areas.html", context)
 
 
+def manage_area(request):
+    action = request.POST.get('action')
+    if action == "create":
+        area = request.POST.get("area")
+        form = AreaForm(request.POST)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            area_obj =  Area.objects.get(id=int(area))
+            piece = cleaned_data.pop('ip_piece')
+            cleaned_data['area'] = area_obj
+            cleaned_data['piece'] = piece
+            Ippiece.objects.create(**cleaned_data)
+            Data.objects.filter(~Q(state="-1")).filter(ip__startswith=piece).update(area=area_obj)
+
+    elif action == "delete":
+        pk = request.POST.get("id")
+        quertset = Ippiece.objects.filter(pk=pk)
+        if quertset.exists():
+            #处理data对应area
+            Data.objects.filter(~Q(state="-1")).filter(ip__startswith=quertset[0].piece, area=quertset[0].area).update(area=None)
+            quertset.delete()
 
 
+    return HttpResponseRedirect(reverse("areas"))
 
 
