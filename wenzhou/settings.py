@@ -1,3 +1,4 @@
+#encoding=utf-8
 """
 Django settings for wenzhou project.
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     "south",
     "cohost",
+    "auth",
     "crispy_forms",
 )
 
@@ -49,6 +51,19 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "cohost.context_processors.common",
+    )
+
 
 ROOT_URLCONF = 'wenzhou.urls'
 
@@ -105,5 +120,6 @@ STATICFILES_DIRS = (
 
 #User Custom
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
+#设置登陆的url  -- login_require
+LOGIN_URL = '/login'
 

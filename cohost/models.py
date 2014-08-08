@@ -71,3 +71,9 @@ class Data(models.Model):
 
     class Meta:
         db_table = 'Data'
+        
+        permissions = (
+            ("can_see_log", u"查看日志"),
+            ("can_do_stuff", u"处理相应的IP"),
+            ("can_add_keyword", u"添加关键字"),
+        )

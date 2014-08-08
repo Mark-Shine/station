@@ -6,14 +6,14 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.core.urlresolvers import reverse
 from django.template.context import (Context, RequestContext)
 from django.template.loader import Template
 from django.core.paginator import Paginator
 from django.template.response import TemplateResponse
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -65,7 +65,6 @@ def build_pages(model, condition=None):
             r = show_func(request)
             #外围过滤条件
             Qs = r.context_data.get("q", "")
-            print Qs
             if Qs:
                 objs = objs.filter(Qs)
             paged_objects, pagination = get_pagination(request, objs, int(pagenum))
@@ -78,16 +77,18 @@ def build_pages(model, condition=None):
         return _page
     return wrraped
 
+@login_required
+@permission_required("cohost.can_add_keyword")
 @build_pages(model=Keywords)
 def show_kwords(request):
     context = {}
     context['keyword_active'] = "active"
     return TemplateResponse(request, 'cohost/keywords.html', context)
 
-
+@login_required
+@permission_required("cohost.can_do_stuff",)
 @build_pages(model=Data, condition=~Q(state="-1"))
 def show_data(request):
-    q = Q()
     icpno = request.GET.get("icpno",)
     cate = request.GET.get("cate")
     state = request.GET.get("state")
@@ -104,12 +105,13 @@ def show_data(request):
     filter_context['cates'] = Cate.objects.all()
     filter_context['states'] = STATE_CHOICES
     filter_context.update(request.GET.dict())
+    #Q()是必须的，否则当所有条件为空会报错
     context['q'] = reduce(operator.and_, qs, Q())
     context['filter_section'] = render_to_string("include/filter_section.html", filter_context)
     context['data_active'] = "active"
     return TemplateResponse(request, "cohost/data.html", context)
 
-
+@login_required
 def show_data_detail(request, pk):
     template = "cohost/detail.html"
     context = {}
@@ -121,7 +123,7 @@ def show_data_detail(request, pk):
     context['form'] = form
     return render(request, template, context)
 
-
+@login_required
 def change_detail(request, pk):
     form = DataStateForm(request.POST)
     if form.is_valid():
