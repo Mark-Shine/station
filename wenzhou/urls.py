@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 
 from cohost import views
-from auth.views import LoginView, logoff
+from wzauth.views import LoginView, logoff
 admin.autodiscover()
 
 urlpatterns = patterns('',

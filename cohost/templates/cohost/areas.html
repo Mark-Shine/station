@@ -36,6 +36,7 @@
                 </table>
                 {%else%}
                 {%endif%}
+                <hr>
                 <form class="form" action="{%url "manage_area" %}" method="POST">
                     {%csrf_token%}
                     <div class="col-lg-6">

@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     "south",
     "cohost",
-    "auth",
+    "wzauth",
     "crispy_forms",
 )
 

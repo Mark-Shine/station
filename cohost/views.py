@@ -25,7 +25,7 @@ from cohost.models import Area
 from cohost.forms import DataStateForm, AreaForm
 from cohost.models import STATE_CHOICES
 from cohost.models import Ippiece
-# from cohost.forms import DataFilterForm
+from wzauth.models import WzUser
 
 from cohost.models import STATE_CHOICES
 
@@ -89,7 +89,6 @@ def show_ips(request):
 
 
 @login_required
-@permission_required("cohost.can_add_keyword")
 @build_pages(model=Keywords)
 def show_kwords(request):
     context = {}
@@ -100,16 +99,28 @@ def show_kwords(request):
 @login_required
 @build_pages(model=Data, condition=~Q(state="-1"))
 def show_data(request):
+    user = request.user
+
     icpno = request.GET.get("icpno",)
     cate = request.GET.get("cate")
     state = request.GET.get("state")
     ip = request.GET.get("ip")
+
+    #处理iP查询
     icp_q = None
     if icpno:
         icp_q = ("icpno__isnull", True) if icpno == '0' else ("icpno__isnull", False)
     predicates = [cate and ("cate",  int(cate)), state and ("state", state), ip and ("ip__startswith", ip)]
     if icp_q:
         predicates.append(icp_q)
+    
+    #获取用户的管辖区域
+    if not user.is_superuser:
+        wzuser = WzUser.objects.get(user=user)
+        user_areas = wzuser.area.all()
+        predicates.append(("area__in", user_areas))
+    
+    #将所有的查询条件生成Q()对象
     qs = [Q(x) for x in predicates if x]
     context = {}
     filter_context = {}
@@ -131,6 +142,7 @@ def show_data_detail(request, pk):
     context['object'] = _object
     form = DataStateForm(initial={'state': _object.state, "cate": _object.cate})
     form.helper.form_action = reverse("change_detail", args=[pk])
+    context['data_active'] = "active"
     context['form'] = form
     return render(request, template, context)
 
@@ -184,5 +196,7 @@ def manage_area(request):
 
 
     return HttpResponseRedirect(reverse("areas"))
+
+
 
 

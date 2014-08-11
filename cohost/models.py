@@ -17,12 +17,17 @@ class Keywords(models.Model):
     #分类
     cate = models.ForeignKey("Cate", null=True, blank=True)
 
+    class Meta:
+        verbose_name_plural = u"匹配关键字"
 
 class Cate(models.Model):
     name = models.CharField(max_length=64, null=True, blank=True)
 
     def __unicode__(self, ):
         return self.name
+
+    class Meta:
+        verbose_name_plural = u"分类"
 
 # class Iptable(models.Model):
 #     """IP段"""
@@ -68,8 +73,8 @@ class Data(models.Model):
     cate = models.ForeignKey("Cate", null=True, blank=True)
     area = models.ForeignKey("Area", null=True, blank=True)
     class Meta:
+        verbose_name_plural = u"IP域名信息"
         db_table = 'Data'
-
         permissions = (
             # ("can_see_log", u"查看日志"),
             ("can_do_stuff", u"处理相应的IP"),
@@ -78,9 +83,12 @@ class Data(models.Model):
 class Area(models.Model):
     #区域名称
     def __unicode__(self,):
-        return "地区: %s" %(self.name)
+        return "%s" %(self.name)
 
     name = models.CharField(max_length=64, blank=True, null=True)
+    class Meta:
+        verbose_name_plural = u"区域"
+
 
 class Ippiece(models.Model):
     """IP片段"""
