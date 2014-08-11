@@ -17,6 +17,7 @@ class DataStateForm(forms.Form):
         self.helper.form_class = 'form'
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Submit'))
+
     state = forms.TypedChoiceField(
         label = u"审核状态",
         choices = STATE_CHOICES,
@@ -31,6 +32,10 @@ class DataStateForm(forms.Form):
         initial = '0',
         required = False,
     )
+    beizhu = forms.CharField(
+        label=u"审核处理意见",
+        required=False,
+        widget=forms.Textarea)
 
 
 class AreaForm(forms.Form):

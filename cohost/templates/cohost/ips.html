@@ -14,7 +14,7 @@
             <div class="input-group">
               <input name="ip" type="text" class="form-control" placeholder="查询: ip " value={{ip}}>
               <span class="input-group-btn">
-                <button class="btn btn-default"  type="submit">Go!</button>
+                <button class="btn btn-default"  type="submit">Go</button>
               </span>
             </div>
         </div>
@@ -29,9 +29,9 @@
 
     </thead>
     <tbody>
-    {%for d in objects %}
+    {%for ip in objects %}
         <tr>
-            <td>{{d.ip}}</td>
+            <td>{{ip}}</td>
         </tr>
     
     {%endfor%}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {%block mod_content%}
-{%if object%}
+{%if objects%}
 <h3 class="page-header">查询结果</h3>
 <table class="table ">
     <thead>
@@ -15,6 +15,7 @@
         </tr>
     </thead>
     <tbody>
+        {%for object in objects%}
         <tr>
             <td>{{object.ip}}</td>
             <td>{{object.uri}}</td>
@@ -23,8 +24,10 @@
             <td>{{object.icpno}}</td>
             <td>{{object.organizers}}</td>
         </tr>
+        {%endfor%}
     </tbody>
 </table>
+
 {%else%}
 <div class="well">
     <div class="pull-center"> 

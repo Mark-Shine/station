@@ -1,5 +1,13 @@
 #encoding=utf-8
+import datetime
+import time
+from django.utils import timezone
+
 from django.db import models
+from django.contrib.auth.models import User
+from django.dispatch import receiver
+
+from cohost.signals import action_message
 
 STATE_CHOICES = (
     ('0',u'未处理'),
@@ -28,10 +36,6 @@ class Cate(models.Model):
 
     class Meta:
         verbose_name_plural = u"分类"
-
-# class Iptable(models.Model):
-#     """IP段"""
-#     ip_zone = models.CharField(max_length=32, null=True, blank=True)
 
 
 class Allkey(models.Model):
@@ -72,13 +76,11 @@ class Data(models.Model):
     organizers = models.CharField(null=True, blank=True, max_length=64)
     cate = models.ForeignKey("Cate", null=True, blank=True)
     area = models.ForeignKey("Area", null=True, blank=True)
+    #备注
+    beizhu = models.TextField(blank=True, null=True)
     class Meta:
         verbose_name_plural = u"IP域名信息"
         db_table = 'Data'
-        permissions = (
-            # ("can_see_log", u"查看日志"),
-            ("can_do_stuff", u"处理相应的IP"),
-        )
 
 class Area(models.Model):
     #区域名称
@@ -94,5 +96,24 @@ class Ippiece(models.Model):
     """IP片段"""
     piece = models.CharField(max_length=64, blank=True, null=True)
     area = models.ForeignKey("Area", null=True, blank=True)
+
+
+class DataActionRecord(models.Model):
+    """用户处理data记录表"""
+    data = models.ForeignKey("Data", null=True, blank=True)
+    action = models.CharField(max_length=24, blank=True, null=True)
+    time = models.DateTimeField(blank=True, null=True)
+    user = models.ForeignKey(User, blank=True, null=True)
+
+
+    @receiver([action_message],)
+    def record_handel(sender=None, user=None, instance=None, action=None, **kwargs): 
+        form = {}
+        form['user'] = user
+        form['data'] = instance
+        form['time'] = timezone.localtime(timezone.now())
+        form['action'] = action
+        acrecord, created = DataActionRecord.objects.get_or_create(**form)
+
 
 

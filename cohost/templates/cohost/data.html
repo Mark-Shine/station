@@ -14,8 +14,6 @@
             <td>审核状态</td>
             <td>操作</td>
             <td>网站分类</td>
-            <td>审核状态</td>
-            <td>区域</td>
         </tr>
 
     </thead>
@@ -27,8 +25,6 @@
             <td>{{d.get_state_display}}</td>
             <td><a href="{% url 'detail' pk=d.id %}">详情</a></td>
             <td>{{d.cate}}</td>
-            <td>{{d.get_state_display}}</td>
-            <td>{{d.area.name}}</td>
         </tr>
     
     {%endfor%}

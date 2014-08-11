@@ -1,6 +1,7 @@
 #encoding=utf-8
 import math
 import operator
+import datetime
 
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
@@ -26,8 +27,9 @@ from cohost.forms import DataStateForm, AreaForm
 from cohost.models import STATE_CHOICES
 from cohost.models import Ippiece
 from wzauth.models import WzUser
+from cohost.signals import action_message
+from cohost.models import DataActionRecord
 
-from cohost.models import STATE_CHOICES
 
 PAGE_SIZE = 10
 
@@ -80,12 +82,16 @@ def build_pages(model, condition=None):
     return wrraped
 
 
-@build_pages(model=Data)
 def show_ips(request):
+    pagenum = request.GET.get("page", 1)
     context = {}
     context['ips_active'] = "active"
-    context['total_count'] = Data.objects.all().count()
-    return TemplateResponse(request, 'cohost/ips.html', context)
+    ips = Data.objects.all().values_list('ip', flat=True).distinct()
+    context['total_count'] = ips.count()
+    paged_objects, pagination = get_pagination(request, ips, int(pagenum))
+    context['pagination'] = pagination
+    context['objects'] = paged_objects  
+    return render(request, 'cohost/ips.html', context)
 
 
 @login_required
@@ -140,7 +146,10 @@ def show_data_detail(request, pk):
     _object = get_object_or_404(Data, id=pk)
 
     context['object'] = _object
-    form = DataStateForm(initial={'state': _object.state, "cate": _object.cate})
+    form = DataStateForm(initial={
+        'state': _object.state, 
+        "cate": _object.cate,
+        "beizhu":_object.beizhu})
     form.helper.form_action = reverse("change_detail", args=[pk])
     context['data_active'] = "active"
     context['form'] = form
@@ -148,10 +157,20 @@ def show_data_detail(request, pk):
 
 @login_required
 def change_detail(request, pk):
+    user = request.user
     form = DataStateForm(request.POST)
     if form.is_valid():
         cleaned_data = form.cleaned_data
-        Data.objects.filter(id=pk).update(**cleaned_data)
+        queryset = Data.objects.filter(id=pk)
+        queryset.update(**cleaned_data)
+        obj = queryset[0]
+        try:
+            action_message.send(sender=Data.__class__, 
+                user=user, 
+                instance=obj,
+                action=u"处理记录",)
+        except Exception, e:
+            raise e
     return HttpResponseRedirect(reverse("detail", args=[pk]))
 
 
@@ -161,7 +180,7 @@ def search_ip(request):
     curIP = request.GET.get("ip")
     queryset = Data.objects.filter(ip=curIP)
     context = {}
-    context['object'] = queryset[0] if queryset.exists() else None
+    context['objects'] = queryset if queryset.exists() else None
     context['ips_active'] = "active"
     return render(request, template, context)
 
@@ -171,6 +190,11 @@ def show_areas(request):
     context['area_active'] = "active"
     return TemplateResponse(request, "cohost/areas.html", context)
 
+@build_pages(model=DataActionRecord)
+def show_logs(request):
+    context = {}
+    context['logs_active'] = "active"
+    return TemplateResponse(request, "cohost/logs.html", context)
 
 def manage_area(request):
     action = request.POST.get('action')

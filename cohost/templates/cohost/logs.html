@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load tz %}
+{%block mod_content%}
+<h2 class="sub-header">用户操作记录</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th >用户</th>
+          <th >操作</th>
+          <th >对象</th>
+          <th >状态</th>
+          <th >时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in objects reversed %}
+        <tr>
+          <td>{{forloop.counter}}</td>
+          <td>{{w.user.username}}</td>
+          <td>{{w.action}}</td>
+          <td> <button type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover"  title="处理意见" data-content="{{w.data.beizhu}}">{{w.data.uri}}-{{w.data.title}}</button> </td>
+          <td>{{w.data.get_state_display}}</td>
+          <td>{{w.time|localtime|date:"Y-m-d H:i"}}</td>
+        </tr>
+
+        {% empty %}
+        {% endfor %}
+      </tbody>
+        {%if objects%}
+        {{pagination}}
+
+        {%endif%}
+    </table>
+  </div>
+<script type="text/javascript">
+  $('.popover-dismiss').popover({
+  trigger: 'focus'
+})
+</script>
+{%endblock%}
