@@ -16,4 +16,4 @@ kill -9 $id
 echo "kill $id"
 done
 echo  "################################################"
-uwsgi --ini /root/www/station/uwsgi_station.ini --daemonize /root/www/station/station.log
+uwsgi --ini /var/www/station/uwsgi_station.ini --daemonize /var/www/station/station.log
