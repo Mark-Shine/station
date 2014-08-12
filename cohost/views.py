@@ -229,6 +229,7 @@ def manage_area(request):
 
 @login_required
 def show_result(request):
+    """提示页面"""
     context = {}
     template = "result.html"
     next = request.GET.get('next')
