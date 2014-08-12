@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from datetime import timedelta
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -41,6 +42,7 @@ INSTALLED_APPS = (
     "cohost",
     "wzauth",
     "crispy_forms",
+    "djcelery",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -125,4 +127,27 @@ STATICFILES_DIRS = (
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #设置登陆的url  -- login_require
 LOGIN_URL = '/login'
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CELERY_TASK_RESULT_EXPIRES=3600
+
+from celery.schedules import crontab
+CELERYBEAT_SCHEDULE = {
+    # 'add-every-30-seconds': {
+    #     'task': 'tasks.add',
+    #     'schedule': timedelta(seconds=3),
+    #     'args': (16, 16)
+    # },
+    'bing-every-0.5-hour': {
+        'task': 'tasks.ip_bing',
+        'schedule': crontab(day_of_month='2'),
+    },
+
+
+}
+
+CELERY_TIMEZONE = 'UTC'
+
 

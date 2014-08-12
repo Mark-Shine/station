@@ -2,6 +2,7 @@
 #https://datamarket.azure.com/account/datasets
 #Code by Anle
 import sys
+import os
 import redis
 import urllib  
 import urllib2
@@ -12,12 +13,13 @@ import struct
 import time
 import requests
 import MySQLdb
-from datetime import datetime,timedelta
+import logging
 from multiprocessing import Pool
 
-import os
+logger = logging.getLogger('tasks.log')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wenzhou.settings")
 from cohost.models import Data
+from datetime import datetime,timedelta
 try:  
     import json  
 except ImportError:  
@@ -127,21 +129,22 @@ def ViewResult(data):
         if not updated:
             #如果快照的内容没有更新则更新数据
             print ("nothing changed compared with cached page")
+            logger.info("nothing changed compared with cached page")
             continue
         try:
             JsonData=json.loads(ResData)
         except:
             pass
-        print "[%s]" % curIP
+        print ("[%s]" % curIP)
+        logger.info("[%s]" % curIP)
         url=[]
         for key,value in JsonData.items():
             for key1,value1 in value.items():
                 for lv in value1:
                     try:
-                        print lv['Url']
+                        print (lv['Url'])
+                        logger.info(lv['Url'])
                         host = urllib3.get_host(lv['Url'])[1]
-                        # newip = getIp(host)
-                        # if newip == curIP:
                         d_query_set = data_query.filter(uri=host)
                         if d_query_set.exists():
                             print ("update 2 ip-host : %s->%s" %(curIP, host))
@@ -155,15 +158,12 @@ def ViewResult(data):
                         else:
                             print "save to database %s" % host
                             Data.objects.create(ip=curIP,uri=host,title=lv['Title'],descript=lv['Description'])
-                    # else:
-                        #     print ("fake curip")
                     except Exception, e:
                         print e
 
                     finally:
                         pass
         print '\r\n'
-    # conn.close()
 
 
 def NewViewResult(data):
@@ -242,7 +242,8 @@ def BingSearch(index, _AccountKey=None):
         return  result
     except Exception, e:
         print e
-        print '[-] Connect failed.'
+        logger.error('%s ' % e)
+        print ('[-] Connect failed.')
         raise e
   
 def y(x):
@@ -294,14 +295,12 @@ if __name__ == '__main__':
     bSave = True
     nType = 1
     p = Pool(processes=4)
-    import time 
-    now = time.time()
-    for strHost in result:
-        IpRange=BuildHostRange(strHost)
-        r = p.map_async(f, range(IpRange[0],IpRange[1]+1), callback=ViewResult)
-        r.wait()
     
-
+    now = time.time()
+    for strHost in test_result:
+        IpRange=BuildHostRange(strHost)
+        r = p.map_async(f, range(IpRange[0], IpRange[1]+1), callback=ViewResult)
+        r.wait()
     # for strHost in result:
     #     print strHost
     #     IpRange=BuildHostRange(strHost)
