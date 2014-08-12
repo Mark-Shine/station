@@ -159,6 +159,9 @@ def show_data_detail(request, pk):
 def change_detail(request, pk):
     user = request.user
     form = DataStateForm(request.POST)
+    status = 0
+    next = reverse("detail", args=[pk])
+
     if form.is_valid():
         cleaned_data = form.cleaned_data
         queryset = Data.objects.filter(id=pk)
@@ -171,7 +174,10 @@ def change_detail(request, pk):
                 action=u"处理记录",)
         except Exception, e:
             raise e
-    return HttpResponseRedirect(reverse("detail", args=[pk]))
+        status = 1
+        next = reverse("data")
+    url = "{0}?next={1}&status={2}".format(reverse("result"), next, status)
+    return HttpResponseRedirect(url)
 
 
 @login_required
@@ -221,6 +227,20 @@ def manage_area(request):
 
     return HttpResponseRedirect(reverse("areas"))
 
-
+@login_required
+def show_result(request):
+    context = {}
+    template = "result.html"
+    next = request.GET.get('next')
+    status = request.GET.get('status')
+    context['next'] = next
+    if status=="1":
+        message = u"成功"
+    else:
+        message = u"失败"
+    context['status'] = status
+    context['message'] = message
+    context['style'] = "success" if status=='1' else "warning"
+    return render(request, template, context)
 
 

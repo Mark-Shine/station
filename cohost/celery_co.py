@@ -9,6 +9,7 @@ from celery import Celery
 from django.conf import settings
 
 from cohost.new_bing import *
+from cohost.utils import makeup_info_bulk
 
 logger = get_logger(__name__)
 
@@ -41,3 +42,5 @@ def ip_bing():
         r.wait()
     end = time.time()
     print (end-now)
+    makeup_info_bulk()
+    
