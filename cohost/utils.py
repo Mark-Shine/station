@@ -109,11 +109,12 @@ def makeup_info_bulk():
     kwords = Keywords.objects.all()
     for d in datas:
         r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
+        r.wait(5)
     print ("GOOd bye")
 
 
 if __name__ == '__main__':
     makeup_info_bulk()
-    # p = Pool(processes=4)
+    # p = Pool(processes=4)utls
     # apply_async = p.apply_async
 

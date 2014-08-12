@@ -1,2 +1,4 @@
 settings.py
+*.ini
+*.sh
 **.pyc
