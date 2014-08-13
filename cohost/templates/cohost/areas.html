@@ -4,6 +4,7 @@
 {%block mod_content%}
 <h2 class="page-header">区域管理</h2>
 <div class="col-md-8">
+  {%if objects %}
   <div class="panel-group" id="accordion">
       {%for obj in objects%}
         <div class="panel panel-default">
@@ -57,7 +58,10 @@
         </div>
     {%endfor%}
 
-  </div>  
+  </div> 
+  {%else%}
+  <p>请到后台添加区域</p>
+
 </div>
 
 
