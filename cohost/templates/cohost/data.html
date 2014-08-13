@@ -24,7 +24,7 @@
             <td>{{d.ip}}</td>
             <td>{{d.get_state_display}}</td>
             <td><a href="{% url 'detail' pk=d.id %}">详情</a></td>
-            <td>{{d.cate}}</td>
+            <td>{{d.cate|default:""}}</td>
         </tr>
     
     {%endfor%}
