@@ -25,19 +25,61 @@
             <td>{{object.get_state_display}}</td>
             <td>{{object.title}}</td>
             <td>{{object.cate}}</td>
-            <td>{{object.IPS}}</td>
-            <td>更新...</td>
-            <td>{{object.icpno}}</td>
-            <td>{{object.organizers}}</td>
-            <td>{{d.area.name}}</td>
+            <td>{{object.IPS|default:""}}</td>
+            <td id="J-Site-Status"><span >等待...</span><span id="J-Success-Site"class="hidden">正常</span><span class="hidden" id="J-Error-Site">异常</span> </td>
+            <td>{{object.icpno|default:''}}</td>
+            <td>{{object.organizers|default:""}}</td>
+            <td>{{d.area.name|default:''}}</td>
         </tr>
     </tbody>
 </table>
 
-<section class="well">
-<h3>相关编辑</h3>
-{% crispy form form.helper %}
-</section>
+ <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{obj.id}}">
+              编辑选项
+              </a>
+            </h4>
+          </div>
+          <div id="collapse-{{obj.id}}" class="panel-collapse collapse in">
+            <div class="panel-body">
+                    {% crispy form form.helper %}
+            </div>
+          </div>
+        </div>
 
+  </div> 
+
+{%block jsset %}
+    
+<script type="text/javascript">
+        $('.collapse').collapse()
+        var serverUrl = "http://{{object.uri}}"
+        $.ajax(serverUrl, {
+           type: "GET",
+           dataType: 'jsonp',
+           statusCode: {
+              200: function (response) {
+                $('#J-Site-Status span').addClass("hidden")
+                $('#J-Success-Site').removeClass("hidden")
+
+              },
+              400: function (response) {
+                $('#J-Site-Status span').addClass("hidden")
+                $('#J-Error-Site').removeClass("hidden")
+              },
+              404: function (response) {
+                $('#J-Site-Status span').addClass("hidden")
+                $('#J-Error-Site').removeClass("hidden")
+
+              }
+           }, success: function () {
+
+           },
+        });
+    </script>
+{%endblock%}
 
 {%endblock%}

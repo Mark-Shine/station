@@ -28,6 +28,9 @@ class Keywords(models.Model):
     class Meta:
         verbose_name_plural = u"匹配关键字"
 
+    def __unicode__(self, ):
+        return self.kword
+
 class Cate(models.Model):
     name = models.CharField(max_length=64, null=True, blank=True)
 
