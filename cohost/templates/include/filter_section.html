@@ -5,10 +5,11 @@
     border-radius: 3px;
 }
 
+    .block_filter dd {margin-right: 300px}
 </style>
 
 <dl class="dl-horizontal block_filter">        
-    <dd>
+    <dd >
         <ul class="list-inline">
             <li>备案：</li>
             <li><a href="{%url "data" %}?cate={{cate}}&ip={{ip}}&state={{state}}" {%if not sid %} class="on" {%endif%}>不限</a></li>
