@@ -34,8 +34,6 @@ def url2host():
 
 def getIp(domain):
     print "ping domain :%s" % domain
-    print "##########\n"
-    socket.settimeout(3)
     myaddr = socket.getaddrinfo(domain,'http')[0][4][0]
     return myaddr
 
