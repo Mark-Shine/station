@@ -23,3 +23,5 @@ python tool.py
 设定计划任务在basic_setting.py
 每月2日执行查询操作
 
+
+Ip需要手动添加到cohost/new_bing.py文件中result列表中

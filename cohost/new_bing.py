@@ -254,7 +254,11 @@ def f(r):
     AccountKey = keyInfo[1]
     return BingSearch(r, AccountKey)
 
+
+#测试用Ip集合
 test_result = [ "122.228.194.72-122.228.194.74",]
+
+#完整ip集合
 result = [
  "122.228.192.0-122.228.192.255",
  '122.228.193.0-122.228.193.255',
@@ -288,7 +292,9 @@ result = [
  '61.164.155.144-61.164.155.159',
  '61.164.159.192-61.164.159.223',]
 
-if __name__ == '__main__':
+
+def do_bing():
+    """异步执行bing查询动作"""
     keyInfo=GetAccountKey()
     AccountKey =keyInfo[1]
     useCounts=keyInfo[2]
@@ -301,13 +307,12 @@ if __name__ == '__main__':
         IpRange=BuildHostRange(strHost)
         r = p.map_async(f, range(IpRange[0], IpRange[1]+1), callback=ViewResult)
         r.wait()
-    # for strHost in result:
-    #     print strHost
-    #     IpRange=BuildHostRange(strHost)
-    #     r = p.apply_async(f, range(IpRange[0],IpRange[1]+1), callback=NewViewResult)
-    #     r.wait()
     end = time.time()
     print (end-now)
+
+
+if __name__ == '__main__':
+    do_bing()
 
 
 
