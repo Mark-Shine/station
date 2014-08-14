@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{%block mod_content%}
+
+        
+          <h1 class="page-header">温州市文化市场行政执法支队</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>{{datas}}</h4>
+              <span class="text-muted">记录域名数</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>{{areas}}</h4>
+              <span class="text-muted">区域数量</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>{{ips}}</h4>
+              <span class="text-muted">ip数量</span>
+            </div>
+          </div>
+
+
+
+{%endblock%}

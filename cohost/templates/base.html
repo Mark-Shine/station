@@ -41,6 +41,7 @@
                 <!-- 边栏 -->
                 <div class="col-sm-3 col-md-2 sidebar">
                   <ul class="nav nav-sidebar">
+                    <li class={{home_active}}><a href="{%url 'home'%}">概述</a></li>
                     <li class={{data_active}}><a href="{%url 'data'%}">数据</a></li>
                     <li class={{ips_active}}><a href="{%url 'ips'%}">IP库</a></li>
                     {%if perms.wzauth.can_manage_area %}

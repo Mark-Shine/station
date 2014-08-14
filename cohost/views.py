@@ -252,3 +252,14 @@ def show_result(request):
     return render(request, template, context)
 
 
+def show_home(request):
+    template = "cohost/home.html"
+    datas = Data.objects.filter(~Q(state="-1")).count()
+    ips = Data.objects.all().values_list('ip', flat=True).distinct().count()
+    areas = Area.objects.all().count()
+    context = {}
+    context['home_active'] = 'active'
+    context.update(**locals())
+    return render(request, template, context)
+
+

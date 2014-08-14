@@ -22,9 +22,9 @@ urlpatterns = patterns('',
     url(r'^areas/manage$', views.manage_area, name="manage_area"),
     url(r'^ip/search$', views.search_ip, name="search_ip"),
     url(r'^data/$', views.show_data, name="data"),
-    url(r'^$', views.show_data, name="home"),
+    url(r'^$', views.show_home, name="home"),
     url(r'^data/detail/(?P<pk>\d+)$', views.show_data_detail, name="detail"),
     url(r'^host/edit/(?P<pk>\d+)$', views.change_detail, name="change_detail"),
-    
+
     url(r'^admin/', include(admin.site.urls), ),
 )
