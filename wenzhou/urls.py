@@ -25,6 +25,6 @@ urlpatterns = patterns('',
     url(r'^$', views.show_data, name="home"),
     url(r'^data/detail/(?P<pk>\d+)$', views.show_data_detail, name="detail"),
     url(r'^host/edit/(?P<pk>\d+)$', views.change_detail, name="change_detail"),
-
-    url(r'^admin/', include(admin.site.urls)),
+    
+    url(r'^admin/', include(admin.site.urls), ),
 )
