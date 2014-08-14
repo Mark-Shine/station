@@ -20,7 +20,7 @@
     <tbody>
     {%for d in objects %}
         <tr>
-            <td><a href="{{d.uri}}">{{d.uri}}</a></td>
+            <td><a href="http://{{d.uri}}">{{d.uri}}</a></td>
             <td>{{d.ip}}</td>
             <td>{{d.get_state_display}}</td>
             <td><a href="{% url 'detail' pk=d.id %}">详情</a></td>

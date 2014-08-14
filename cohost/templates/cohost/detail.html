@@ -21,10 +21,10 @@
     <tbody>
         <tr>
             <td>{{object.ip}}</td>
-            <td>{{object.uri}}</td>
+            <td><a href="http://{{object.uri}}">{{object.uri}}</a></td>
             <td>{{object.get_state_display}}</td>
             <td>{{object.title}}</td>
-            <td>{{object.cate}}</td>
+            <td>{{object.cate|default:""}}</td>
             <td>{{object.IPS|default:""}}</td>
             <td id="J-Site-Status"><span >等待...</span><span id="J-Success-Site"class="hidden">正常</span><span class="hidden" id="J-Error-Site">异常</span> </td>
             <td>{{object.icpno|default:''}}</td>
@@ -75,9 +75,15 @@
                 $('#J-Error-Site').removeClass("hidden")
 
               }
-           }, success: function () {
+           }, 
+           error: function(){
+               $('#J-Site-Status span').addClass("hidden")
+               $('#J-Error-Site').removeClass("hidden")
+            },
+           success: function () {
 
            },
+           timeout: 3000 
         });
     </script>
 {%endblock%}
