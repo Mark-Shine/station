@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'wenzhou.wsgi.application'
 
 LANGUAGE_CODE = 'zh'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
