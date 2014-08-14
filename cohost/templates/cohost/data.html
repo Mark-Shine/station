@@ -38,7 +38,7 @@
         <tr>
             <td title="{{d.uri}}"><a href="http://{{d.uri}}" target="_blank">{{d.uri|truncatechars:16}}</a></td>
             <td>{{d.ip}}</td>
-            <td><button title="处理意见" data-content="{{w.data.beizhu|default:"无"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.get_state_display}}</button></td>
+            <td><button title="处理意见" data-content="{{d.beizhu|default:"无"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.get_state_display}}</button></td>
             <td>{{d.cate|default:""}}</td>
             <td title="{{d.title}}">{{d.title|truncatechars:10}}</td>
             <td>{{d.IPS|default:""|truncatechars:10}}</td>
