@@ -114,7 +114,7 @@ class DataActionRecord(models.Model):
         form = {}
         form['user'] = user
         form['data'] = instance
-        form['time'] = timezone.localtime(timezone.now())
+        form['time'] =  timezone.localtime(timezone.now())
         form['action'] = action
         acrecord, created = DataActionRecord.objects.get_or_create(**form)
 

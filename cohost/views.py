@@ -1,5 +1,6 @@
 #encoding=utf-8
 import math
+import time
 import operator
 import datetime
 
@@ -15,6 +16,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
+from django.utils import timezone
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -196,11 +198,16 @@ def show_areas(request):
     context['area_active'] = "active"
     return TemplateResponse(request, "cohost/areas.html", context)
 
-@build_pages(model=DataActionRecord)
+@login_required
 def show_logs(request):
+    pagenum = request.GET.get("page", 1)
     context = {}
     context['logs_active'] = "active"
-    return TemplateResponse(request, "cohost/logs.html", context)
+    objs = DataActionRecord.objects.all().order_by("-time")
+    paged_objects, pagination = get_pagination(request, objs, int(pagenum))
+    context['pagination'] = pagination  
+    context['objects'] = paged_objects
+    return render(request, "cohost/logs.html", context)
 
 def manage_area(request):
     action = request.POST.get('action')
@@ -227,7 +234,7 @@ def manage_area(request):
 
     return HttpResponseRedirect(reverse("areas"))
 
-@login_required
+@login_required 
 def show_result(request):
     """提示页面"""
     context = {}
