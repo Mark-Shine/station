@@ -39,7 +39,7 @@
     <div class="container-fluid">
           <div class="row">
                 <!-- 边栏 -->
-                <div class="col-sm-3 col-md-2 sidebar">
+                <div class="col-sm-3 col-md-1 sidebar">
                   <ul class="nav nav-sidebar">
                     <li class={{home_active}}><a href="{%url 'home'%}">概述</a></li>
                     <li class={{data_active}}><a href="{%url 'data'%}">数据</a></li>
@@ -53,7 +53,7 @@
                   </ul>
                 </div>
                 <!-- 主要内容 -->
-                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div class="col-sm-9 col-sm-offset-3 col-md-11 col-md-offset-1 main">
                 {% block mod_content%}
                 
                 {%endblock%}

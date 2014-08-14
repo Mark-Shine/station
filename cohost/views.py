@@ -143,7 +143,7 @@ def show_data(request):
 
 @login_required
 def show_data_detail(request, pk):
-    template = "cohost/detail.html"
+    template = "cohost/edit_data.html"
     context = {}
     _object = get_object_or_404(Data, id=pk)
 
@@ -161,9 +161,6 @@ def show_data_detail(request, pk):
 def change_detail(request, pk):
     user = request.user
     form = DataStateForm(request.POST)
-    status = 0
-    next = reverse("detail", args=[pk])
-
     if form.is_valid():
         cleaned_data = form.cleaned_data
         queryset = Data.objects.filter(id=pk)
@@ -177,9 +174,8 @@ def change_detail(request, pk):
         except Exception, e:
             raise e
         status = 1
-        next = reverse("data")
-    url = "{0}?next={1}&status={2}".format(reverse("result"), next, status)
-    return HttpResponseRedirect(url)
+    next = reverse("data")
+    return HttpResponseRedirect(next)
 
 
 @login_required

@@ -6,25 +6,47 @@
 <div >
     {{filter_section}}
 </div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="J_Edit_Data">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" id="J_Edit_Data_Content" style="width:800px">
+      
+    </div>
+  </div>
+</div>
+
 <table class="table ">
     <thead>
         <tr>
             <td>host</td>
             <td>ip</td>
             <td>审核状态</td>
-            <td>操作</td>
             <td>网站分类</td>
+            <td>标题</td>
+            <td>接入商</td>
+            <td>站点状态</td>
+            <td>备案号</td>
+            <td>主办单位</td>
+            <td>区域</td>
+            <td>操作</td>
         </tr>
 
     </thead>
     <tbody>
     {%for d in objects %}
         <tr>
-            <td><a href="http://{{d.uri}}" target="_blank">{{d.uri}}</a></td>
+            <td title="{{d.uri}}"><a href="http://{{d.uri}}" target="_blank">{{d.uri|truncatechars:16}}</a></td>
             <td>{{d.ip}}</td>
-            <td>{{d.get_state_display}}</td>
-            <td><a href="{% url 'detail' pk=d.id %}">详情</a></td>
+            <td><button title="处理意见" data-content="{{w.data.beizhu|default:"无"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.get_state_display}}</button></td>
             <td>{{d.cate|default:""}}</td>
+            <td title="{{d.title}}">{{d.title|truncatechars:10}}</td>
+            <td>{{d.IPS|default:""|truncatechars:10}}</td>
+            <td id="J-Site-Status"><span >等待...</span><span id="J-Success-Site"class="hidden">正常</span><span class="hidden" id="J-Error-Site">异常</span> </td>
+            <td>{{d.icpno|default:''}}</td>
+            <td title="{{d.organizers}}">{{d.organizers|default:""|truncatechars:5}}</td>
+            <td>{{d.area.name|default:''}}</td>
+            <td><button  data-toggle="modal" data-target="#J_Edit_Data" class="btn btn-link J_Edit_Button" id="{{d.id}}" url="{%url "detail" pk=d.id%}">编辑</button></td>
         </tr>
     
     {%endfor%}
@@ -34,5 +56,24 @@
 </table>
 
 {{pagination}}
+
+<script type="text/javascript">
+$('.popover-dismiss').popover({
+  trigger: 'focus'
+})
+    $(".J_Edit_Button").on("click", function(e) {
+            var b_id = $(this).attr("id");
+            var b_url = $(this).attr("url");
+            $.ajax(b_url,
+            {
+                type:"GET",
+                success: function (data) {
+                    $("#J_Edit_Data_Content").html(data)
+           },
+
+            })
+        });
+      
+</script>
 
 {%endblock%}
