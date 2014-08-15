@@ -5,7 +5,7 @@
     border-radius: 3px;
 }
 
-    .block_filter dd {margin-right: 300px}
+    /*.block_filter dd {margin-right: 300px}*/
 </style>
 
 <dl class="dl-horizontal block_filter">        
@@ -30,7 +30,7 @@
             <li><a href="{%url "data" %}?icpno={{icpno}}&state={{sid}}&cate={{cate}}&ip={{ip}}" {%if sid|slugify == state %} class="on" {%endif%}>{{sname}}</a></li>
             {%endfor%}
         </ul> 
-
+        <ul class="list-inline"><a href="{%url "data" %}" class="btn btn-default">重置</a></ul>
         <ul class="list-inline">
             <li >
                 <form class="form" role="search" action="{%url "data" %}" method="get">
