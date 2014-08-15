@@ -83,7 +83,7 @@ def build_pages(model, condition=None):
         return _page
     return wrraped
 
-
+@login_required
 def show_ips(request):
     pagenum = request.GET.get("page", 1)
     context = {}
@@ -248,6 +248,7 @@ def show_result(request):
     return render(request, template, context)
 
 
+@login_required
 def show_home(request):
     template = "cohost/home.html"
     datas = Data.objects.filter(~Q(state="-1")).count()
