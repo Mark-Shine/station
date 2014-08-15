@@ -135,8 +135,8 @@ def show_data(request):
     filter_context['cates'] = Cate.objects.all()
     filter_context['states'] = STATE_CHOICES
     filter_context.update(request.GET.dict())
-    filter_context['data_counts'] = data_counts
     data_counts = Data.objects.filter(reduce(operator.and_, qs, Q())).filter(~Q(state="-1")).count()
+    filter_context['data_counts'] = data_counts
     #Q()是必须的，否则当所有条件为空会报错
     context['q'] = reduce(operator.and_, qs, Q())
     context['data_counts'] = data_counts
