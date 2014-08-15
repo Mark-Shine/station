@@ -135,10 +135,11 @@ def show_data(request):
     filter_context['cates'] = Cate.objects.all()
     filter_context['states'] = STATE_CHOICES
     filter_context.update(request.GET.dict())
+    filter_context['data_counts'] = data_counts
     data_counts = Data.objects.filter(reduce(operator.and_, qs, Q())).filter(~Q(state="-1")).count()
     #Q()是必须的，否则当所有条件为空会报错
-    context['data_counts'] = data_counts
     context['q'] = reduce(operator.and_, qs, Q())
+    context['data_counts'] = data_counts
     context['filter_section'] = render_to_string("include/filter_section.html", filter_context)
     context['data_active'] = "active"
     return TemplateResponse(request, "cohost/data.html", context)
