@@ -36,13 +36,17 @@
     <tbody>
     {%for d in objects %}
         <tr>
-            <td title="{{d.uri}}"><a href="http://{{d.uri}}" target="_blank">{{d.uri|truncatechars:16}}</a></td>
+            <td title="{{d.uri}}" ><a href="http://{{d.uri}}" target="_blank">{{d.uri|truncatechars:16}}</a></td>
             <td>{{d.ip}}</td>
             <td><button title="处理意见" data-content="{{d.beizhu|default:"无"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.get_state_display}}</button></td>
             <td>{{d.cate|default:""}}</td>
             <td title="{{d.title}}">{{d.title|truncatechars:10}}</td>
             <td>{{d.IPS|default:""|truncatechars:10}}</td>
-            <td id="J-Site-Status"><span >等待...</span><span id="J-Success-Site"class="hidden">正常</span><span class="hidden" id="J-Error-Site">异常</span> </td>
+            <td host="http://{{d.uri}}" class="J_Host" >
+                <span class="J-Status-Wait">等待...</span>
+                <span class="hidden J-Status-Success">正常</span>
+                <span class="hidden J-Status-Error" >异常</span> 
+            </td>
             <td>{{d.icpno|default:''}}</td>
             <td title="{{d.organizers}}">{{d.organizers|default:""|truncatechars:5}}</td>
             <td>{{d.area.name|default:''}}</td>
@@ -58,9 +62,48 @@
 {{pagination}}
 
 <script type="text/javascript">
-$('.popover-dismiss').popover({
-  trigger: 'focus'
-})
+
+    // 获取每条数据的状态
+    $(".J_Host").each(function(){
+        var serverUrl = $(this).attr("host")
+        var td = $(this)
+        $.ajax(serverUrl, {
+           type: "GET",
+           dataType: 'jsonp',
+           statusCode: {
+              200: function (response) {
+                td.children(".J-Status-Wait").addClass("hidden")
+                td.children(".J-Status-Success").removeClass("hidden")
+
+              },
+              400: function (response) {
+                td.children(".J-Status-Wait").addClass("hidden")
+                td.children(".J-Status-Error").removeClass("hidden")
+              },
+              404: function (response) {
+                td.children(".J-Status-Wait").addClass("hidden")
+                td.children(".J-Status-Error").removeClass("hidden")
+
+              }
+           }, 
+           error: function(data){
+                if (data['status'] != 200){
+                   td.children(".J-Status-Wait").addClass("hidden")
+                   td.children(".J-Status-Error").removeClass("hidden")
+                }
+            },
+           success: function () {
+           },
+           timeout: 3000 
+        });
+
+
+
+          });
+
+    $('.popover-dismiss').popover({
+      trigger: 'focus'
+    })
     $(".J_Edit_Button").on("click", function(e) {
             var b_id = $(this).attr("id");
             var b_url = $(this).attr("url");
