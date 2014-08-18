@@ -146,10 +146,20 @@ def show_data(request):
 
 @login_required
 def show_data_detail(request, pk):
+    template = "cohost/detail.html"
+    context = {}
+    _object = get_object_or_404(Data, id=pk)
+    context['object'] = _object
+    context['data_active'] = "active"
+    return render(request, template, context)
+
+
+
+@login_required
+def edit_data(request, pk):
     template = "cohost/edit_data.html"
     context = {}
     _object = get_object_or_404(Data, id=pk)
-
     context['object'] = _object
     form = DataStateForm(initial={
         'state': _object.state, 
@@ -159,6 +169,7 @@ def show_data_detail(request, pk):
     context['data_active'] = "active"
     context['form'] = form
     return render(request, template, context)
+
 
 @login_required
 def change_detail(request, pk):

@@ -10,9 +10,9 @@ from cohost.models import Area
 
 class WzUser(models.Model):
     user = models.OneToOneField(User)
-    is_admin = models.BooleanField('admin status', default=False,)
+    is_admin = models.BooleanField('是否为管理员', default=False,)
     #一个员工可以管理多个区域
-    area = models.ManyToManyField(Area, null=True, blank=True)
+    area = models.ManyToManyField(Area, null=True, blank=True, verbose_name=u"区域")
 
     def __unicode__(self,):
         return u"用户：%s-%s" %(self.user.id, self.user.username)

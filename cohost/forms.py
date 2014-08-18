@@ -17,7 +17,7 @@ class DataStateForm(forms.Form):
         self.helper.form_id = 'id-datastateForm'
         self.helper.form_class = 'form'
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', u'提交'))
 
     state = forms.TypedChoiceField(
         label = u"审核状态",

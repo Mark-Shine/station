@@ -15,7 +15,6 @@
     </div>
   </div>
 </div>
-
 <table class="table ">
     <thead>
         <tr>
@@ -24,10 +23,8 @@
             <td>审核状态</td>
             <td>网站分类</td>
             <td>标题</td>
-            <td>接入商</td>
-            <td>站点状态</td>
             <td>备案号</td>
-            <td>主办单位</td>
+            <td>站点状态</td>
             <td>区域</td>
             <td>操作</td>
         </tr>
@@ -41,16 +38,16 @@
             <td><button title="处理意见" data-content="{{d.related_law.law|default:"无"}} : {{d.related_law.detail|default:"无"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.get_state_display}}</button></td>
             <td>{{d.cate|default:""}}</td>
             <td title="{{d.title}}">{{d.title|truncatechars:10}}</td>
-            <td>{{d.IPS|default:""|truncatechars:10}}</td>
+            <td>
+              <button title="主办单位：{{d.organizers}}" data-content="单位性质：{{d.cate|default:""}}； 网站名称：{{d.title}}；审核时间：{{d.dataactionrecord_set.last.time|date:"Y-m-d H:i"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.icpno|default:''}}</button>
+            </td>
             <td host="http://{{d.uri}}" class="J_Host" >
                 <span class="J-Status-Wait">等待...</span>
                 <span class="hidden J-Status-Success">正常</span>
                 <span class="hidden J-Status-Error" >异常</span> 
             </td>
-            <td>{{d.icpno|default:''}}</td>
-            <td title="{{d.organizers}}">{{d.organizers|default:""|truncatechars:5}}</td>
             <td>{{d.area.name|default:''}}</td>
-            <td><button  data-toggle="modal" data-target="#J_Edit_Data" class="btn btn-link J_Edit_Button" id="{{d.id}}" url="{%url "detail" pk=d.id%}">编辑</button></td>
+            <td><button  data-toggle="modal" data-target="#J_Edit_Data" class="btn btn-link J_Edit_Button" id="{{d.id}}" url="{%url "edit_data" pk=d.id%}">编辑</button></td>
         </tr>
     
     {%endfor%}
