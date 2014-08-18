@@ -21,9 +21,9 @@ STATE_CHOICES = (
 # Create your models here.
 class Keywords(models.Model):
     #关键字
-    kword = models.CharField(max_length=32, null=True, blank=True)
+    kword = models.CharField(u"关键字", max_length=32, null=True, blank=True)
     #分类
-    cate = models.ForeignKey("Cate", null=True, blank=True)
+    cate = models.ForeignKey("Cate", null=True, blank=True, verbose_name=u"相关分类")
 
     class Meta:
         verbose_name_plural = u"匹配关键字"
@@ -32,7 +32,7 @@ class Keywords(models.Model):
         return self.kword
 
 class Cate(models.Model):
-    name = models.CharField(max_length=64, null=True, blank=True)
+    name = models.CharField(u"分类", max_length=64, null=True, blank=True)
 
     def __unicode__(self, ):
         return self.name
@@ -58,31 +58,31 @@ class Data(models.Model):
 
     # id = models.IntegerField(db_column='ID', primary_key=True, blank=True) # Field name made lowercase.
     ip = models.TextField(db_column='IP') # Field name made lowercase.
-    uri = models.TextField(db_column='URI') # Field name made lowercase.
-    title = models.TextField(db_column='Title', blank=True) # Field name made lowercase.
+    uri = models.TextField(u"域名", db_column='URI') # Field name made lowercase.
+    title = models.TextField(u"标题", db_column='Title', blank=True) # Field name made lowercase.
     descript = models.TextField(db_column='Descript', blank=True) # Field name made lowercase.
     
-    IPS = models.CharField(max_length=16, null=True, blank=True)
+    IPS = models.CharField(u"运营商", max_length=16, null=True, blank=True)
     #备案号
     # reg_number = models.IntegerField(blank=True, default=0, null=True)
     #备案类型
     # reg_type = models.CharField(max_length=16, null=True, blank=True)
-    state = models.CharField(max_length=32, blank=True, choices=STATE_CHOICES, default='0')
+    state = models.CharField(u"状态", max_length=32, blank=True, choices=STATE_CHOICES, default='0')
     contact_name = models.CharField(max_length=32, null=True, blank=True)
     time = models.DateTimeField(blank=True, null=True)
 
     #备案信息
-    icpno = models.CharField(max_length=32, blank=True, null=True)
-    organizers_type = models.CharField(null=True, blank=True, max_length=64)
-    exadate = models.DateTimeField(null=True, blank=True)
+    icpno = models.CharField(u"备案号", max_length=32, blank=True, null=True)
+    organizers_type = models.CharField(u"组织机构类型", null=True, blank=True, max_length=64)
+    exadate = models.DateTimeField(u"过期时间", null=True, blank=True)
     #主办单位
-    organizers = models.CharField(null=True, blank=True, max_length=64)
-    cate = models.ForeignKey("Cate", null=True, blank=True)
-    area = models.ForeignKey("Area", null=True, blank=True)
+    organizers = models.CharField(u"组织机构", null=True, blank=True, max_length=64)
+    cate = models.ForeignKey("Cate", null=True, blank=True,  verbose_name=u"分类")
+    area = models.ForeignKey("Area", null=True, blank=True,  verbose_name=u"区域")
     #备注
-    beizhu = models.TextField(blank=True, null=True)
+    beizhu = models.TextField(blank=True, null=True,)
     #适应法律条文
-    related_law = models.ForeignKey("LawRecord", null=True, blank=True)
+    related_law = models.ForeignKey("LawRecord", null=True, blank=True,  verbose_name=u"相关条文")
     class Meta:
         verbose_name_plural = u"IP域名信息"
         db_table = 'Data'
@@ -92,15 +92,15 @@ class Area(models.Model):
     def __unicode__(self,):
         return "%s" %(self.name)
 
-    name = models.CharField(max_length=64, blank=True, null=True)
+    name = models.CharField(u"区域", max_length=64, blank=True, null=True)
     class Meta:
         verbose_name_plural = u"区域"
 
 
 class Ippiece(models.Model):
     """IP片段"""
-    piece = models.CharField(max_length=64, blank=True, null=True)
-    area = models.ForeignKey("Area", null=True, blank=True)
+    piece = models.CharField(u"IP段", max_length=64, blank=True, null=True)
+    area = models.ForeignKey("Area", null=True, blank=True, verbose_name=u"区域")
 
 
 class DataActionRecord(models.Model):
@@ -135,9 +135,9 @@ class LawRecord(models.Model):
         return self.law
 
     #todo 添加详细说明 lanmu 
-    law = models.TextField(null=True, blank=True)
+    law = models.TextField(u"条文", null=True, blank=True, )
     #详细
-    detail = models.TextField(null=True, blank=True)
+    detail = models.TextField(u"详细", null=True, blank=True, )
     time = models.DateTimeField(null=True, blank=True)
 
 
