@@ -119,4 +119,10 @@ class DataActionRecord(models.Model):
         acrecord, created = DataActionRecord.objects.get_or_create(**form)
 
 
+class Ips(models.Model):
+    """IP库"""
+    ip = models.IPAddressField(null=True, blank=True)
+    
+
+
 

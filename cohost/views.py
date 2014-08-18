@@ -257,9 +257,32 @@ def show_home(request):
     datas = Data.objects.filter(~Q(state="-1")).count()
     ips = Data.objects.all().values_list('ip', flat=True).distinct().count()
     areas = Area.objects.all().count()
+    cts, states, is_beians = count_for_data()
     context = {}
     context['home_active'] = 'active'
     context.update(**locals())
     return render(request, template, context)
+
+def count_for_data():
+    cates = Cate.objects.all()
+    #分类
+    cts = []
+    for c in cates:
+        cts.append({'name': c.name, "counts": c.data_set.all().count()})
+    #状态统计
+    data_set = Data.objects.filter(~Q(state="-1"))
+    states = []
+    for state, sname in iter(STATE_CHOICES):
+        states.append({"counts": data_set.filter(state=state).count(), "name": sname})
+    is_beians = []
+
+    is_beians.append({"counts": data_set.filter(icpno=None).count(), "name": u"未备案"})
+    is_beians.append({"counts": data_set.exclude(icpno=None).count(), "name": u"已备案"})
+    return cts, states, is_beians
+        
+
+
+
+
 
 

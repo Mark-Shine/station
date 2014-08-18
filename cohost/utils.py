@@ -4,9 +4,10 @@ import urllib3
 import socket
 from cohost.models import Data, Allkey, Cate, Keywords
 import requests
+import struct
 import time
 from multiprocessing import Pool
-
+from cohost.models import Ips
 
 def urldecode_to_utf8(dict_data):
     for k, v in dict_data.items():
@@ -111,8 +112,57 @@ def makeup_info_bulk():
     print ("GOOd bye")
 
 
+
+def BuildHostRange(strHost):
+    slash=[]                                      
+    startIpStr=""
+    endIpStr=""
+    ranges=0
+    submask=0
+
+    realStartIP=0
+    realEndIP=0
+
+    if strHost.find('-')>0:
+        slash = strHost.split('-')
+        startIpStr=slash[0]
+        endIpStr=slash[1]
+    else:
+        startIpStr=strHost
+    try:
+        startIpStr=socket.gethostbyname(startIpStr)
+        if strHost.find('-')>0:
+            realStartIP = socket.ntohl(struct.unpack('I',socket.inet_aton(startIpStr))[0])
+            realEndIP = socket.ntohl(struct.unpack('I',socket.inet_aton(endIpStr))[0])
+        else:
+            realStartIP=realEndIP=socket.ntohl(struct.unpack('I',socket.inet_aton(startIpStr))[0])
+    except Exception, e:
+        print e
+        return [0,0]
+    print realStartIP, realEndIP
+    return [realStartIP,realEndIP]
+
+def read_from_ipbook():
+    with open('ip.txt',"r") as data:
+        c = data.read()
+        d =c.split(",")
+        return d
+
+def f(x):
+    Ips.objects.create(ip=x)
+
+
+def put_into_ippool():
+    ips = read_from_ipbook()
+    for strHost in ips:
+        IpRange = BuildHostRange(strHost)
+        map(f, range(IpRange[0], IpRange[1]+1))
+
+
+
 if __name__ == '__main__':
-    makeup_info_bulk()
+    # makeup_info_bulk()
+    put_into_ippool()
     # p = Pool(processes=4)utls
     # apply_async = p.apply_async
 

@@ -256,7 +256,7 @@ def f(r):
 
 
 #测试用Ip集合
-test_result = [ "122.228.194.72-122.228.194.74",]
+test_result = [ '36.22.64.0-36.22.127.255', '39.180.128.0-39.180.136.255']
 
 #完整ip集合
 result = [
@@ -310,6 +310,12 @@ def do_bing():
     end = time.time()
     print (end-now)
 
+
+def read_from_ipbook():
+    with open('ip.txt',"r") as data:
+        c = data.read()
+        d =c.split(",")
+        print d
 
 if __name__ == '__main__':
     do_bing()

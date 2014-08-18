@@ -19,7 +19,41 @@
               <h4>{{ips}}</h4>
               <span class="text-muted">ip数量</span>
             </div>
+            {%for o in objs %}
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>{{o.counts}}</h4>
+              <span class="text-muted">{{o.cate_name}}</span>
+            </div>
+            {%endfor%}
           </div>
+          <dl class="dl-horizontal">
+            <dd>
+              <ul class="list-inline">
+              <li>分类：</li>
+                {%for c in cts%}
+                <li>{{c.name}}</li>
+                <li>{{c.counts}}</li>
+                {%endfor%}
+              </ul>
+              <li>评审状态：</li>
+                {%for c in states%}
+                <li>{{c.name}}</li>
+                <li>{{c.counts}}</li>
+                {%endfor%}
+              </ul>
+              <li>备案情况</li>
+                {%for c in is_beians%}
+                <li>{{c.name}}</li>
+                <li>{{c.counts}}</li>
+                {%endfor%}
+              </ul>
+
+
+            </dd>
+
+          </dl>
+
+
 
 
 
