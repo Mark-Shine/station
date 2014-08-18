@@ -3,6 +3,7 @@ from django import forms
 
 from cohost.models import STATE_CHOICES
 from cohost.models import Cate
+from cohost.models import LawRecord
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -32,10 +33,12 @@ class DataStateForm(forms.Form):
         initial = '0',
         required = False,
     )
-    beizhu = forms.CharField(
+    related_law = forms.ModelChoiceField(
         label=u"审核处理意见",
+        queryset=LawRecord.objects.all(),
         required=False,
-        widget=forms.Textarea)
+        widget=forms.Select)
+
 
 
 class AreaForm(forms.Form):

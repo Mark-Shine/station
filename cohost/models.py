@@ -81,6 +81,8 @@ class Data(models.Model):
     area = models.ForeignKey("Area", null=True, blank=True)
     #备注
     beizhu = models.TextField(blank=True, null=True)
+    #适应法律条文
+    related_law = models.ForeignKey("LawRecord", null=True, blank=True)
     class Meta:
         verbose_name_plural = u"IP域名信息"
         db_table = 'Data'
@@ -123,6 +125,20 @@ class Ips(models.Model):
     """IP库"""
     ip = models.IPAddressField(null=True, blank=True)
     
+
+
+class LawRecord(models.Model):
+    class Meta:
+        verbose_name_plural = u"相关条文"
+
+    def __unicode__(self):
+        return self.law
+
+    #todo 添加详细说明 lanmu 
+    law = models.TextField(null=True, blank=True)
+    #详细
+    detail = models.TextField(null=True, blank=True)
+    time = models.DateTimeField(null=True, blank=True)
 
 
 

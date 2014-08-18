@@ -154,7 +154,7 @@ def show_data_detail(request, pk):
     form = DataStateForm(initial={
         'state': _object.state, 
         "cate": _object.cate,
-        "beizhu":_object.beizhu})
+        "related_law":_object.related_law})
     form.helper.form_action = reverse("change_detail", args=[pk])
     context['data_active'] = "active"
     context['form'] = form

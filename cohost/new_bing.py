@@ -157,7 +157,8 @@ def ViewResult(data):
                             d_query.save()
                         else:
                             print "save to database %s" % host
-                            Data.objects.create(ip=curIP,uri=host,title=lv['Title'],descript=lv['Description'])
+                            now = datetime.datetime.now()
+                            Data.objects.create(ip=curIP,uri=host,title=lv['Title'],descript=lv['Description'], time=now)
                     except Exception, e:
                         print e
 
