@@ -35,12 +35,14 @@
                 <li>{{c.counts}}</li>
                 {%endfor%}
               </ul>
+              <ul class="list-inline">
               <li>评审状态：</li>
                 {%for c in states%}
                 <li>{{c.name}}</li>
                 <li>{{c.counts}}</li>
                 {%endfor%}
               </ul>
+              <ul class="list-inline">
               <li>备案情况</li>
                 {%for c in is_beians%}
                 <li>{{c.name}}</li>
