@@ -52,11 +52,19 @@ def paginate(objects_query, pagenum):
 
 # Create your views here.
 def get_pagination(request, objects, pagenum=1):
+    #查询的页面
+    icpno = request.GET.get("icpno",)
+    cate = request.GET.get("cate")
+    state = request.GET.get("state")
+    ip = request.GET.get("ip")
+    queryurl = "cate=%s&ip=%s&state=%s&icpno=%s" % (cate, ip, state, icpno)
+
     paged_objects = paginate(objects, pagenum)
     pagination = render_to_string('pagination.html', {
+        'queryurl': queryurl, 
         'page_count': range(1, int(paged_objects.page_count)+1),
         'objects':paged_objects,
-        'loop_times':range(1,6)},
+        'loop_times': range(1,6)},
         context_instance=RequestContext(request))
     return paged_objects, pagination
 
@@ -113,7 +121,6 @@ def show_data(request):
     cate = request.GET.get("cate")
     state = request.GET.get("state")
     ip = request.GET.get("ip")
-
     #处理iP查询
     icp_q = None
     if icpno:

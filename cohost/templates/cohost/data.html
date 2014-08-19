@@ -39,7 +39,7 @@
             <td>{{d.cate|default:""}}</td>
             <td title="{{d.title}}">{{d.title|truncatechars:10}}</td>
             <td>
-              <button title="主办单位：{{d.organizers}}" data-content="单位性质：{{d.cate|default:""}}； 网站名称：{{d.title}}；审核时间：{{d.dataactionrecord_set.last.time|date:"Y-m-d H:i"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.icpno|default:''}}</button>
+              <button title="主办单位：{{d.organizers|default:''}}" data-content="单位性质：{{d.cate|default:""}}； 网站名称：{{d.title}}；审核时间：{{d.exadate|date:"Y-m-d H:i"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.icpno|default:''}}</button>
             </td>
             <td host="http://{{d.uri}}" class="J_Host" >
                 <span class="J-Status-Wait">等待...</span>
