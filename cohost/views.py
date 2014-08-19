@@ -28,6 +28,7 @@ from cohost.models import Area
 from cohost.forms import DataStateForm, AreaForm
 from cohost.models import STATE_CHOICES
 from cohost.models import Ippiece
+from cohost.models import LawRecord
 from wzauth.models import WzUser
 from cohost.signals import action_message
 from cohost.models import DataActionRecord
@@ -168,6 +169,9 @@ def edit_data(request, pk):
     context = {}
     _object = get_object_or_404(Data, id=pk)
     context['object'] = _object
+    context['cates'] = Cate.objects.all()
+    context['states'] = STATE_CHOICES
+    context['laws'] = LawRecord.objects.all()
     form = DataStateForm(initial={
         'state': _object.state, 
         "cate": _object.cate,

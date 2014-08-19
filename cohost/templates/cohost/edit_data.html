@@ -1,9 +1,55 @@
-{% load crispy_forms_tags %}
+
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
   <h4 class="modal-title" id="myModalLabel">编辑</h4>
 </div>
 <div class="modal-body">
-    {% crispy form form.helper %}
-    <a href="{%url "detail" pk=object.id %}" class="btn btn-default" target="_blank">打印</a>
+    <form action="{%url 'change_detail' pk=object.id%}" id="id-datastateForm" class="form" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="iWLhMfUFP8Qa0iherGoJ4dxcLjpV8wZz"> 
+            <div id="div_id_state" class="form-group">
+                <label for="id_state" class="control-label ">
+                    审核状态
+                </label>
+                <div class="controls ">
+                    <select class="select form-control" id="id_state" name="state">
+                    {% for sid, sname in states%}
+                        <option value="{{sid}}" {%if sid == object.state%} selected="True" {%endif%}>{{sname}}</option>
+
+                        {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <div id="div_id_cate" class="form-group">
+                <label for="id_cate" class="control-label ">
+                    类别
+                </label>
+                <div class="controls ">
+                    <select class="select form-control" id="id_cate" name="cate">
+                    <option value="">---------</option>
+                    {% for c in cates%}
+                    <option value="{{c.id}}" {%if c.id == object.cate.id%} selected="True" {%endif%}>{{c.name}}</option>
+                    {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <div id="div_id_related_law" class="form-group">
+                <label for="id_related_law" class="control-label ">
+                    审核处理意见
+                </label>
+                <div class="controls ">
+                    <select class="select form-control" id="id_related_law" name="related_law"><option value="">---------</option>
+                    {%for law in laws%}
+                    <option value="{{law.id}}" {%if law.id == object.related_law.id%} selected="True" {%endif%}>{{law.law}}</option>
+                    {%endfor%}
+                    </select>
+                </div>
+            </div>
+            <div class="form-actions">
+                <input type="submit" name="submit" value="提交" class="btn btn-primary" id="submit-id-submit"> 
+                <a href="{%url "detail" pk=object.id %}" class="btn btn-default" target="_blank">打印</a>
+            </div>
+            </form>
 </div>
+
+
+
