@@ -124,6 +124,7 @@ class DataActionRecord(models.Model):
 class Ips(models.Model):
     """IP库"""
     ip = models.IPAddressField(null=True, blank=True)
+    area = models.ForeignKey("Area", null=True, blank=True, verbose_name=u"区域")
     
 
 

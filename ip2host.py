@@ -5,6 +5,10 @@ import socket
 import requests
 from multiprocessing import Pool
 from time import sleep
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wenzhou.settings")
+from cohost.models import Ips
+from cohost.models import Data
+    
 # with open("ips.txt") as text
 
 AIZHAN_HEADERS = {
@@ -33,7 +37,6 @@ def f(ip):
 
 
 def main():
-    url = "http://dns.aizhan.com/index.php?r=index/domains"
     with Pool(4) as pool:
         c = pool.map(f, ['42.120.194.11', "220.181.181.222", "123.125.114.144"])
         # query = {ip: aizhan_get_host(ip,) for ip in ['42.120.194.11', "220.181.181.222", "123.125.114.144"]}

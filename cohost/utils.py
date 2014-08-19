@@ -6,6 +6,7 @@ from cohost.models import Data, Allkey, Cate, Keywords
 import requests
 import struct
 import time
+from cohost.models import Area
 from multiprocessing import Pool
 from cohost.models import Ips
 
@@ -142,18 +143,15 @@ def BuildHostRange(strHost):
     print realStartIP, realEndIP
     return [realStartIP,realEndIP]
 
-def read_from_ipbook():
-    with open('ip.txt',"r") as data:
-        c = data.read()
-        d =c.split(",")
-        return d
 
 def f(x):
-    Ips.objects.create(ip=x)
+    area, created = Area.objects.get_or_create(name=u"龙湾")
+    Ips.objects.create(ip=x, area=area)
 
 
-def put_into_ippool():
-    ips = read_from_ipbook()
+
+def put_into_ippool(ips):
+    # ips = read_from_ipbook()
     for strHost in ips:
         IpRange = BuildHostRange(strHost)
         map(f, range(IpRange[0], IpRange[1]+1))
@@ -162,7 +160,7 @@ def put_into_ippool():
 
 if __name__ == '__main__':
     # makeup_info_bulk()
-    put_into_ippool()
+    put_into_ippool(result)
     # p = Pool(processes=4)utls
     # apply_async = p.apply_async
 

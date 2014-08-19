@@ -19,6 +19,7 @@ from multiprocessing import Pool
 logger = logging.getLogger('tasks.log')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wenzhou.settings")
 from cohost.models import Data
+from cohost.models import Ips
 from datetime import datetime,timedelta
 try:  
     import json  
@@ -120,6 +121,7 @@ def getIp(domain):
 
 def ViewResult(data):
     JsonData={}
+
     for r in data:
         ResData = r.get("ResData", "")
         curIP = r.get("curIP", "")
@@ -251,9 +253,13 @@ def y(x):
     print (x)
 
 def f(r):
+    print r
     keyInfo=GetAccountKey()
     AccountKey = keyInfo[1]
-    return BingSearch(r, AccountKey)
+    res = BingSearch(r, AccountKey)
+    print res
+    return "res"
+    # return "y"
 
 
 #测试用Ip集合
@@ -304,10 +310,21 @@ def do_bing():
     p = Pool(processes=4)
     
     now = time.time()
-    for strHost in test_result:
-        IpRange=BuildHostRange(strHost)
-        r = p.map_async(f, range(IpRange[0], IpRange[1]+1), callback=ViewResult)
-        r.wait()
+    ips = Ips.objects.all().values_list("ip", flat=True)
+    futures = []
+    #单线程版本用于测试线路
+    # for ip in iter(ips):
+    #     res = f(int(ip))
+    #     NewViewResult(res)
+    #多线程版本   
+    for ip in iter(ips):    
+        r = p.apply_async(f, [int(ip), ], callback=NewViewResult)
+        r.get()
+    # for fu in futures:
+        # r = fu.get()
+    # r = p.map_async(f, iter(ips), callback=ViewResult)
+    # for strHost in test_result:
+    #     IpRange=BuildHostRange(strHost)
     end = time.time()
     print (end-now)
 
@@ -315,7 +332,7 @@ def do_bing():
 def read_from_ipbook():
     with open('ip.txt',"r") as data:
         c = data.read()
-        d =c.split(",")
+        d = c.split(",")
         print d
 
 if __name__ == '__main__':
