@@ -21,7 +21,7 @@
           <td>{{forloop.counter}}</td>
           <td>{{w.user.username}}</td>
           <td>{{w.action}}</td>
-          <td> <button type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover"  title="处理意见" data-content="{{w.data.beizhu}}">{{w.data.uri}}-{{w.data.title}}</button> </td>
+          <td> <button type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover"  title="相关条文：{{w.data.related_law.law}}" data-content="{{w.data.related_law.detail|default:""}}">{{w.data.uri}}-{{w.data.title}}</button> </td>
           <td>{{w.data.get_state_display}}</td>
           <td>{{w.time|date:"Y-m-d H:i"}}</td>
         </tr>
