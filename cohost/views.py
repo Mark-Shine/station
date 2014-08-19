@@ -54,10 +54,10 @@ def paginate(objects_query, pagenum):
 # Create your views here.
 def get_pagination(request, objects, pagenum=1):
     #查询的页面
-    icpno = request.GET.get("icpno",)
-    cate = request.GET.get("cate")
-    state = request.GET.get("state")
-    ip = request.GET.get("ip")
+    icpno = request.GET.get("icpno", "")
+    cate = request.GET.get("cate", "")
+    state = request.GET.get("state", "")
+    ip = request.GET.get("ip", "")
     queryurl = "cate=%s&ip=%s&state=%s&icpno=%s" % (cate, ip, state, icpno)
 
     paged_objects = paginate(objects, pagenum)
