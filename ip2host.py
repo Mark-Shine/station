@@ -1,14 +1,55 @@
 # encoding: UTF-8
 import re
+import os
+import struct
+import socket
 import pickle
 import socket
 import requests
+import datetime
 from multiprocessing import Pool
 from time import sleep
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wenzhou.settings")
 from cohost.models import Ips
 from cohost.models import Data
-    
+from cohost.models import Area
+from multiprocessing import Pool
+from cohost.models import Ips
+from cohost.utils import makeup_info_bulk
+
+result = [
+ "122.228.192.0-122.228.192.255",
+ '122.228.193.0-122.228.193.255',
+ '122.228.194.0-122.228.194.255',
+ '122.228.195.0-122.228.195.255',
+ '122.228.195.193-122.228.195.255',# 后续
+ '122.228.196.0-122.228.196.255',
+ '122.228.197.0-122.228.197.255',
+ '122.228.198.0-122.228.198.255',
+ '122.228.199.0-122.228.199.255',
+ '122.228.228.16-122.228.228.23',
+ '122.228.228.64-122.228.228.127',
+ '122.228.230.0-122.228.230.127',
+ '122.228.231.64-122.228.231.127',
+ '122.228.252.64-122.228.252.95',
+ '122.228.254.128-122.228.254.143',
+ '122.228.255.16-122.228.255.31',
+ '122.228.255.48-122.228.255.63',
+ '122.228.68.64-122.228.68.79',
+ '122.228.71.0-122.228.71.31',
+ '122.228.71.64-122.228.71.79',
+ '122.228.72.80-122.228.72.95',
+ '122.228.73.0-122.228.73.15',
+ '60.190.101.192-60.190.101.255',
+ '60.190.114.240-60.190.114.255',
+ '60.190.118.160-60.190.118.175',
+ '61.164.120.240-61.164.120.255',
+ '61.164.122.128-61.164.122.143',
+ '61.164.124.0-61.164.124.127',
+ '61.164.125.0-61.164.125.255',
+ '61.164.155.144-61.164.155.159',
+ '61.164.159.192-61.164.159.223',]
+
 # with open("ips.txt") as text
 
 AIZHAN_HEADERS = {
@@ -27,7 +68,7 @@ def gen_ip2host(query_url, keyword, **kwards):
         res = requests.get(query_url, params=params, headers=headers)
         json_data = res.json()
         sleep(5)
-        return json_data.get(keyword)
+        return json_data and  json_data.get(keyword) or ""
     return get_host
 
 def f(ip):
@@ -36,19 +77,49 @@ def f(ip):
     return ip, aizhan_get_host(ip)
 
 
+def put_host(ip, domains):
+    now = datetime.datetime.now()
+    for domain in domains:
+        data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults={"time": now, })
+        if created:
+            print u"生成新的domain记录"
+        else:
+            print data.uri
+
 def main():
-    with Pool(4) as pool:
-        c = pool.map(f, ['42.120.194.11', "220.181.181.222", "123.125.114.144"])
-        # query = {ip: aizhan_get_host(ip,) for ip in ['42.120.194.11', "220.181.181.222", "123.125.114.144"]}
-        print (c)
+    ips = Ips.objects.all().values_list("ip", flat=True)[2:10]
+    for ip in iter(ips):
+        curip = socket.inet_ntoa(struct.pack('I',socket.htonl(int(ip))))
+        print curip
+        ip, res = f(curip)
+        if res:
+            put_host(ip, res)
+        else:
+            print "error no data"
+
+    
+    # with Pool(4) as p:
+    #     c = pool.map(f, ['42.120.194.11', "220.181.181.222", "123.125.114.144"])
+    #     # query = {ip: aizhan_get_host(ip,) for ip in ['42.120.194.11', "220.181.181.222", "123.125.114.144"]}
+    #     print (c)
 
 def getIp(domain):
-    import socket
-    myaddr = socket.getaddrinfo(domain,'http')[0][4][0]
+    myaddr = socket.getaddrinfo(domain, 'http')[0][4][0]
     print(myaddr)
 
+def put_ip(x):
+    area, created = Area.objects.get_or_create(name=u"龙湾")
+    Ips.objects.create(ip=x, area=area)
+
+#将ip放入数据库
+def put_into_ippool(ips):
+    # ips = read_from_ipbook()
+    for strHost in ips:
+        IpRange = BuildHostRange(strHost)
+        map(f, range(IpRange[0], IpRange[1]+1))
 
 if __name__ == '__main__':
     main()
+    # makeup_info_bulk()
 
 

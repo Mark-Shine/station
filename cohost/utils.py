@@ -144,7 +144,7 @@ def BuildHostRange(strHost):
     return [realStartIP,realEndIP]
 
 
-def f(x):
+def put_ip(x):
     area, created = Area.objects.get_or_create(name=u"龙湾")
     Ips.objects.create(ip=x, area=area)
 
