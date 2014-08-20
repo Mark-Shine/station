@@ -15,7 +15,7 @@ from cohost.models import Data
 from cohost.models import Area
 from multiprocessing import Pool
 from cohost.models import Ips
-from cohost.utils import makeup_info_bulk, BuildHostRange
+from cohost.utils import makeup_info_bulk, BuildHostRange, get_host_infos
 
 result = [
  "122.228.192.0-122.228.192.255",
@@ -80,7 +80,10 @@ def f(ip):
 def put_host(ip, domains):
     now = datetime.datetime.now()
     for domain in domains:
-        data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults={"time": now, })
+        default = {}
+        host_info = get_host_infos(domain)
+        default.update({"time": now, })
+        data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults=default)
         if created:
             makeup_info_bulk([data, ])
             print u"生成新的domain记录"
@@ -99,7 +102,7 @@ def main():
         else:
             print "error no data"
         obj.save()
-        
+
 
     # with Pool(4) as p:
     #     c = pool.map(f, ['42.120.194.11', "220.181.181.222", "123.125.114.144"])

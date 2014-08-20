@@ -125,10 +125,11 @@ def makeup_info_bulk(datas=None):
     for d in datas:
         r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
         r.wait(5)
-    for d in datas:
-        update_info = get_host_infos(d.uri)
-        d.__dict__.update(update_info)
-        d.save()
+    # for d in datas:
+    #     update_info = get_host_infos(d.uri)
+    #     d.descript = update_info.get('descript')
+    #     d.title = update_info.get('title')
+    #     d.save(force_update=True)
     print ("GOOd bye")
 
 
