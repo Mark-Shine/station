@@ -82,24 +82,9 @@ def put_host(ip, domains):
     for domain in domains:
         data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults={"time": now, })
         if created:
-            default = {}
-            try:
-                host_info = get_host_infos(domain)
-            except Exception, e:
-                print e
-            finally:
-                return
-            default.update(host_info)
-            data.__dict__.update(default)
-            data.save()
-
-            makeup_info_bulk([data, ])
             print u"生成新的domain记录"
-        else:
-            print data.uri
 
 def main():
-
     ips = Ips.objects.exclude(active='1')
     for obj in iter(ips):
         curip = obj.ip
@@ -111,20 +96,21 @@ def main():
             print "error no data"
         obj.save()
 
-
-    # with Pool(4) as p:
-    #     c = pool.map(f, ['42.120.194.11', "220.181.181.222", "123.125.114.144"])
-    #     # query = {ip: aizhan_get_host(ip,) for ip in ['42.120.194.11', "220.181.181.222", "123.125.114.144"]}
-    #     print (c)
-
 def getIp(domain):
     myaddr = socket.getaddrinfo(domain, 'http')[0][4][0]
     print(myaddr)
 
 
 if __name__ == '__main__':
-    put_into_ippool(result, u"龙湾")
+    print u"重置ip active状态"
+    Ips.objects.filter(active='1').update(active='0')
+    print u"导入ip"
+    # put_into_ippool(result, u"龙湾")
+    datas = Data.objects.filter(cate=None).exclude(state="-1")
+    print u"查询反向"
     main()
+    print u"补充备案信息"
+    makeup_info_bulk(datas)
     # makeup_info_bulk()
 
 

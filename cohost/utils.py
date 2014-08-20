@@ -65,7 +65,7 @@ def get_host_infos(host):
     res = requests.get("http://%s" % host, timeout=1)
     page = res.content
     info = {}
-    if page:
+    if res.status_code=='200':
         soup = BeautifulSoup(page)
         info['title'] = soup.title.text
         descript = soup.find(attrs={"name":"description"})
@@ -102,6 +102,13 @@ def handle_obj(obj, kwords):
             obj.state = "-1"
         else:
             host = obj.uri
+            try:
+                host_info = get_host_infos(host)
+            except Exception, e:
+                print e
+            finally:
+                return
+            obj.__dict__.update(host_info)
             beian = get_beian(host)
             ip_info = get_ip_info(obj.ip)
             if ip_info:
@@ -124,7 +131,7 @@ def makeup_info_bulk(datas=None):
     kwords = Keywords.objects.all()
     for d in datas:
         r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
-        r.wait(5)
+        r.get(5)
     print ("GOOd bye")
 
 
@@ -160,10 +167,9 @@ def BuildHostRange(strHost):
 
 def build_area_ip(area_name=u'其他'):
     def put_ip(x,):
+        curip = socket.inet_ntoa(struct.pack('I',socket.htonl(x)))
         area, created = Area.objects.get_or_create(name=area_name)
-        obj, cred = Ips.objects.get_or_create(ip=x, area=area)
-        if not cred:
-            print "alredy have ip"
+        obj, cred = Ips.objects.get_or_create(ip=curip, area=area)
     return put_ip
 
 def put_into_ippool(ips, area_name=u'其他'):
@@ -174,7 +180,7 @@ def put_into_ippool(ips, area_name=u'其他'):
 
 
 if __name__ == '__main__':
-    put_into_ippool(result, u"龙湾")
+    # put_into_ippool(result, u"龙湾")
     datas = Data.objects.filter(cate=None).exclude(state="-1")
     makeup_info_bulk(datas)
     # p = Pool(processes=4)utls
