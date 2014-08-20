@@ -81,8 +81,14 @@ def put_host(ip, domains):
     now = datetime.datetime.now()
     for domain in domains:
         default = {}
-        host_info = get_host_infos(domain)
+        try:
+            host_info = get_host_infos(domain)
+        except Exception, e:
+            print e
+        finally:
+            return
         default.update({"time": now, })
+        default.update(host_info)
         data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults=default)
         if created:
             makeup_info_bulk([data, ])
