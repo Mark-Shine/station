@@ -130,8 +130,13 @@ def makeup_info_bulk(datas=None):
         return
     kwords = Keywords.objects.all()
     for d in datas:
-        r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
-        r.get(5)
+        try:
+            r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
+            r.get(5)
+        except Exception, e:
+            print e
+        finally:
+            pass
     print ("GOOd bye")
 
 
