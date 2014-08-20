@@ -102,9 +102,6 @@ def handle_obj(obj, kwords):
             obj.state = "-1"
         else:
             host = obj.uri
-            # host_info = get_host_infos(host)
-            if host_info:
-                obj.__dict__.update(host_info)
             beian = get_beian(host)
             ip_info = get_ip_info(obj.ip)
             if ip_info:
