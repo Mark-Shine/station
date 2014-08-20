@@ -88,7 +88,12 @@ def main():
     ips = Ips.objects.exclude(active='1')
     for obj in iter(ips):
         curip = obj.ip
-        ip, res = f(curip)
+        try:
+            ip, res = f(curip)        
+        except Exception, e:
+            print e
+        finally:
+            pass
         obj.active = '1'
         if res:
             put_host(ip, res)
