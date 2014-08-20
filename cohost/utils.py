@@ -163,7 +163,7 @@ def build_area_ip(area_name=u'其他'):
         area, created = Area.objects.get_or_create(name=area_name)
         obj, cred = Ips.objects.get_or_create(ip=x, area=area)
         if not cred:
-            print "insert ip"
+            print "alredy have ip"
     return put_ip
 
 def put_into_ippool(ips, area_name=u'其他'):

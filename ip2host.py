@@ -80,17 +80,19 @@ def f(ip):
 def put_host(ip, domains):
     now = datetime.datetime.now()
     for domain in domains:
-        default = {}
-        try:
-            host_info = get_host_infos(domain)
-        except Exception, e:
-            print e
-        finally:
-            return
-        default.update({"time": now, })
-        default.update(host_info)
-        data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults=default)
+        data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults={"time": now, })
         if created:
+            default = {}
+            try:
+                host_info = get_host_infos(domain)
+            except Exception, e:
+                print e
+            finally:
+                return
+            default.update(host_info)
+            data.__dict__.update(default)
+            data.save()
+
             makeup_info_bulk([data, ])
             print u"生成新的domain记录"
         else:
