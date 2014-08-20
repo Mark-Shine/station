@@ -88,7 +88,7 @@ def put_host(ip, domains):
             print data.uri
 
 def main():
-    
+
     ips = Ips.objects.all()
     for obj in iter(ips):
         curip = obj.ip
@@ -124,6 +124,7 @@ def put_into_ippool(ips):
 
 
 if __name__ == '__main__':
+    put_into_ippool(result)
     main()
     # makeup_info_bulk()
 
