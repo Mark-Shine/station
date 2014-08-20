@@ -125,7 +125,7 @@ class Ips(models.Model):
     """IP库"""
     ip = models.IPAddressField(null=True, blank=True)
     area = models.ForeignKey("Area", null=True, blank=True, verbose_name=u"区域")
-    
+    active = models.CharField(max_length=6, null=True, blank=True, verbose_name=u'是否查询过')
 
 
 class LawRecord(models.Model):

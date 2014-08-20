@@ -15,7 +15,7 @@ from cohost.models import Data
 from cohost.models import Area
 from multiprocessing import Pool
 from cohost.models import Ips
-from cohost.utils import makeup_info_bulk
+from cohost.utils import makeup_info_bulk, BuildHostRange
 
 result = [
  "122.228.192.0-122.228.192.255",
@@ -82,22 +82,25 @@ def put_host(ip, domains):
     for domain in domains:
         data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults={"time": now, })
         if created:
+            makeup_info_bulk([data, ])
             print u"生成新的domain记录"
         else:
             print data.uri
 
 def main():
-    ips = Ips.objects.all().values_list("ip", flat=True)[2:10]
-    for ip in iter(ips):
-        curip = socket.inet_ntoa(struct.pack('I',socket.htonl(int(ip))))
-        print curip
+    
+    ips = Ips.objects.all()
+    for obj in iter(ips):
+        curip = obj.ip
         ip, res = f(curip)
+        obj.active = '1'
+        obj.save()
         if res:
             put_host(ip, res)
         else:
             print "error no data"
 
-    
+
     # with Pool(4) as p:
     #     c = pool.map(f, ['42.120.194.11', "220.181.181.222", "123.125.114.144"])
     #     # query = {ip: aizhan_get_host(ip,) for ip in ['42.120.194.11', "220.181.181.222", "123.125.114.144"]}
@@ -108,15 +111,17 @@ def getIp(domain):
     print(myaddr)
 
 def put_ip(x):
+    ip = socket.inet_ntoa(struct.pack('I',socket.htonl(int(x))))
     area, created = Area.objects.get_or_create(name=u"龙湾")
-    Ips.objects.create(ip=x, area=area)
+    Ips.objects.create(ip=ip, area=area)
 
 #将ip放入数据库
 def put_into_ippool(ips):
     # ips = read_from_ipbook()
     for strHost in ips:
         IpRange = BuildHostRange(strHost)
-        map(f, range(IpRange[0], IpRange[1]+1))
+        map(put_ip, range(IpRange[0], IpRange[1]+1))
+
 
 if __name__ == '__main__':
     main()

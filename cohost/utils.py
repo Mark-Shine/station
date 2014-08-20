@@ -9,6 +9,7 @@ import time
 from cohost.models import Area
 from multiprocessing import Pool
 from cohost.models import Ips
+from BeautifulSoup import BeautifulSoup
 
 def urldecode_to_utf8(dict_data):
     for k, v in dict_data.items():
@@ -59,6 +60,19 @@ def get_cate():
                 d.cate = k.cate
                 d.save()
 
+def get_host_infos(host):
+    """获取host站点信息"""
+    res = requests.get("http://%s" % host, timeout=1)
+    page = res.content
+    info = {}
+    if page:
+        soup = BeautifulSoup(page)
+        info['title'] = soup.title
+        descript = soup.find(attrs={"name":"description"})
+        info['descript'] = descript and descript.get('content', "") or ""
+        print info
+    return info
+
 def build_api_get(querykey, queryurl, format="json"):
     
     def api_get(querystr):
@@ -88,6 +102,9 @@ def handle_obj(obj, kwords):
             obj.state = "-1"
         else:
             host = obj.uri
+            # host_info = get_host_infos(host)
+            if host_info:
+                obj.__dict__.update(host_info)
             beian = get_beian(host)
             ip_info = get_ip_info(obj.ip)
             if ip_info:
@@ -98,18 +115,23 @@ def handle_obj(obj, kwords):
                 if k.kword in obj.descript:
                     obj.cate = k.cate
         obj.save()
-        return 
+        return "well"
     return wrapped
 
 
-def makeup_info_bulk():
+def makeup_info_bulk(datas=None):
     p = Pool(processes=4)
-
-    datas = Data.objects.filter(cate=None).exclude(state="-1")
+    if datas is None:
+        print "please put datas in "
+        return
     kwords = Keywords.objects.all()
     for d in datas:
         r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
         r.wait(5)
+    for d in datas:
+        update_info = get_host_infos(d.uri)
+        d.__dict__.update(update_info)
+        d.save()
     print ("GOOd bye")
 
 
@@ -159,7 +181,8 @@ def put_into_ippool(ips):
 
 
 if __name__ == '__main__':
-    # makeup_info_bulk()
+    datas = Data.objects.filter(cate=None).exclude(state="-1")
+    makeup_info_bulk(datas)
     put_into_ippool(result)
     # p = Pool(processes=4)utls
     # apply_async = p.apply_async
