@@ -89,7 +89,7 @@ def put_host(ip, domains):
 
 def main():
 
-    ips = Ips.objects.all()
+    ips = Ips.objects.exclude(active='1')
     for obj in iter(ips):
         curip = obj.ip
         ip, res = f(curip)

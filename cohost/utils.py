@@ -178,9 +178,9 @@ def put_into_ippool(ips):
 
 
 if __name__ == '__main__':
+    put_into_ippool(result)
     datas = Data.objects.filter(cate=None).exclude(state="-1")
     makeup_info_bulk(datas)
-    put_into_ippool(result)
     # p = Pool(processes=4)utls
     # apply_async = p.apply_async
 
