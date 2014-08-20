@@ -165,8 +165,9 @@ def BuildHostRange(strHost):
 
 def put_ip(x):
     area, created = Area.objects.get_or_create(name=u"龙湾")
-    Ips.objects.create(ip=x, area=area)
-
+    obj, cred = Ips.objects.get_or_create(ip=x, area=area)
+    if not cred:
+        print "insert ip"
 
 
 def put_into_ippool(ips):
