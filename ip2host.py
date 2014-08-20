@@ -15,7 +15,7 @@ from cohost.models import Data
 from cohost.models import Area
 from multiprocessing import Pool
 from cohost.models import Ips
-from cohost.utils import makeup_info_bulk, BuildHostRange, get_host_infos
+from cohost.utils import makeup_info_bulk, BuildHostRange, get_host_infos, put_into_ippool
 
 result = [
  "122.228.192.0-122.228.192.255",
@@ -113,21 +113,9 @@ def getIp(domain):
     myaddr = socket.getaddrinfo(domain, 'http')[0][4][0]
     print(myaddr)
 
-def put_ip(x):
-    ip = socket.inet_ntoa(struct.pack('I',socket.htonl(int(x))))
-    area, created = Area.objects.get_or_create(name=u"龙湾")
-    Ips.objects.create(ip=ip, area=area)
-
-#将ip放入数据库
-def put_into_ippool(ips):
-    # ips = read_from_ipbook()
-    for strHost in ips:
-        IpRange = BuildHostRange(strHost)
-        map(put_ip, range(IpRange[0], IpRange[1]+1))
-
 
 if __name__ == '__main__':
-    put_into_ippool(result)
+    put_into_ippool(result, u"龙湾")
     main()
     # makeup_info_bulk()
 

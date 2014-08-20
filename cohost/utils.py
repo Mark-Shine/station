@@ -158,24 +158,23 @@ def BuildHostRange(strHost):
     print realStartIP, realEndIP
     return [realStartIP,realEndIP]
 
+def build_area_ip(area_name=u'其他'):
+    def put_ip(x,):
+        area, created = Area.objects.get_or_create(name=area_name)
+        obj, cred = Ips.objects.get_or_create(ip=x, area=area)
+        if not cred:
+            print "insert ip"
+    return put_ip
 
-def put_ip(x):
-    area, created = Area.objects.get_or_create(name=u"龙湾")
-    obj, cred = Ips.objects.get_or_create(ip=x, area=area)
-    if not cred:
-        print "insert ip"
-
-
-def put_into_ippool(ips):
-    # ips = read_from_ipbook()
+def put_into_ippool(ips, area_name=u'其他'):
     for strHost in ips:
         IpRange = BuildHostRange(strHost)
-        map(f, range(IpRange[0], IpRange[1]+1))
+        map(build_area_ip(area_name), range(IpRange[0], IpRange[1]+1))
 
 
 
 if __name__ == '__main__':
-    put_into_ippool(result)
+    put_into_ippool(result, u"龙湾")
     datas = Data.objects.filter(cate=None).exclude(state="-1")
     makeup_info_bulk(datas)
     # p = Pool(processes=4)utls
