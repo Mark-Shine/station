@@ -94,12 +94,12 @@ def main():
         curip = obj.ip
         ip, res = f(curip)
         obj.active = '1'
-        obj.save()
         if res:
             put_host(ip, res)
         else:
             print "error no data"
-
+        obj.save()
+        
 
     # with Pool(4) as p:
     #     c = pool.map(f, ['42.120.194.11', "220.181.181.222", "123.125.114.144"])
