@@ -67,7 +67,7 @@ def get_host_infos(host):
     info = {}
     if page:
         soup = BeautifulSoup(page)
-        info['title'] = soup.title
+        info['title'] = soup.title.text
         descript = soup.find(attrs={"name":"description"})
         info['descript'] = descript and descript.get('content', "") or ""
         print info
@@ -112,7 +112,7 @@ def handle_obj(obj, kwords):
                 if k.kword in obj.descript:
                     obj.cate = k.cate
         obj.save()
-        return "well"
+        return 
     return wrapped
 
 
@@ -125,11 +125,6 @@ def makeup_info_bulk(datas=None):
     for d in datas:
         r = p.apply_async(getIp, (d.uri, ), callback=handle_obj(d, kwords))
         r.wait(5)
-    # for d in datas:
-    #     update_info = get_host_infos(d.uri)
-    #     d.descript = update_info.get('descript')
-    #     d.title = update_info.get('title')
-    #     d.save(force_update=True)
     print ("GOOd bye")
 
 
