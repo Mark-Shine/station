@@ -54,7 +54,7 @@ class Allkey(models.Model):
 
 class Data(models.Model):
     def __unicode__(self,):
-        return "ip: %s - uri: %s" %(self.ip, self.uri)
+        return "ip: %s - uri: %s" %(self.ips_id, self.uri)
 
     # id = models.IntegerField(db_column='ID', primary_key=True, blank=True) # Field name made lowercase.
     # ip = models.TextField(db_column='IP') # Field name made lowercase.
