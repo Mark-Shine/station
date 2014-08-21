@@ -31,5 +31,11 @@
     </tbody>
 </table>
 
+<div class="panel panel-default">
+  <div class="panel-heading">处理意见：{{object.related_law.law}}</div>
+  <div class="panel-body">
+    <p>{{object.related_law.detail|default:"无"}}</p>
+  </div>
+</div>
 
 {%endblock%}
