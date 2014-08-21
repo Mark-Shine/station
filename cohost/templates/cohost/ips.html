@@ -20,7 +20,11 @@
         </div>
     </form> 
 </div>
-
+{%for ip in ips %}
+<p>
+{{ip.ip}}
+</p>
+{%endfor%}
 <table class="table ips-table">
     <thead>
         <tr>
