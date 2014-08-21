@@ -17,6 +17,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -184,6 +185,7 @@ def edit_data(request, pk):
 
 
 @login_required
+@csrf_exempt
 def change_detail(request, pk):
     user = request.user
     form = DataStateForm(request.POST)
