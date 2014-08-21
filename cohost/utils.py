@@ -65,7 +65,7 @@ def get_host_infos(host):
     res = requests.get("http://%s" % host, timeout=1)
     page = res.content
     info = {}
-    if res.status_code=='200':
+    if res.status_code==200:
         soup = BeautifulSoup(page)
         info['title'] = soup.title.text
         descript = soup.find(attrs={"name":"description"})
