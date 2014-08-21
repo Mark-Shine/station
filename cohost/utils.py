@@ -69,7 +69,7 @@ def get_host_infos(host):
         soup = BeautifulSoup(page)
         info['title'] = soup.title.text
         descript = soup.find(attrs={"name":"description"})
-        info['descript'] = descript and descript.get('content', "") or ""
+        info['descript'] = descript an.d descript.get('content', "") or ""
         print info
     return info
 
@@ -118,6 +118,7 @@ def handle_obj(obj, kwords):
             for k in kwords:
                 if k.kword in obj.descript or k.kword in obj.title:
                     obj.cate = k.cate
+                    break
                 else:
                     #如果没有匹配的，就分入其他  
                     cate, created = Cate.objects.get_or_create(name=u"其他")
@@ -131,8 +132,11 @@ def put_cate():
     kwords = Keywords.objects.all()
     for obj in das:
         for k in kwords:
-            if k.kword in obj.descript or k.kword in obj.title:
+            print k.kword
+            print k.kword in obj.descript 
+            if (k.kword in obj.descript) or (k.kword in obj.title):
                 obj.cate = k.cate
+                break
             else:
                 #如果没有匹配的，就分入其他  
                 cate, created = Cate.objects.get_or_create(name=u"其他")
