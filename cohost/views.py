@@ -103,7 +103,8 @@ def show_ips(request):
     context['total_count'] = ips.count()
     paged_objects, pagination = get_pagination(request, ips, int(pagenum))
     context['pagination'] = pagination
-    context['objects'] = paged_objects  
+    context['objects'] = paged_objects
+    context['ips'] = ips  
     return render(request, 'cohost/ips.html', context)
 
 
