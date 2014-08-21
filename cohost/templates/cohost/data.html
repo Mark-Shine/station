@@ -34,7 +34,7 @@
     {%for d in objects %}
         <tr>
             <td title="{{d.uri}}" ><a href="http://{{d.uri}}" target="_blank">{{d.uri|truncatechars:16}}</a></td>
-            <td>{{d.ip}}</td>
+            <td>{{d.ips_id.ip}}</td>
             <td><button title="处理意见" data-content="{{d.related_law.law|default:"无"}} : {{d.related_law.detail|default:"无"}}" type="button" class="btn btn-sm btn-link popover-dismiss" data-toggle="popover">{{d.get_state_display}}</button></td>
             <td>{{d.cate|default:""}}</td>
             <td title="{{d.title}}">{{d.title|truncatechars:10}}</td>

@@ -57,7 +57,7 @@ class Data(models.Model):
         return "ip: %s - uri: %s" %(self.ip, self.uri)
 
     # id = models.IntegerField(db_column='ID', primary_key=True, blank=True) # Field name made lowercase.
-    ip = models.TextField(db_column='IP') # Field name made lowercase.
+    # ip = models.TextField(db_column='IP') # Field name made lowercase.
     ips_id = models.ForeignKey("Ips", verbose_name=u"ip", null=True, blank=True, db_column="ip_id") # Field name made lowercase.
     uri = models.TextField(u"域名", db_column='URI') # Field name made lowercase.
     title = models.TextField(u"标题", db_column='Title', blank=True) # Field name made lowercase.
