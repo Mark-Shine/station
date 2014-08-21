@@ -69,7 +69,7 @@ def get_host_infos(host):
         soup = BeautifulSoup(page)
         info['title'] = soup.title.text
         descript = soup.find(attrs={"name":"description"})
-        info['descript'] = descript an.d descript.get('content', "") or ""
+        info['descript'] = descript and descript.get('content', "") or ""
         print info
     return info
 
