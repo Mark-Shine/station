@@ -183,6 +183,22 @@ def put_into_ippool(ips, area_name=u'其他'):
         map(build_area_ip(area_name), range(IpRange[0], IpRange[1]+1))
 
 
+# def fff():
+#     datas = Data.objects.all()
+#     for d in datas:
+#         try:
+#             ip = getIp(d.uri)        
+#         except Exception, e:
+#             print e
+#         else:
+#             d.state="-1"
+#             ip = ''
+#         finally:
+#             q=Ips.objects.filter(ip=ip)
+#             if q :
+#                 d.ip_s = q[0]
+#             d.save()
+
 
 if __name__ == '__main__':
     # put_into_ippool(result, u"龙湾")

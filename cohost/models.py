@@ -62,7 +62,8 @@ class Data(models.Model):
     uri = models.TextField(u"域名", db_column='URI') # Field name made lowercase.
     title = models.TextField(u"标题", db_column='Title', blank=True) # Field name made lowercase.
     descript = models.TextField(db_column='Descript', blank=True) # Field name made lowercase.
-    IPS = models.CharField(u"运营商", max_length=16, null=True, blank=True)
+    #IPS 与ips_id冲突重启前需要修改字段名称
+    # IPS = models.CharField(u"运营商", max_length=16, null=True, blank=True)
     #备案号
     # reg_number = models.IntegerField(blank=True, default=0, null=True)
     #备案类型

@@ -46,7 +46,7 @@
                 <span class="hidden J-Status-Success">正常</span>
                 <span class="hidden J-Status-Error" >异常</span> 
             </td>
-            <td>{{d.area.name|default:''}}</td>
+            <td>{{d.ips_id.area.name}}</td>
             <td><button  data-toggle="modal" data-target="#J_Edit_Data" class="btn btn-link J_Edit_Button" id="{{d.id}}" url="{%url "edit_data" pk=d.id%}">编辑</button></td>
         </tr>
     
