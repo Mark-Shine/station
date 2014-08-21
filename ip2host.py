@@ -92,7 +92,7 @@ def put_host(ip, domains):
 def main():
     ips = Ips.objects.exclude(active='1')
     for obj in iter(ips):
-        curip = obj.ip
+        curip = obj.ips_id.ip
         try:
             ip, res = f(curip)        
         except Exception, e:

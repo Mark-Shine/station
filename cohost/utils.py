@@ -97,8 +97,8 @@ get_ip_info = build_api_get(querykey="ip", queryurl="http://api.k780.com:88/?app
 def handle_obj(obj, kwords):
     """查询ip及域名的备案信息"""
     def wrapped(ping_ip):
-        if ping_ip != obj.ip:
-            print ("ping_ip :%s not equal curIP %s" %(ping_ip, obj.ip))
+        if ping_ip != obj.ips_id.ip:
+            print ("ping_ip :%s not equal curIP %s" %(ping_ip, obj.ips_id.ip))
             obj.state = "-1"
         else:
             host = obj.uri
@@ -110,7 +110,7 @@ def handle_obj(obj, kwords):
                 return
             obj.__dict__.update(host_info)
             beian = get_beian(host)
-            ip_info = get_ip_info(obj.ip)
+            ip_info = get_ip_info(obj.ips_id.ip)
             # if ip_info:
             #     obj.IPS = ip_info.get("detailed", '')
             if beian:
