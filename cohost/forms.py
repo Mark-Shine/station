@@ -38,6 +38,10 @@ class DataStateForm(forms.Form):
         queryset=LawRecord.objects.all(),
         required=False,
         widget=forms.Select)
+    beizhu = forms.CharField(
+        label=u"备注",
+        required=False
+        )
 
 
 
