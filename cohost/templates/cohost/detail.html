@@ -19,17 +19,17 @@
 </tr>
 <tr>
 	<td>IP</td>
-	<td>{{object.ip}}</td>
+	<td>{{object.ips_id.ip}}</td>
 	<td>站点类别</td>
 	<td>{{object.cate|default:""}}</td>
 </tr>
 <tr>
 	<td>接入商</td>
-	<td col="3">{{object.IPS|default:""}}</td>
+	<td col="3">{{object.IPS_net|default:""}}</td>
 </tr>
 <tr>
 	<td>区域</td>
-	<td>{{d.area.name|default:''}}</td>
+	<td>{{d.ips_id.area.name|default:''}}</td>
 	<td>备案号</td>
 	<td>{{object.icpno|default:''}}</td>
 </tr>
