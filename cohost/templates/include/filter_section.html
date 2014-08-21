@@ -12,7 +12,7 @@
     <dd >
         <ul class="list-inline">
             <li>备案：</li>
-            <li><a href="{%url "data" %}?cate={{cate}}&ip={{ip}}&state={{state}}" {%if not sid %} class="on" {%endif%}>不限</a></li>
+            <li><a href="{%url "data" %}?cate={{cate}}&ip={{ip}}&state={{state}}" {%if not icpno %} class="on" {%endif%}>不限</a></li>
             <li ><a href="{%url "data" %}?icpno=1&state={{state}}&cate={{cate}}&ip={{ip}}" {%if '1' == icpno %} class="on" {%endif%}>有</a></li>
             <li><a href="{%url "data" %}?icpno=0&state={{state}}&cate={{cate}}&ip={{ip}}" {%if '0' == icpno    %} class="on" {%endif%}>无</a></li>
         </ul> 
