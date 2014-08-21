@@ -45,7 +45,7 @@
                     <li class={{data_active}}><a href="{%url 'data'%}">数据</a></li>
                     <li class={{ips_active}}><a href="{%url 'ips'%}">IP库</a></li>
                     {%if perms.wzauth.can_manage_area %}
-                    <li class={{area_active}}><a href="{%url 'areas'%}">区域管理</a></li>
+                    <!-- <li class={{area_active}}><a href="{%url 'areas'%}">区域管理</a></li> -->
                     {%endif%}
                     {%if perms.wzauth.can_see_log%}
                     <li class={{logs_active}}><a href="{%url 'logs'%}">系统日志</a></li>

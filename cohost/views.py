@@ -45,7 +45,7 @@ def page(objects, num):
     return objects
 
 def paginate(objects_query, pagenum):
-    """paginate objetcs"""
+    """paginate """
     object_count = objects_query.count()
     page_count = int(math.ceil(1.0 * object_count / PAGE_SIZE))
     page_count = max(page_count, 1)
@@ -280,7 +280,7 @@ def show_result(request):
 def show_home(request):
     template = "cohost/home.html"
     datas = Data.objects.filter(~Q(state="-1")).count()
-    ips = Data.objects.all().values_list('ip', flat=True).distinct().count()
+    ips = Ips.objects.all().count()
     areas = Area.objects.all().count()
     cts, states, is_beians = count_for_data()
     context = {}
