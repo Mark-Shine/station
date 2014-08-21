@@ -111,16 +111,33 @@ def handle_obj(obj, kwords):
             obj.__dict__.update(host_info)
             beian = get_beian(host)
             ip_info = get_ip_info(obj.ip)
-            if ip_info:
-                obj.IPS = ip_info.get("detailed", '')
+            # if ip_info:
+            #     obj.IPS = ip_info.get("detailed", '')
             if beian:
                 obj.__dict__.update(**beian)
             for k in kwords:
-                if k.kword in obj.descript:
+                if k.kword in obj.descript or k.kword in obj.title:
                     obj.cate = k.cate
+                else:
+                    #如果没有匹配的，就分入其他  
+                    cate, created = Cate.objects.get_or_create(name=u"其他")
+                    obj.cate = cate
         obj.save()
         return 
     return wrapped
+
+def put_cate():
+    das =  Data.objects.all()
+    kwords = Keywords.objects.all()
+    for obj in das:
+        for k in kwords:
+            if k.kword in obj.descript or k.kword in obj.title:
+                obj.cate = k.cate
+            else:
+                #如果没有匹配的，就分入其他  
+                cate, created = Cate.objects.get_or_create(name=u"其他")
+                obj.cate = cate
+        obj.save()
 
 
 def makeup_info_bulk(datas=None):
