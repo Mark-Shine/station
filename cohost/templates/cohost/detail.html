@@ -1,44 +1,35 @@
-<html>
-<head>
-<style type="text/css">
-	html{background:#e1e1e1;}
-	body{width:595px;height:842px;background:#fff;margin:0 auto}
-</style>
-</head>
-<body>
+{% extends 'base.html' %}
+
 {%block mod_content%}
 <h1 class="page-header">打印数据</h1>
-<table>
-<tr>
-	<td>域名</td>
-	<td col="3">{{object.uri}}</td>
-</tr>
-<tr>
-	<td>站点名称</td>
-	<td col="3">{{object.title}}</td>
-</tr>
-<tr>
-	<td>IP</td>
-	<td>{{object.ip}}</td>
-	<td>站点类别</td>
-	<td>{{object.cate|default:""}}</td>
-</tr>
-<tr>
-	<td>接入商</td>
-	<td col="3">{{object.IPS|default:""}}</td>
-</tr>
-<tr>
-	<td>区域</td>
-	<td>{{d.area.name|default:''}}</td>
-	<td>备案号</td>
-	<td>{{object.icpno|default:''}}</td>
-</tr>
-<tr>
-	<td>主办单位</td>
-	<td col="3">{{object.organizers|default:""}}</td>
-</tr>
+<table class="table ">
+    <thead>
+        <tr>
+            <td>ip</td>
+            <td>host</td>
+            <td>审核状态</td>
+            <td>标题</td>
+            <td>类别</td>
+            <td>接入商</td>
+            <td>备案号</td>
+            <td>主办单位</td>
+            <td>区域</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{object.ip}}</td>
+            <td><a href="http://{{object.uri}}" target="_blank">{{object.uri}}</a></td>
+            <td>{{object.get_state_display}}</td>
+            <td>{{object.title}}</td>
+            <td>{{object.cate|default:""}}</td>
+            <td>{{object.IPS|default:""}}</td>
+            <td>{{object.icpno|default:''}}</td>
+            <td>{{object.organizers|default:""}}</td>
+            <td>{{d.area.name|default:''}}</td>
+        </tr>
+    </tbody>
 </table>
-
 
 <div class="panel panel-default">
   <div class="panel-heading">处理意见：{{object.related_law.law}}</div>
@@ -50,5 +41,3 @@
 </div>
 
 {%endblock%}
-</body>
-</html>
