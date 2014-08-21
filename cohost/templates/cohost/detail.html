@@ -1,5 +1,11 @@
-{% extends 'base.html' %}
-
+<html>
+<head>
+<style type="text/css">
+    html{background:#e1e1e1;}
+    body{width:595px;height:842px;background:#fff;margin:0 auto}
+</style>
+</head>
+<body>
 {%block mod_content%}
 <h1 class="page-header">打印数据</h1>
 <table class="table ">
@@ -10,6 +16,7 @@
             <td>审核状态</td>
             <td>标题</td>
             <td>类别</td>
+            <td>接入商</td>
             <td>备案号</td>
             <td>主办单位</td>
             <td>区域</td>
@@ -17,14 +24,15 @@
     </thead>
     <tbody>
         <tr>
-            <td>{{object.ips_id.ip}}</td>
+            <td>{{object.ip}}</td>
             <td><a href="http://{{object.uri}}" target="_blank">{{object.uri}}</a></td>
             <td>{{object.get_state_display}}</td>
             <td>{{object.title}}</td>
             <td>{{object.cate|default:""}}</td>
+            <td>{{object.IPS|default:""}}</td>
             <td>{{object.icpno|default:''}}</td>
             <td>{{object.organizers|default:""}}</td>
-            <td>{{d.ips_id.area.name|default:''}}</td>
+            <td>{{d.area.name|default:''}}</td>
         </tr>
     </tbody>
 </table>
@@ -39,3 +47,5 @@
 </div>
 
 {%endblock%}
+</body>
+</html>

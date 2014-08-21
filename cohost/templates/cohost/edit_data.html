@@ -35,7 +35,7 @@
             </div>
             <div id="div_id_related_law" class="form-group">
                 <label for="id_related_law" class="control-label ">
-                    审核处理意见
+                    法律依据
                 </label>
                 <div class="controls ">
                     <select class="select form-control" id="id_related_law" name="related_law"><option value="">---------</option>
@@ -44,12 +44,19 @@
                     {%endfor%}
                     </select>
                     <hr>
-                    <textarea class="form-control" rows="3"></textarea>
+                    <textarea class="form-control" rows="3" id="law_content" disabled></textarea>
                 </div>
             </div>
+            <script type="text/javascript">
+            $('#law_content').html($('#id_related_law').children('option:selected').attr("detail"));
+
+            $('#id_related_law').change(function(){
+                $('#law_content').html($(this).children('option:selected').attr("detail"));
+            });
+            </script>
             <div class="form-group">
-                <label class="control-label">备注</label>
-                <textarea name="beizhu" class="form-control" rows="3">{{object.beizhu|default:''}}</textarea>
+                <label class="control-label">处理意见</label>
+                <textarea name="beizhu" class="form-control" rows="3">{{object.beizhu}}</textarea>
             </div>
 
             <div class="form-actions">
