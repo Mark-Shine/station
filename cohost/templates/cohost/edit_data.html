@@ -5,6 +5,7 @@
 </div>
 <div class="modal-body">
     <form action="{%url 'change_detail' pk=object.id%}" id="id-datastateForm" class="form" method="post">
+    {%csrf_token%}
     <input type="hidden" name="csrfmiddlewaretoken" value="iWLhMfUFP8Qa0iherGoJ4dxcLjpV8wZz"> 
             <div id="div_id_state" class="form-group">
                 <label for="id_state" class="control-label ">

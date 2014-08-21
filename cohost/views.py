@@ -32,6 +32,7 @@ from cohost.models import LawRecord
 from wzauth.models import WzUser
 from cohost.signals import action_message
 from cohost.models import DataActionRecord
+from cohost.models import Ips
 
 
 PAGE_SIZE = 10
@@ -97,7 +98,7 @@ def show_ips(request):
     pagenum = request.GET.get("page", 1)
     context = {}
     context['ips_active'] = "active"
-    ips = Data.objects.all().values_list('ip', flat=True).distinct()
+    ips = Ips.objects.all()
     context['total_count'] = ips.count()
     paged_objects, pagination = get_pagination(request, ips, int(pagenum))
     context['pagination'] = pagination
