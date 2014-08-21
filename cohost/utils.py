@@ -111,6 +111,7 @@ def handle_obj(obj, kwords):
             obj.__dict__.update(host_info)
             beian = get_beian(host)
             ip_info = get_ip_info(obj.ips_id.ip)
+            obj.save()
             # if ip_info:
             #     obj.IPS = ip_info.get("detailed", '')
             if beian:
