@@ -8,16 +8,18 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'LawRecord.detail'
-        db.add_column(u'cohost_lawrecord', 'detail',
-                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
-                      keep_default=False)
 
+        # Renaming column for 'Data.ips_id' to match new field type.
+        db.rename_column('Data', 'ips_id_id', 'ip_id')
+        # Changing field 'Data.ips_id'
+        db.alter_column('Data', 'ip_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Ips'], null=True, db_column='ip_id'))
 
     def backwards(self, orm):
-        # Deleting field 'LawRecord.detail'
-        db.delete_column(u'cohost_lawrecord', 'detail')
 
+        # Renaming column for 'Data.ips_id' to match new field type.
+        db.rename_column('Data', 'ip_id', 'ips_id_id')
+        # Changing field 'Data.ips_id'
+        db.alter_column('Data', 'ips_id_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Ips'], null=True))
 
     models = {
         u'auth.group': {
@@ -79,6 +81,7 @@ class Migration(SchemaMigration):
             'icpno': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip': ('django.db.models.fields.TextField', [], {'db_column': "'IP'"}),
+            'ips_id': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Ips']", 'null': 'True', 'db_column': "'ip_id'", 'blank': 'True'}),
             'organizers': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'organizers_type': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'related_law': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.LawRecord']", 'null': 'True', 'blank': 'True'}),
@@ -103,6 +106,8 @@ class Migration(SchemaMigration):
         },
         u'cohost.ips': {
             'Meta': {'object_name': 'Ips'},
+            'active': ('django.db.models.fields.CharField', [], {'max_length': '6', 'null': 'True', 'blank': 'True'}),
+            'area': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Area']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'})
         },

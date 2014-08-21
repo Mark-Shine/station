@@ -8,34 +8,32 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'ActionRecord'
-        db.delete_table(u'cohost_actionrecord')
+        # Adding field 'Data.ips_id'
+        db.add_column('Data', 'ips_id',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Ips'], null=True, db_column='ip_id', blank=True),
+                      keep_default=False)
 
-        # Adding model 'DataActionRecord'
-        db.create_table(u'cohost_dataactionrecord', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('data', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Data'], null=True, blank=True)),
-            ('action', self.gf('django.db.models.fields.CharField')(max_length=24, null=True, blank=True)),
-            ('time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
-        ))
-        db.send_create_signal(u'cohost', ['DataActionRecord'])
+
+        # Renaming column for 'Data.ip' to match new field type.
+        db.rename_column('Data', 'ip_id', 'IP')
+        # Changing field 'Data.ip'
+        db.alter_column('Data', 'IP', self.gf('django.db.models.fields.TextField')(db_column='IP'))
+        # Removing index on 'Data', fields ['ip']
+        db.delete_index('Data', ['ip_id'])
 
 
     def backwards(self, orm):
-        # Adding model 'ActionRecord'
-        db.create_table(u'cohost_actionrecord', (
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
-            ('time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('action', self.gf('django.db.models.fields.CharField')(max_length=24, null=True, blank=True)),
-            ('message', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal(u'cohost', ['ActionRecord'])
+        # Adding index on 'Data', fields ['ip']
+        db.create_index('Data', ['ip_id'])
 
-        # Deleting model 'DataActionRecord'
-        db.delete_table(u'cohost_dataactionrecord')
+        # Deleting field 'Data.ips_id'
+        db.delete_column('Data', 'ip_id')
 
+
+        # Renaming column for 'Data.ip' to match new field type.
+        db.rename_column('Data', 'IP', 'ip_id')
+        # Changing field 'Data.ip'
+        db.alter_column('Data', 'ip_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Ips']))
 
     models = {
         u'auth.group': {
@@ -97,8 +95,10 @@ class Migration(SchemaMigration):
             'icpno': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip': ('django.db.models.fields.TextField', [], {'db_column': "'IP'"}),
+            'ips_id': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Ips']", 'null': 'True', 'db_column': "'ip_id'", 'blank': 'True'}),
             'organizers': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'organizers_type': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
+            'related_law': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.LawRecord']", 'null': 'True', 'blank': 'True'}),
             'state': ('django.db.models.fields.CharField', [], {'default': "'0'", 'max_length': '32', 'blank': 'True'}),
             'time': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.TextField', [], {'db_column': "'Title'", 'blank': 'True'}),
@@ -118,11 +118,25 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'piece': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'})
         },
+        u'cohost.ips': {
+            'Meta': {'object_name': 'Ips'},
+            'active': ('django.db.models.fields.CharField', [], {'max_length': '6', 'null': 'True', 'blank': 'True'}),
+            'area': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Area']", 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'})
+        },
         u'cohost.keywords': {
             'Meta': {'object_name': 'Keywords'},
             'cate': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Cate']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'kword': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'})
+        },
+        u'cohost.lawrecord': {
+            'Meta': {'object_name': 'LawRecord'},
+            'detail': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'law': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'time': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},

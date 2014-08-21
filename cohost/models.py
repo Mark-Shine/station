@@ -58,10 +58,10 @@ class Data(models.Model):
 
     # id = models.IntegerField(db_column='ID', primary_key=True, blank=True) # Field name made lowercase.
     ip = models.TextField(db_column='IP') # Field name made lowercase.
+    ips_id = models.ForeignKey("Ips", verbose_name=u"ip", null=True, blank=True, db_column="ip_id") # Field name made lowercase.
     uri = models.TextField(u"域名", db_column='URI') # Field name made lowercase.
     title = models.TextField(u"标题", db_column='Title', blank=True) # Field name made lowercase.
     descript = models.TextField(db_column='Descript', blank=True) # Field name made lowercase.
-    
     IPS = models.CharField(u"运营商", max_length=16, null=True, blank=True)
     #备案号
     # reg_number = models.IntegerField(blank=True, default=0, null=True)

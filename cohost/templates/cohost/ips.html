@@ -25,6 +25,7 @@
     <thead>
         <tr>
             <td>ip</td>
+            <td>区域</td>
         </tr>
 
     </thead>
@@ -32,6 +33,7 @@
     {%for obj in objects %}
         <tr>
             <td>{{obj.ip}}</td>
+            <td>{{obj.area.name}}</td>
         </tr>
     
     {%endfor%}

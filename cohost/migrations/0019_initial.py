@@ -8,15 +8,124 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Ips.area'
-        db.add_column(u'cohost_ips', 'area',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Area'], null=True, blank=True),
-                      keep_default=False)
+        # Adding model 'Keywords'
+        db.create_table(u'cohost_keywords', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('kword', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
+            ('cate', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Cate'], null=True, blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['Keywords'])
+
+        # Adding model 'Cate'
+        db.create_table(u'cohost_cate', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['Cate'])
+
+        # Adding model 'Allkey'
+        db.create_table('AllKey', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('bactive', self.gf('django.db.models.fields.IntegerField')(db_column='bActive')),
+            ('keyname', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128, db_column='KeyName')),
+            ('visitmonth', self.gf('django.db.models.fields.IntegerField')(null=True, db_column='VisitMonth', blank=True)),
+            ('usecount', self.gf('django.db.models.fields.IntegerField')(null=True, db_column='UseCount', blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['Allkey'])
+
+        # Adding model 'Data'
+        db.create_table('Data', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('ip', self.gf('django.db.models.fields.TextField')(db_column='IP')),
+            ('uri', self.gf('django.db.models.fields.TextField')(db_column='URI')),
+            ('title', self.gf('django.db.models.fields.TextField')(db_column='Title', blank=True)),
+            ('descript', self.gf('django.db.models.fields.TextField')(db_column='Descript', blank=True)),
+            ('IPS', self.gf('django.db.models.fields.CharField')(max_length=16, null=True, blank=True)),
+            ('state', self.gf('django.db.models.fields.CharField')(default='0', max_length=32, blank=True)),
+            ('contact_name', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
+            ('time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('icpno', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
+            ('organizers_type', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
+            ('exadate', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('organizers', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
+            ('cate', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Cate'], null=True, blank=True)),
+            ('area', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Area'], null=True, blank=True)),
+            ('beizhu', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('related_law', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.LawRecord'], null=True, blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['Data'])
+
+        # Adding model 'Area'
+        db.create_table(u'cohost_area', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['Area'])
+
+        # Adding model 'Ippiece'
+        db.create_table(u'cohost_ippiece', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('piece', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
+            ('area', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Area'], null=True, blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['Ippiece'])
+
+        # Adding model 'DataActionRecord'
+        db.create_table(u'cohost_dataactionrecord', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('data', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Data'], null=True, blank=True)),
+            ('action', self.gf('django.db.models.fields.CharField')(max_length=24, null=True, blank=True)),
+            ('time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['DataActionRecord'])
+
+        # Adding model 'Ips'
+        db.create_table(u'cohost_ips', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('ip', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True)),
+            ('area', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Area'], null=True, blank=True)),
+            ('active', self.gf('django.db.models.fields.CharField')(max_length=6, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['Ips'])
+
+        # Adding model 'LawRecord'
+        db.create_table(u'cohost_lawrecord', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('law', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('detail', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+        ))
+        db.send_create_signal(u'cohost', ['LawRecord'])
 
 
     def backwards(self, orm):
-        # Deleting field 'Ips.area'
-        db.delete_column(u'cohost_ips', 'area_id')
+        # Deleting model 'Keywords'
+        db.delete_table(u'cohost_keywords')
+
+        # Deleting model 'Cate'
+        db.delete_table(u'cohost_cate')
+
+        # Deleting model 'Allkey'
+        db.delete_table('AllKey')
+
+        # Deleting model 'Data'
+        db.delete_table('Data')
+
+        # Deleting model 'Area'
+        db.delete_table(u'cohost_area')
+
+        # Deleting model 'Ippiece'
+        db.delete_table(u'cohost_ippiece')
+
+        # Deleting model 'DataActionRecord'
+        db.delete_table(u'cohost_dataactionrecord')
+
+        # Deleting model 'Ips'
+        db.delete_table(u'cohost_ips')
+
+        # Deleting model 'LawRecord'
+        db.delete_table(u'cohost_lawrecord')
 
 
     models = {
@@ -103,6 +212,7 @@ class Migration(SchemaMigration):
         },
         u'cohost.ips': {
             'Meta': {'object_name': 'Ips'},
+            'active': ('django.db.models.fields.CharField', [], {'max_length': '6', 'null': 'True', 'blank': 'True'}),
             'area': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Area']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'})

@@ -8,26 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'LawRecord'
-        db.create_table(u'cohost_lawrecord', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('law', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('time', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'cohost', ['LawRecord'])
-
-        # Adding field 'Data.related_law'
-        db.add_column('Data', 'related_law',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.LawRecord'], null=True, blank=True),
+        # Adding field 'Data.ips_id'
+        db.add_column('Data', 'ips_id',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cohost.Ips'], null=True, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'LawRecord'
-        db.delete_table(u'cohost_lawrecord')
-
-        # Deleting field 'Data.related_law'
-        db.delete_column('Data', 'related_law_id')
+        # Deleting field 'Data.ips_id'
+        db.delete_column('Data', 'ips_id_id')
 
 
     models = {
@@ -90,6 +79,7 @@ class Migration(SchemaMigration):
             'icpno': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip': ('django.db.models.fields.TextField', [], {'db_column': "'IP'"}),
+            'ips_id': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Ips']", 'null': 'True', 'blank': 'True'}),
             'organizers': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'organizers_type': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'related_law': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.LawRecord']", 'null': 'True', 'blank': 'True'}),
@@ -112,6 +102,13 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'piece': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'})
         },
+        u'cohost.ips': {
+            'Meta': {'object_name': 'Ips'},
+            'active': ('django.db.models.fields.CharField', [], {'max_length': '6', 'null': 'True', 'blank': 'True'}),
+            'area': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Area']", 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'})
+        },
         u'cohost.keywords': {
             'Meta': {'object_name': 'Keywords'},
             'cate': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['cohost.Cate']", 'null': 'True', 'blank': 'True'}),
@@ -120,6 +117,7 @@ class Migration(SchemaMigration):
         },
         u'cohost.lawrecord': {
             'Meta': {'object_name': 'LawRecord'},
+            'detail': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'law': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'time': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'})
