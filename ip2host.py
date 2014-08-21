@@ -79,6 +79,11 @@ def f(ip):
 
 def put_host(ip, domains):
     now = datetime.datetime.now()
+    ip_q = Ips.objects.filter(ip=ip)
+    ip = ip_q and ip_q[0]
+    if not ip:
+        print u"ip 不在库中"
+        return 
     for domain in domains:
         data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults={"time": now, })
         if created:
