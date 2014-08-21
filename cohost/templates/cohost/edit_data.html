@@ -40,7 +40,7 @@
                 <div class="controls ">
                     <select class="select form-control" id="id_related_law" name="related_law"><option value="">---------</option>
                     {%for law in laws%}
-                    <option value="{{law.id}}" {%if law.id == object.related_law.id%} selected="True" {%endif%}>{{law.law}}</option>
+                    <option value="{{law.id}}" {%if law.id == object.related_law.id%} selected="True" {%endif%}  detail="{{law.detail}}">{{law.law}}</option>
                     {%endfor%}
                     </select>
                     <hr>
