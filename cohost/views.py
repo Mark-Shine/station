@@ -210,7 +210,8 @@ def change_detail(request, pk):
 def search_ip(request):
     template = "cohost/ip.html"
     curIP = request.GET.get("ip")
-    queryset = Data.objects.filter(ip=curIP)
+    ips = Ips.objects.filter(ip=curIP)
+    queryset = Data.objects.filter(ips_id__in=ips)
     context = {}
     context['objects'] = queryset if queryset.exists() else None
     context['ips_active'] = "active"

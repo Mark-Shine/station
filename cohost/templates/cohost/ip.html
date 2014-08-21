@@ -9,7 +9,6 @@
             <td>ip</td>
             <td>host</td>
             <td>标题</td>
-            <td>接入商</td>
             <td>备案号</td>
             <td>主办单位</td>
         </tr>
@@ -17,10 +16,9 @@
     <tbody>
         {%for object in objects%}
         <tr>
-            <td>{{object.ip}}</td>
+            <td>{{object.ips_id.ip}}</td>
             <td>{{object.uri}}</td>
             <td>{{object.title}}</td>
-            <td>{{object.IPS}}</td>
             <td>{{object.icpno}}</td>
             <td>{{object.organizers}}</td>
         </tr>
