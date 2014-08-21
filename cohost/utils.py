@@ -73,6 +73,20 @@ def get_host_infos(host):
         print info
     return info
 
+def put_host():
+    das = Data.objects.all()
+    for d in das:
+        try:
+            info = get_host_infos("http://%s" % d.uri)        
+        except Exception, e:
+            continue
+            print e
+        finally:
+            pass
+        d.__dict__.update(**info)
+        d.save()
+
+
 def build_api_get(querykey, queryurl, format="json"):
     
     def api_get(querystr):
