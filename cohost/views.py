@@ -126,9 +126,10 @@ def show_data(request):
     ip = request.GET.get("ip")
     #处理iP查询
     icp_q = None
+    ips_q = Ips.objects.filter(ip=ip)
     if icpno:
         icp_q = ("icpno__isnull", True) if icpno == '0' else ("icpno__isnull", False)
-    predicates = [cate and ("cate",  int(cate)), state and ("state", state), ip and ("ip__startswith", ip)]
+    predicates = [cate and ("cate",  int(cate)), state and ("state", state), ip and ("ips_id", ips_q and ips_q[0])]
     if icp_q:
         predicates.append(icp_q)
     
