@@ -1,5 +1,9 @@
 <style type="text/css">
-    .block_filter ul li a.on {
+    .block_filter dd{padding-bottom:10px;}
+.block_filter dt{font-weight:normal}
+.block_filter dd a{padding:0 5px}
+.block_filter dd a.btn{padding:5px 10px}
+    .block_filter a.on {
     background: #FF6600;
     color: #fff;
     border-radius: 3px;
@@ -8,45 +12,40 @@
     /*.block_filter dd {margin-right: 300px}*/
 </style>
 
-<dl class="dl-horizontal block_filter">        
-    <dd >
-        <ul class="list-inline">
-            <li>备案：</li>
-            <li><a href="{%url "data" %}?cate={{cate}}&ip={{ip}}&state={{state}}" {%if not icpno %} class="on" {%endif%}>不限</a></li>
-            <li ><a href="{%url "data" %}?icpno=1&state={{state}}&cate={{cate}}&ip={{ip}}" {%if '1' == icpno %} class="on" {%endif%}>有</a></li>
-            <li><a href="{%url "data" %}?icpno=0&state={{state}}&cate={{cate}}&ip={{ip}}" {%if '0' == icpno    %} class="on" {%endif%}>无</a></li>
-        </ul> 
-        <ul class="list-inline">
-            <li>网站类型：</li>
-            <li><a href="{%url "data" %}?icpno={{icpno}}&state={{state}}&ip={{ip}}" {%if not cate %} class="on" {%endif%}>不限</a></li>
-            {%for c in cates%}
-            <li><a href="{%url "data" %}?icpno={{icpno}}&cate={{c.id}}&state={{state}}&ip={{ip}}" {%if c.id|slugify == cate %} class="on" {%endif%} >{{c.name}}</a></li>
-            {%endfor%}
-        </ul>
-        <ul class="list-inline">
-            <li>审核状态：</li>
-            <li><a href="{%url "data" %}?icpno={{icpno}}&cate={{cate}}&ip={{ip}}" {%if not state %} class="on" {%endif%}>不限</a></li>
+<dl class="dl-horizontal block_filter"> 
+    <dt>备案：</dt>
+    <dd>
+        <a href="{%url "data" %}?cate={{cate}}&ip={{ip}}&state={{state}}" {%if not icpno %} class="on" {%endif%}>不限</a>
+        <a href="{%url "data" %}?icpno=1&state={{state}}&cate={{cate}}&ip={{ip}}" {%if '1' == icpno %} class="on" {%endif%}>有</a>
+        <a href="{%url "data" %}?icpno=0&state={{state}}&cate={{cate}}&ip={{ip}}" {%if '0' == icpno    %} class="on" {%endif%}>无</a>
+     </dd>
+     <dt>网站类型：</dt>
+     <dd>
+        <a href="{%url "data" %}?icpno={{icpno}}&state={{state}}&ip={{ip}}" {%if not cate %} class="on" {%endif%}>不限</a>
+        {%for c in cates%}
+        <a href="{%url "data" %}?icpno={{icpno}}&cate={{c.id}}&state={{state}}&ip={{ip}}" {%if c.id|slugify == cate %} class="on" {%endif%} >{{c.name}}</a>
+        {%endfor%}
+     </dd>
+     <dt>审核状态：</dt>
+     <dd>
+         <a href="{%url "data" %}?icpno={{icpno}}&cate={{cate}}&ip={{ip}}" {%if not state %} class="on" {%endif%}>不限</a>
             {% for sid, sname in states %}
-            <li><a href="{%url "data" %}?icpno={{icpno}}&state={{sid}}&cate={{cate}}&ip={{ip}}" {%if sid|slugify == state %} class="on" {%endif%}>{{sname}}</a></li>
+         <a href="{%url "data" %}?icpno={{icpno}}&state={{sid}}&cate={{cate}}&ip={{ip}}" {%if sid|slugify == state %} class="on" {%endif%}>{{sname}}</a>
             {%endfor%}
-        </ul> 
-        <ul class="list-inline"><a href="{%url "data" %}" class="btn btn-default">重置</a></ul>
-        <ul class="list-inline">
-            <li >
+     </dd>
+     <dt>按IP搜索：</dt>
+     <dd>
                 <form class="form" role="search" action="{%url "data" %}" method="get">
                     <div class="col-lg-6">
                         <div class="input-group">
-                          <input name="ip" type="text" class="form-control" placeholder="搜索: ip 段" value={{ip}}>
+                          <input name="ip" type="text" class="form-control" placeholder="填入IP或IP段" value={{ip}}>
                           <span class="input-group-btn">
-                            <button class="btn btn-default"  type="submit">Go</button>
+                            <button class="btn btn-default"  type="submit">搜索</button>
                           </span>
                         </div>
                     </div>
                 </form> 
-            </li>
-
-        </ul>
-        
-    </dd>
+     </dd>
+    <div style="border-bottom:1px solid #ddd;padding-bottom:10px;font-size:16px;"><span>共有<font color="red">{{data_counts}}</font>条域名数据符合筛选条件</span>&nbsp;&nbsp;<a href="{%url "data" %}" class="btn btn-primary btn-sm">重置筛选</a></div>
 </dl>
 
