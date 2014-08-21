@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{%block mod_content%}
+
+        
+          <h1 class="page-header">温州市文化市场行政执法支队</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>{{datas}}</h4>
+              <span class="text-muted">记录域名数</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>{{areas}}</h4>
+              <span class="text-muted">区域数量</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>{{ips}}</h4>
+              <span class="text-muted">ip数量</span>
+            </div>
+            {%for o in objs %}
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>{{o.counts}}</h4>
+              <span class="text-muted">{{o.cate_name}}</span>
+            </div>
+            {%endfor%}
+          </div>
+          <dl class="dl-horizontal">
+            <dd>
+              <ul class="list-inline">
+              <li>分类：</li>
+                {%for c in cts%}
+                <li>{{c.name}}</li>
+                <li>{{c.counts}}</li>
+                {%endfor%}
+              </ul>
+              <ul class="list-inline">
+              <li>评审状态：</li>
+                {%for c in states%}
+                <li>{{c.name}}</li>
+                <li>{{c.counts}}</li>
+                {%endfor%}
+              </ul>
+              <ul class="list-inline">
+              <li>备案情况</li>
+                {%for c in is_beians%}
+                <li>{{c.name}}</li>
+                <li>{{c.counts}}</li>
+                {%endfor%}
+              </ul>
+
+
+            </dd>
+
+          </dl>
+
+
+
+
+
+{%endblock%}
