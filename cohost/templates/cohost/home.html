@@ -3,29 +3,30 @@
 
 {%block mod_content%}
 <style type="text/css">
-	.placeholder{color:#fff;padding:10px 0}
-	.placeholder span{color:#fff}
-	.placeholders{margin-left:0px;}
+  .placeholder{color:#fff;padding:10px 0}
+  .placeholder span{color:#fff}
+  .placeholders{margin-left:0px;}
+  .page-header{padding-left:0;text-align:center;}
 </style>
 <script type="text/javascript" src="/static/jquery/ichart.1.2.min.js"></script>
         
-          <h1 class="page-header">温州市文化市场行政执法支队</h1>
+          <h1 class="page-header">统计概况</h1>
 
           <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder" style="background:#6f5499">
+            <div class="col-xs-4 placeholder" style="background:#6f5499">
               <h4>{{datas}}</h4>
               <span class="text-muted">记录域名数</span>
             </div>
-            <div class="col-xs-6 col-sm-3 placeholder" style="background:#e48632">
+            <div class="col-xs-4 placeholder" style="background:#e48632">
               <h4>{{areas}}</h4>
               <span class="text-muted">区域数量</span>
             </div>
-            <div class="col-xs-6 col-sm-3 placeholder" style="background:#3498db">
+            <div class="col-xs-4 placeholder" style="background:#3498db">
               <h4>{{ips}}</h4>
               <span class="text-muted">ip数量</span>
             </div>
             {%for o in objs %}
-            <div class="col-xs-6 col-sm-3 placeholder">
+            <div class="col-xs-6 placeholder">
               <h4>{{o.counts}}</h4>
               <span class="text-muted">{{o.cate_name}}</span>
             </div>
@@ -63,192 +64,192 @@
 var yc = ["#a5c2d5","#cbab4f","#76a871","#76a871","#a56f8f","#c12c44","#a56f8f","#9f7961","#76a871","#6f83a5","#a56f8f","#cf77d7","#a5c2d5","#cbab4f","#a5c2d5","#cbab4f","#76a871","#76a871","#a56f8f","#c12c44","#a56f8f","#9f7961","#76a871","#6f83a5","#a56f8f","#cf77d7","#a5c2d5","#cbab4f"];
 </script>
 <div class="row">
-	<div class="col-xs-4">
-	<script type="text/javascript">
-	$(function(){
-				var data = [
-							{%for c in cts%}
-				        	{name : '{{c.name}}',value : {{c.counts}},color: yc[{{forloop.counter}}]},
-							{%endfor%}
-			        	];
+  <div class="col-xs-4">
+  <script type="text/javascript">
+  $(function(){
+        var data = [
+              {%for c in cts%}
+                  {name : '{{c.name}}',value : {{c.counts}},color: yc[{{forloop.counter}}]},
+              {%endfor%}
+                ];
 
-	        	
-				var chart = new iChart.Pie2D({
-					render : 'canvasDiv',
-					data: data,
-					title : {
-						text : '分类统计',
-						color : '#3e576f'
-					},
-					footnote : {
-						text : '',
-						color : '#486c8f',
-						fontsize : 11,
-						padding : '0 38'
-					},
-					sub_option : {
-						label : {
-							background_color:null,
-							sign:false,//设置禁用label的小图标
-							padding:'0 4',
-							border:{
-								enable:false,
-								color:'#666666'
-							},
-							fontsize:11,
-							fontweight:600,
-							color : '#4572a7'
-						},
-						border : {
-							width : 2,
-							color : '#ffffff'
-						}
-					},
-					shadow : true,
-					shadow_blur : 6,
-					shadow_color : '#aaaaaa',
-					shadow_offsetx : 0,
-					shadow_offsety : 0,
-					background_color:'#fefefe',
-					offsetx:0,//设置向x轴负方向偏移位置60px
-					offset_angle:-120,//逆时针偏移120度
-					showpercent:true,
-					decimalsnum:2,
-					width : 470,
-					height : 600,
-					radius:120
-				});
-				
-				
-				chart.draw();
-			});
+            
+        var chart = new iChart.Pie2D({
+          render : 'canvasDiv',
+          data: data,
+          title : {
+            text : '分类统计',
+            color : '#3e576f'
+          },
+          footnote : {
+            text : '',
+            color : '#486c8f',
+            fontsize : 11,
+            padding : '0 38'
+          },
+          sub_option : {
+            label : {
+              background_color:null,
+              sign:false,//设置禁用label的小图标
+              padding:'0 4',
+              border:{
+                enable:false,
+                color:'#666666'
+              },
+              fontsize:11,
+              fontweight:600,
+              color : '#4572a7'
+            },
+            border : {
+              width : 2,
+              color : '#ffffff'
+            }
+          },
+          shadow : true,
+          shadow_blur : 6,
+          shadow_color : '#aaaaaa',
+          shadow_offsetx : 0,
+          shadow_offsety : 0,
+          background_color:'#fefefe',
+          offsetx:0,//设置向x轴负方向偏移位置60px
+          offset_angle:-120,//逆时针偏移120度
+          showpercent:true,
+          decimalsnum:2,
+          width : 470,
+          height : 600,
+          radius:120
+        });
+        
+        
+        chart.draw();
+      });
 </script>
 <div id='canvasDiv'></div>
-	</div>
-	<div class="col-xs-4">
-	<script type="text/javascript">
-	$(function(){
-				var data = [
-							{%for c in states%}
-				        	{name : '{{c.name}}',value : {{c.counts}},color: yc[{{forloop.counter}}]},
-							{%endfor%}
-			        	];
+  </div>
+  <div class="col-xs-4">
+  <script type="text/javascript">
+  $(function(){
+        var data = [
+              {%for c in states%}
+                  {name : '{{c.name}}',value : {{c.counts}},color: yc[{{forloop.counter}}]},
+              {%endfor%}
+                ];
 
-	        	
-				var chart = new iChart.Pie2D({
-					render : 'canvasDiv2',
-					data: data,
-					title : {
-						text : '评审状态统计',
-						color : '#3e576f'
-					},
-					footnote : {
-						text : '',
-						color : '#486c8f',
-						fontsize : 11,
-						padding : '0 38'
-					},
-					sub_option : {
-						label : {
-							background_color:null,
-							sign:false,//设置禁用label的小图标
-							padding:'0 4',
-							border:{
-								enable:false,
-								color:'#666666'
-							},
-							fontsize:11,
-							fontweight:600,
-							color : '#4572a7'
-						},
-						border : {
-							width : 2,
-							color : '#ffffff'
-						}
-					},
-					shadow : true,
-					shadow_blur : 6,
-					shadow_color : '#aaaaaa',
-					shadow_offsetx : 0,
-					shadow_offsety : 0,
-					background_color:'#fefefe',
-					offsetx:0,//设置向x轴负方向偏移位置60px
-					offset_angle:-120,//逆时针偏移120度
-					showpercent:true,
-					decimalsnum:2,
-					width : 470,
-					height : 600,
-					radius:120
-				});
-				
-				
-				chart.draw();
-			});
+            
+        var chart = new iChart.Pie2D({
+          render : 'canvasDiv2',
+          data: data,
+          title : {
+            text : '评审状态统计',
+            color : '#3e576f'
+          },
+          footnote : {
+            text : '',
+            color : '#486c8f',
+            fontsize : 11,
+            padding : '0 38'
+          },
+          sub_option : {
+            label : {
+              background_color:null,
+              sign:false,//设置禁用label的小图标
+              padding:'0 4',
+              border:{
+                enable:false,
+                color:'#666666'
+              },
+              fontsize:11,
+              fontweight:600,
+              color : '#4572a7'
+            },
+            border : {
+              width : 2,
+              color : '#ffffff'
+            }
+          },
+          shadow : true,
+          shadow_blur : 6,
+          shadow_color : '#aaaaaa',
+          shadow_offsetx : 0,
+          shadow_offsety : 0,
+          background_color:'#fefefe',
+          offsetx:0,//设置向x轴负方向偏移位置60px
+          offset_angle:-120,//逆时针偏移120度
+          showpercent:true,
+          decimalsnum:2,
+          width : 470,
+          height : 600,
+          radius:120
+        });
+        
+        
+        chart.draw();
+      });
 </script>
 <div id='canvasDiv2'></div>
-	</div>
-	<div class="col-xs-4">
-	<script type="text/javascript">
-	$(function(){
-				var data = [
-							{%for c in is_beians%}
-				        	{name : '{{c.name}}',value : {{c.counts}},color: yc[{{forloop.counter}}]},
-							{%endfor%}
-			        	];
+  </div>
+  <div class="col-xs-4">
+  <script type="text/javascript">
+  $(function(){
+        var data = [
+              {%for c in is_beians%}
+                  {name : '{{c.name}}',value : {{c.counts}},color: yc[{{forloop.counter}}]},
+              {%endfor%}
+                ];
 
-	        	
-				var chart = new iChart.Pie2D({
-					render : 'canvasDiv3',
-					data: data,
-					title : {
-						text : '备案情况统计',
-						color : '#3e576f'
-					},
-					footnote : {
-						text : '',
-						color : '#486c8f',
-						fontsize : 11,
-						padding : '0 38'
-					},
-					sub_option : {
-						label : {
-							background_color:null,
-							sign:false,//设置禁用label的小图标
-							padding:'0 4',
-							border:{
-								enable:false,
-								color:'#666666'
-							},
-							fontsize:11,
-							fontweight:600,
-							color : '#4572a7'
-						},
-						border : {
-							width : 2,
-							color : '#ffffff'
-						}
-					},
-					shadow : true,
-					shadow_blur : 6,
-					shadow_color : '#aaaaaa',
-					shadow_offsetx : 0,
-					shadow_offsety : 0,
-					background_color:'#fefefe',
-					offsetx:0,//设置向x轴负方向偏移位置60px
-					offset_angle:-120,//逆时针偏移120度
-					showpercent:true,
-					decimalsnum:2,
-					width : 470,
-					height : 600,
-					radius:120
-				});
-				
-				
-				chart.draw();
-			});
+            
+        var chart = new iChart.Pie2D({
+          render : 'canvasDiv3',
+          data: data,
+          title : {
+            text : '备案情况统计',
+            color : '#3e576f'
+          },
+          footnote : {
+            text : '',
+            color : '#486c8f',
+            fontsize : 11,
+            padding : '0 38'
+          },
+          sub_option : {
+            label : {
+              background_color:null,
+              sign:false,//设置禁用label的小图标
+              padding:'0 4',
+              border:{
+                enable:false,
+                color:'#666666'
+              },
+              fontsize:11,
+              fontweight:600,
+              color : '#4572a7'
+            },
+            border : {
+              width : 2,
+              color : '#ffffff'
+            }
+          },
+          shadow : true,
+          shadow_blur : 6,
+          shadow_color : '#aaaaaa',
+          shadow_offsetx : 0,
+          shadow_offsety : 0,
+          background_color:'#fefefe',
+          offsetx:0,//设置向x轴负方向偏移位置60px
+          offset_angle:-120,//逆时针偏移120度
+          showpercent:true,
+          decimalsnum:2,
+          width : 470,
+          height : 600,
+          radius:120
+        });
+        
+        
+        chart.draw();
+      });
 </script>
 <div id='canvasDiv3'></div>
-	</div>
+  </div>
 </div>
 
 
