@@ -121,13 +121,9 @@ def getIp(domain):
 
 
 if __name__ == '__main__':
-    print u"重置ip active状态"
     Ips.objects.filter(active='1').update(active='0')
-    print u"导入ip"
     # put_into_ippool(result, u"龙湾")
-    print u"查询反向"
     main()
-    print u"补充备案信息"
     datas = Data.objects.filter(cate=None).exclude(state="-1")
     makeup_info_bulk(datas)    
     # makeup_info_bulk()
