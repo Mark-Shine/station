@@ -1,5 +1,5 @@
 #encoding=utf-8
-
+import sys
 import urllib3
 import socket
 from cohost.models import Data, Allkey, Cate, Keywords
@@ -139,6 +139,7 @@ def handle_obj(obj, kwords):
                     cate, created = Cate.objects.get_or_create(name=u"其他")
                     obj.cate = cate
         obj.save()
+        sys.stdout.flush()
         return 
     return wrapped
 

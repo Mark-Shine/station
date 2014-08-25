@@ -102,11 +102,11 @@ def main():
     ips = Ips.objects.exclude(active='1')
     for obj in iter(ips):
         curip = obj.ip
-	print curip
-        sys.stdout.flush()
-        logger.info("%{}".format(curip) )
+	    print curip
+        # logger.info("%{}".format(curip))
         try:
-            ip, res = f(curip)        
+            ip, res = f(curip)
+            print "get ip :%s , domains:%s" %(ip, res)        
         except Exception, e:
             print e
         finally:
@@ -117,6 +117,7 @@ def main():
         else:
             print "error no data"
         obj.save()
+        sys.stdout.flush()
 
 def getIp(domain):
     myaddr = socket.getaddrinfo(domain, 'http')[0][4][0]
