@@ -100,7 +100,7 @@ def put_host(ip, domains):
 def main():
     ips = Ips.objects.exclude(active='1')
     for obj in iter(ips):
-        curip = obj.ips_id.ip
+        curip = obj.ip
         try:
             ip, res = f(curip)        
             logger.info("%{}".format(ip=ip) )
