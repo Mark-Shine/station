@@ -1,4 +1,5 @@
 # encoding: UTF-8
+import sys
 import re
 import os
 import struct
@@ -20,7 +21,7 @@ from cohost.models import Ips
 from cohost.utils import makeup_info_bulk, BuildHostRange, get_host_infos, put_into_ippool
 
 logger = getLogger("trace")
-file_handler = FileHandler("ip_bing.log")
+file_handler = FileHandler("bing_ip.log")
 logger.addHandler(file_handler)  
 
 
@@ -101,9 +102,11 @@ def main():
     ips = Ips.objects.exclude(active='1')
     for obj in iter(ips):
         curip = obj.ip
+	print curip
+        sys.stdout.flush()
+        logger.info("%{}".format(curip) )
         try:
             ip, res = f(curip)        
-            logger.info("%{}".format(ip=ip) )
         except Exception, e:
             print e
         finally:
@@ -127,5 +130,7 @@ if __name__ == '__main__':
     datas = Data.objects.filter(cate=None).exclude(state="-1")
     makeup_info_bulk(datas)    
     # makeup_info_bulk()
+
+
 
 
