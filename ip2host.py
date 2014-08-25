@@ -7,8 +7,10 @@ import pickle
 import socket
 import requests
 import datetime
+from logging import getLogger, FileHandler
 from multiprocessing import Pool
 from time import sleep
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wenzhou.settings")
 from cohost.models import Ips
 from cohost.models import Data
@@ -16,6 +18,12 @@ from cohost.models import Area
 from multiprocessing import Pool
 from cohost.models import Ips
 from cohost.utils import makeup_info_bulk, BuildHostRange, get_host_infos, put_into_ippool
+
+logger = getLogger("trace")
+file_handler = FileHandler("ip_bing.log")
+logger.addHandler(file_handler)  
+
+
 
 result = [
  "122.228.192.0-122.228.192.255",
@@ -95,6 +103,7 @@ def main():
         curip = obj.ips_id.ip
         try:
             ip, res = f(curip)        
+            logger.info("%{}".format(ip=ip) )
         except Exception, e:
             print e
         finally:

@@ -5,40 +5,40 @@
 <!--startprint-->
 <table class="table table-bordered">
 <tr>
-	<td>域名</td>
-	<td colspan="3">{{object.uri}}</td>
+    <td>域名</td>
+    <td colspan="3">{{object.uri}}</td>
 </tr>
 <tr>
-	<td>站点名称</td>
-	<td colspan="3">{{object.title}}</td>
+    <td>站点名称</td>
+    <td colspan="3">{{object.title}}</td>
 </tr>
 <tr>
-	<td>IP</td>
-	<td>{{object.ips_id.ip}}</td>
-	<td>站点类别</td>
-	<td>{{object.cate|default:""}}</td>
+    <td>IP</td>
+    <td>{{object.ips_id.ip}}</td>
+    <td>站点类别</td>
+    <td>{{object.cate|default:""}}</td>
 </tr>
 <tr>
-	<td>接入商</td>
-	<td colspan="3">{{object.IPS_net|default:""}}</td>
+    <td>接入商</td>
+    <td colspan="3">{{object.IPS_net|default:""}}</td>
 </tr>
 <tr>
-	<td>区域</td>
-	<td>{{d.ips_id.area.name|default:''}}</td>
-	<td>备案号</td>
-	<td>{{object.icpno|default:''}}</td>
+    <td>区域</td>
+    <td>{{d.ips_id.area.name|default:''}}</td>
+    <td>备案号</td>
+    <td>{{object.icpno|default:''}}</td>
 </tr>
 <tr>
-	<td>主办单位</td>
-	<td colspan="3">{{object.organizers|default:""}}</td>
+    <td>主办单位</td>
+    <td colspan="3">{{object.organizers|default:""}}</td>
 </tr>
 <tr>
 <td colspan="4">处理意见</td>
 </tr>
 <tr>
 <td colspan="4">依据{{object.related_law.law}}，
-	 {{object.related_law.detail|default:"无"}}
-	{{object.beizhu}}</td>
+     {{object.related_law.detail|default:"无"}}
+    {{object.beizhu}}</td>
 </tr>
 </table>
 <!--endprint-->
