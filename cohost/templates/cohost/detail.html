@@ -2,15 +2,15 @@
 
 {%block mod_content%}
 <h1 class="page-header">打印数据</h1>
-
-<table>
+<!--startprint-->
+<table class="table table-bordered">
 <tr>
 	<td>域名</td>
-	<td col="3">{{object.uri}}</td>
+	<td colspan="3">{{object.uri}}</td>
 </tr>
 <tr>
 	<td>站点名称</td>
-	<td col="3">{{object.title}}</td>
+	<td colspan="3">{{object.title}}</td>
 </tr>
 <tr>
 	<td>IP</td>
@@ -20,7 +20,7 @@
 </tr>
 <tr>
 	<td>接入商</td>
-	<td col="3">{{object.IPS_net|default:""}}</td>
+	<td colspan="3">{{object.IPS_net|default:""}}</td>
 </tr>
 <tr>
 	<td>区域</td>
@@ -30,17 +30,27 @@
 </tr>
 <tr>
 	<td>主办单位</td>
-	<td col="3">{{object.organizers|default:""}}</td>
+	<td colspan="3">{{object.organizers|default:""}}</td>
+</tr>
+<tr>
+<td colspan="4">处理意见</td>
+</tr>
+<tr>
+<td colspan="4">依据{{object.related_law.law}}，
+	 {{object.related_law.detail|default:"无"}}
+	{{object.beizhu}}</td>
 </tr>
 </table>
-
-<div class="panel panel-default">
-  <div class="panel-heading">处理意见：{{object.related_law.law}}</div>
-  <div class="panel-body">
-    <p>{{object.related_law.detail|default:"无"}}</p>
-  </div>
-
-  <div class="panel-footer">备注：{{object.beizhu}}</div>
-</div>
-
+<!--endprint-->
+<script type="text/javascript"> 
+function preview(){ 
+var bdhtml=window.document.body.innerHTML;//获取当前页的html代码 
+var startStr="<!--startprint-->";//设置打印开始区域
+var endStr="<!--endprint-->";//设置打印结束区域 
+var printHtml=bdhtml.substring(bdhtml.indexOf(startStr)+startStr.length,bdhtml.indexOf(endStr));//从标记里获取需要打印的页面 
+window.document.body.innerHTML=printHtml;//需要打印的页面 
+window.print(); 
+} 
+preview(); 
+</script>  
 {%endblock%}
