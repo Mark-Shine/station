@@ -91,22 +91,22 @@ def put_host(ip, domains):
     ip_q = Ips.objects.filter(ip=ip)
     ip = ip_q and ip_q[0]
     if not ip:
-        print u"ip 不在库中"
+        print u"ip not in pool"
         return 
     for domain in domains:
-        data, created = Data.objects.get_or_create(ip=ip, uri=domain, defaults={"time": now, })
+        data, created = Data.objects.get_or_create(ips_id=ip, uri=domain, defaults={"time": now, })
         if created:
-            print u"生成新的domain记录"
+	    print u"insert new domain"
+            sys.stdout.flush()
 
 def main():
-    ips = Ips.objects.exclude(active='1')
+    ips = Ips.objects.all()
+    print ips.count()
     for obj in iter(ips):
         curip = obj.ip
-	    print curip
-        # logger.info("%{}".format(curip))
+        print u"get ip :%s " %(curip)        
         try:
             ip, res = f(curip)
-            print "get ip :%s , domains:%s" %(ip, res)        
         except Exception, e:
             print e
         finally:
@@ -114,6 +114,7 @@ def main():
         obj.active = '1'
         if res:
             put_host(ip, res)
+	    print "get domains %s" %res
         else:
             print "error no data"
         obj.save()
