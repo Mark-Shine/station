@@ -317,16 +317,19 @@ def api_get_ip_info(request=None):
     messages = text_data.split('\n')
     ips = [m for m in messages if m.startswith("get ip")]
     ip = ips[-1:]
-    before_ip = ips[-2:-1]
+    # before_ip = ips[-2:-1]
     index = messages.index(ip[0])
-    before_index = messages.index(before_ip[0])
-    domains = [ messages[i] for i in range(before_index, index) if messages[i].startswith("get domains") ]
+    # before_index = messages.index(before_ip[0])
+    # domains = [ messages[i] for i in range(before_index, index) if messages[i].startswith("get domains") ]
+    domains = [ m for m in messages[index+1:] if m.startswith("get domains") ]
     ip_str = ip[0].strip().split(":")[1]
-    domains_str = domains and domains[0].strip().split(":")[1]
+    try:
+        domains_str = domains and domains[0].strip().split(":")[1]    
+    except Exception, e:
+        print e
+        raise e
     json_data = json.dumps({'ip': ip_str, "domains": domains_str})
     return HttpResponse(json_data)
-
-
 
 
 
