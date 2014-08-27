@@ -114,7 +114,7 @@ def main():
         obj.active = '1'
         if res:
             put_host(ip, res)
-	    print "get domains %s" %res
+	    print "get domains : %s" %res
         else:
             print "error no data"
         obj.save()

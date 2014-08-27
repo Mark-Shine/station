@@ -312,11 +312,19 @@ import json
 import xmlrpclib
 def api_get_ip_info(request=None):
     server = xmlrpclib.Server('http://fs.teabox.cc:9092/RPC2')
-    rawdata = server.supervisor.tailProcessStdoutLog('bing:ip_bing', 0, 300)
+    rawdata = server.supervisor.tailProcessStdoutLog('bing:ip_bing', 0, 1000)
     text_data = rawdata[0].strip()
     messages = text_data.split('\n')
-    messages.reverse()
-    json_data = json.dumps({'messages': messages[:-1]})
+    ips = [m for m in messages if m.startswith("get ip")]
+    ip = ips[-1:]
+    before_ip = ips[-2:-1]
+    index = messages.index(ip[0])
+    before_index = messages.index(before_ip[0])
+    domains = [ messages[i] for i in range(before_index, index) if messages[i].startswith("get domains") ]
+    
+    ip_str = ip[0].strip().split(":")[1]
+    domains_str = domains[0].strip().split(":")[1]
+    json_data = json.dumps({'ip': ip_str, "domains": domains_str})
     return HttpResponse(json_data)
 
 
