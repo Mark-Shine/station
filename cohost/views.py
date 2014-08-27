@@ -308,6 +308,17 @@ def count_for_data():
     is_beians.append({"counts": data_set.exclude(icpno=None).count(), "name": u"已备案"})
     return cts, states, is_beians
         
+import json
+import xmlrpclib
+def api_get_ip_info(request=None):
+    server = xmlrpclib.Server('http://fs.teabox.cc:9092/RPC2')
+    rawdata = server.supervisor.tailProcessStdoutLog('bing:ip_bing', 0, 300)
+    text_data = rawdata[0].strip()
+    messages = text_data.split('\n')
+    messages.reverse()
+    json_data = json.dumps({'messages': messages[:-1]})
+    return HttpResponse(json_data)
+
 
 
 

@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'wenzhou.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^api/ip_info$', views.api_get_ip_info , name="get_ip_info"),
 
     # url(r'^error/permissions$', TemplateView.as_view() , {'template': 'error_perms.html'}, name="error_perms"),
     url(r'^login$', LoginView.as_view() , name="login"),
