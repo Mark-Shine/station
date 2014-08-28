@@ -33,7 +33,7 @@
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
                 {%if user.is_staff%}
-                <li><a href="/admin">后台管理</a></li>
+                <li><a href="/admin">系统设置</a></li>
                 {%endif%}
                 <li><a href="#">当前用户：{{USER_NAME}}</a></li>
                 <li><a href="{%url 'logoff'%}">退出</a></li>
