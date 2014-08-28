@@ -79,6 +79,7 @@ class Data(models.Model):
     #主办单位
     organizers = models.CharField(u"组织机构", null=True, blank=True, max_length=64)
     cate = models.ForeignKey("Cate", null=True, blank=True,  verbose_name=u"分类")
+    #area字段废除，可以从ips表中获取area信息
     area = models.ForeignKey("Area", null=True, blank=True,  verbose_name=u"区域")
     #备注
     beizhu = models.TextField(blank=True, null=True,)

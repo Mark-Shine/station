@@ -25,3 +25,10 @@ python tool.py
 
 
 Ip需要手动添加到cohost/new_bing.py文件中result列表中
+
+
+模型逻辑说明
+用户与区域关联， 
+Data与Ip关联
+IP与区域关联
+
