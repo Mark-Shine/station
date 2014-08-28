@@ -68,23 +68,24 @@ def get_host_infos(host):
     if res.status_code==200:
         soup = BeautifulSoup(page)
         info['title'] = soup.title.text
+        # print type(soup.title.text)
+        # print str(soup.title.text)
         descript = soup.find(attrs={"name":"description"})
         info['descript'] = descript and descript.get('content', "") or ""
-        print info
     return info
 
-def put_host():
-    das = Data.objects.all()
-    for d in das:
-        try:
-            info = get_host_infos("http://%s" % d.uri)        
-        except Exception, e:
-            continue
-            print e
-        finally:
-            pass
-        d.__dict__.update(**info)
-        d.save()
+# def put_host():
+#     das = Data.objects.all()
+#     for d in das:
+#         try:
+#             info = get_host_infos("http://%s" % d.uri)        
+#         except Exception, e:
+#             continue
+#             print e
+#         finally:
+#             pass
+#         d.__dict__.update(**info)
+#         d.save()
 
 
 def build_api_get(querykey, queryurl, format="json"):
@@ -116,16 +117,8 @@ def handle_obj(obj, kwords):
             obj.state = "-1"
         else:
             host = obj.uri
-            try:
-                host_info = get_host_infos(host)
-            except Exception, e:
-                print e
-            finally:
-                return
-            obj.__dict__.update(**host_info)
             beian = get_beian(host)
             ip_info = get_ip_info(obj.ips_id.ip)
-            obj.save()
             if ip_info:
                 obj.IPS_net = ip_info.get("detailed", '')
             if beian:
@@ -174,6 +167,15 @@ def makeup_info_bulk(datas=None):
             print e
         finally:
             pass
+        try:
+            host_info = get_host_infos(d.uri)
+        except Exception, e:
+            print e
+        finally:
+            pass
+        d.title = host_info['title']
+        d.descript = host_info['descript']
+        d.save()
     print ("GOOd bye")
 
 
