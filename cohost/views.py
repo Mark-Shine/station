@@ -55,12 +55,15 @@ def paginate(objects_query, pagenum):
 
 # Create your views here.
 def get_pagination(request, objects, pagenum=1):
+    """分页函数 """
+    #Todo 将queryurl拿出来
     #查询的页面
     icpno = request.GET.get("icpno", "")
     cate = request.GET.get("cate", "")
     state = request.GET.get("state", "")
     ip = request.GET.get("ip", "")
-    queryurl = "cate=%s&ip=%s&state=%s&icpno=%s" % (cate, ip, state, icpno)
+    area = request.GET.get("area", "")
+    queryurl = "cate=%s&ip=%s&state=%s&icpno=%s&area=%s" % (cate, ip, state, icpno, area)
 
     paged_objects = paginate(objects, pagenum)
     pagination = render_to_string('pagination.html', {
