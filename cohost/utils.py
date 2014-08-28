@@ -173,9 +173,10 @@ def makeup_info_bulk(datas=None):
             print e
         finally:
             pass
-        d.title = host_info['title']
-        d.descript = host_info['descript']
-        d.save()
+        if host_info:
+            d.title = host_info['title']
+            d.descript = host_info['descript']
+            d.save()
     print ("GOOd bye")
 
 
