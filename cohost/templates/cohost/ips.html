@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 
 {%block mod_content%}
+
 <style type="text/css">
     .search-block {padding: 20px}
     .ips-table {padding: 10px}
 </style>
 <h2 class="page-header">IP库 <small> 总数：{{total_count}}</small></h2>
+<div >
+    {{ip_filter_section}}
+</div>
 
 
 <div class="search-block">

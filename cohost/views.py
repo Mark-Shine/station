@@ -94,17 +94,24 @@ def build_pages(model, condition=None):
         return _page
     return wrraped
 
+
 @login_required
 def show_ips(request):
+    area = request.GET.get("area", )
     pagenum = request.GET.get("page", 1)
+    filter_context = {}
+    filter_context['areas'] = Area.objects.all()
+    filter_context['area'] = area
     context = {}
     context['ips_active'] = "active"
     ips = Ips.objects.all()
+    if area:
+        ips = ips.filter(area=area)
     context['total_count'] = ips.count()
     paged_objects, pagination = get_pagination(request, ips, int(pagenum))
     context['pagination'] = pagination
     context['objects'] = paged_objects
-    # context['ips'] = ips  
+    context['ip_filter_section'] = render_to_string("include/ip_filter_section.html", filter_context)
     return render(request, 'cohost/ips.html', context)
 
 

@@ -1,0 +1,25 @@
+<style type="text/css">
+    .block_filter dd{padding-bottom:10px;}
+.block_filter dt{font-weight:normal}
+.block_filter dd a{padding:0 5px}
+.block_filter dd a.btn{padding:5px 10px}
+    .block_filter a.on {
+    background: #FF6600;
+    color: #fff;
+    border-radius: 3px;
+}
+
+    /*.block_filter dd {margin-right: 300px}*/
+</style>
+
+<dl class="dl-horizontal block_filter"> 
+     <dt>区域</dt>
+     <dd>
+        <a href="{%url "ips" %}" {%if not area %} class="on" {%endif%}>不限</a>
+        {%for c in areas%}
+        <a href="{%url "ips" %}?area={{c.id}}" {%if c.id|slugify == area %} class="on" {%endif%} >{{c.name}}</a> <span>{{c.ips_set.all.count}}</span>
+        {%endfor%}
+     </dd>
+     
+</dl>
+
