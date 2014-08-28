@@ -33,6 +33,13 @@
          <a href="{%url "data" %}?icpno={{icpno}}&state={{sid}}&cate={{cate}}&ip={{ip}}" {%if sid|slugify == state %} class="on" {%endif%}>{{sname}}</a>
             {%endfor%}
      </dd>
+     <dt>区域</dt>
+     <dd>
+        <a href="{%url "data" %}" {%if not area %} class="on" {%endif%}>不限</a>
+        {%for c in areas%}
+        <a href="{%url "data" %}?icpno={{icpno}}&cate={{cate}}&ip={{ip}}&area={{c.id}}" {%if c.id|slugify == area %} class="on" {%endif%} >{{c.name}}</a>
+        {%endfor%}
+     </dd>
      <dt>按IP搜索：</dt>
      <dd>
                 <form class="form" role="search" action="{%url "data" %}" method="get">

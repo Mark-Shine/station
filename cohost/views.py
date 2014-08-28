@@ -135,12 +135,18 @@ def show_data(request):
     cate = request.GET.get("cate")
     state = request.GET.get("state")
     ip = request.GET.get("ip")
+    area = request.GET.get("area")
+
     #处理iP查询
     icp_q = None
     ips_q = Ips.objects.filter(ip=ip)
     if icpno:
         icp_q = ("icpno__isnull", True) if icpno == '0' else ("icpno__isnull", False)
-    predicates = [cate and ("cate",  int(cate)), state and ("state", state), ip and ("ips_id", ips_q and ips_q[0])]
+    predicates = [cate and ("cate",  int(cate)), 
+        state and ("state", state), 
+        ip and ("ips_id", ips_q and ips_q[0]),
+        # area and ("ips_id", ips_q and ips_q[0]),
+        ]
     if icp_q:
         predicates.append(icp_q)
     
@@ -148,14 +154,20 @@ def show_data(request):
     if not user.is_superuser:
         wzuser = WzUser.objects.get(user=user)
         user_areas = wzuser.area.all()
-        predicates.append(("area__in", user_areas))
-    
+        related_ips = Ips.objects.filter(area__in=user_areas)
+        predicates.append(("ips_id__in", related_ips))
+
+    if area:
+        #筛选区域条件
+        filter_ips = Ips.objects.filter(area=area)
+        predicates.append(("ips_id__in", filter_ips))
     #将所有的查询条件生成Q()对象
     qs = [Q(x) for x in predicates if x]
     context = {}
     filter_context = {}
     filter_context['cates'] = Cate.objects.all()
     filter_context['states'] = STATE_CHOICES
+    filter_context['areas'] = Area.objects.all()
     filter_context.update(request.GET.dict())
     data_counts = Data.objects.filter(reduce(operator.and_, qs, Q())).filter(~Q(state="-1")).count()
     filter_context['data_counts'] = data_counts
