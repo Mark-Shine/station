@@ -3,10 +3,12 @@
 
 {%block mod_content%}
 <style type="text/css">
-	.placeholder{color:#fff;padding:10px 0}
-	.placeholder span{color:#fff}
-	.placeholders{margin-left:0px;}
-	.page-header{padding-left:0;text-align:center;}
+  .placeholder{color:#fff;padding:10px 0;margin:0}
+  .placeholder span{color:#fff}
+  .placeholders{margin:0px;}
+  .page-header{padding-left:0;text-align:center;}
+  .list-inline{text-align:left;margin:0;padding:5px 0 5px 20px}
+  .tubiao{margin:20px 0 0 -15px}
 </style>
 <script type="text/javascript" src="/static/jquery/ichart.1.2.min.js"></script>
         
@@ -32,38 +34,40 @@
             </div>
             {%endfor%}
           </div>
-          <!-- <dl style="margin:10px 20px;">
-            <dd>
-              <ul class="list-inline">
-              <li>分类：</li>
-                {%for c in cts%}
-                <li>{{c.name}}</li>
-                <li>{{c.counts}}</li>
-                {%endfor%}
-              </ul>
-              <ul class="list-inline">
-              <li>评审状态：</li>
+      <div class="row placeholders">
+      <div class="col-xs-12 placeholder" style="background:#1fa67a">
+        <ul class="list-inline">
+          <li>分类：</li>
+          {%for c in cts%}
+          <li>{{c.name}}</li>
+          <li>{{c.counts}}</li>
+          {%endfor%}
+        </ul>
+      </div>
+      <div class="col-xs-12 placeholder" style="background:#f43c12">
+        <ul class="list-inline">
+        <li>评审状态：</li>
                 {%for c in states%}
                 <li>{{c.name}}</li>
                 <li>{{c.counts}}</li>
                 {%endfor%}
               </ul>
-              <ul class="list-inline">
-              <li>备案情况:</li>
+      </div>
+      <div class="col-xs-12 placeholder" style="background:#c3522f">
+        <ul class="list-inline">
+              <li>备案情况：</li>
                 {%for c in is_beians%}
                 <li>{{c.name}}</li>
                 <li>{{c.counts}}</li>
                 {%endfor%}
               </ul>
-
-
-            </dd>
-
-          </dl> -->
+      </div>
+          </div>
+      
 <script type="text/javascript">
 var yc = ["#a5c2d5","#cbab4f","#76a871","#76a871","#a56f8f","#c12c44","#a56f8f","#9f7961","#76a871","#6f83a5","#a56f8f","#cf77d7","#a5c2d5","#cbab4f","#a5c2d5","#cbab4f","#76a871","#76a871","#a56f8f","#c12c44","#a56f8f","#9f7961","#76a871","#6f83a5","#a56f8f","#cf77d7","#a5c2d5","#cbab4f"];
 </script>
-<div class="row">
+<div class="row tubiao">
   <div class="col-xs-4">
   <script type="text/javascript">
   $(function(){
@@ -112,12 +116,13 @@ var yc = ["#a5c2d5","#cbab4f","#76a871","#76a871","#a56f8f","#c12c44","#a56f8f",
           shadow_offsety : 0,
           background_color:'#fefefe',
           offsetx:0,//设置向x轴负方向偏移位置60px
+      offsety:60,
           offset_angle:-120,//逆时针偏移120度
           showpercent:true,
           decimalsnum:2,
-          width : 470,
-          height : 600,
-          radius:120
+          width : 440,
+          height : 400,
+          radius:80
         });
         
         
@@ -174,12 +179,13 @@ var yc = ["#a5c2d5","#cbab4f","#76a871","#76a871","#a56f8f","#c12c44","#a56f8f",
           shadow_offsety : 0,
           background_color:'#fefefe',
           offsetx:0,//设置向x轴负方向偏移位置60px
+      offsety:60,
           offset_angle:-120,//逆时针偏移120度
           showpercent:true,
           decimalsnum:2,
-          width : 470,
-          height : 600,
-          radius:120
+          width : 440,
+          height : 400,
+          radius:80
         });
         
         
@@ -236,12 +242,13 @@ var yc = ["#a5c2d5","#cbab4f","#76a871","#76a871","#a56f8f","#c12c44","#a56f8f",
           shadow_offsety : 0,
           background_color:'#fefefe',
           offsetx:0,//设置向x轴负方向偏移位置60px
+      offsety:60,
           offset_angle:-120,//逆时针偏移120度
           showpercent:true,
           decimalsnum:2,
-          width : 470,
-          height : 600,
-          radius:120
+          width : 440,
+          height : 400,
+          radius:80
         });
         
         

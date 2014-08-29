@@ -3,41 +3,68 @@
 {%block mod_content%}
 
 <style type="text/css">
-    .search-block {padding: 20px}
-    .ips-table {padding: 10px}
+.search-block {padding:0 20px;}
+.ips-table {padding: 10px}
+.right-hd{border-bottom:1px solid #ddd;padding-bottom:10px;margin:0 0 10px 0}
+.right-hd h2{margin:0}
+.block_filter{margin:0;padding:10px 0}
+.block_filter dd{margin-left:0}
+.block_filter dt{font-weight:normal;width:auto;}
+.block_filter dd a{padding:0 5px}
+.block_filter dd a.btn{padding:5px 10px}
+.block_filter a.on {background: #FF6600;color: #fff;border-radius: 3px;}
 </style>
-<h2 class="page-header">IP库 <small> 总数：{{total_count}}</small></h2>
+
+<div class="row right-hd">
+    <div class="col-xs-6"><h2>IP库 <small> 总数：{{total_count}}</small></h2></div>
+    <div class="col-xs-6">
+        <form class="form" role="search" action="{%url "search_ip" %}" method="get">
+            <div class="">
+                <div class="input-group">
+                  <input name="ip" type="text" class="form-control" placeholder="查询: ip " value="{{ip}}">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Go</button>
+                  </span>
+                </div>
+            </div>
+        </form> 
+    </div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    正在扫描IP：<span class="testip"></span>
+  </div>
+  <div class="panel-body">
+    <span>拥有域名：</span><span class="hasdomain"></span>
+  </div>
+</div>
+<script type="text/javascript">
+    function getdomain(){
+        $.getJSON('http://fs.teabox.cc/api/ip_info',function (data){
+            var domainhtml="";
+            if(data.domains == ""){
+                domainhtml = "无"
+            }else{
+                for (var i=0;i<data.domains.length ; i++){
+                    domainhtml += data.domains[i] + ","
+                }
+            }
+            $(".testip").html(data.ip);
+            $(".hasdomain").html(domainhtml);
+        })
+    }
+    getdomain();
+    setInterval(getdomain,5000)
+</script>
 <div >
     {{ip_filter_section}}
 </div>
-
-
-<div class="search-block">
-    <form class="form" role="search" action="{%url "search_ip" %}" method="get">
-        <div class="col-lg-5">
-            <div class="input-group">
-              <input name="ip" type="text" class="form-control" placeholder="查询: ip " value={{ip}}>
-              <span class="input-group-btn">
-                <button class="btn btn-default"  type="submit">Go</button>
-              </span>
-            </div>
-        </div>
-    </form> 
-</div>
-{%for ip in ips %}
-<p>
-{{ip.ip}}
-</p>
-{%endfor%}
-<table class="table ips-table">
-    <thead>
-        <tr>
-            <td>IP地址</td>
-            <td>区域</td>
-        </tr>
-
-    </thead>
+<table class="table table-striped table-bordered">
     <tbody>
+    <tr>
+            <th>IP地址</th>
+            <th>区域</th>
+        </tr>
     {%for obj in objects %}
         <tr>
             <td>{{obj.ip}}</td>

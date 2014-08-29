@@ -10,11 +10,11 @@
     <link href="{{STATIC_PREFIX}}bootstrap/dist/css/dashboard.css" rel="stylesheet">
     <script src="{{STATIC_PREFIX}}jquery/jquery.js"></script>
     <script src="{{STATIC_PREFIX}}bootstrap/dist/js/bootstrap.js"></script>
-	<style type="text/css">
-		.nav-sidebar > .active > a:hover{background-color:#3276b1}
-		.snav li{padding-left:15px;}
-		.snav li a{font-size:12px;}
-	</style>
+    <style type="text/css">
+        .nav-sidebar > .active > a:hover{background-color:#3276b1}
+        .snav li{padding-left:15px;}
+        .snav li a{font-size:12px;}
+    </style>
 </head>
 
 <body >
@@ -49,22 +49,21 @@
                   <ul class="nav nav-sidebar">
                     <li class={{home_active}}><a href="{%url 'home'%}">概述</a></li>
                     <li class={{data_active}}>
-						<a href="{%url 'data'%}">数据</a>
-						<ul class="nav snav">
-							<li><a href="/data/?icpno=&state=0&cate=&ip=">未处理</a></li>
-							<li><a href="/data/?icpno=&state=4&cate=&ip=">已处理</a></li>
-							<li><a href="/data/?icpno=&state=2&cate=&ip=">涉嫌违规</a></li>
-							<li><a href="/data/?icpno=&state=6&cate=&ip=">域名更新</a></li>
-						  </ul>
-					</li>
-                    <li class={{ips_active}}><a href="{%url 'ips'%}">IP库</a></li>
+                        <a href="{%url 'data'%}">域名数据</a>
+                        <ul class="nav snav">
+                            <li><a href="/data/?icpno=&state=0&cate=&ip=">未处理</a></li>
+                            <li><a href="/data/?icpno=&state=4&cate=&ip=">已处理</a></li>
+                            <li><a href="/data/?icpno=&state=2&cate=&ip=">涉嫌违规</a></li>
+                            <li><a href="/data/?icpno=&state=6&cate=&ip=">域名更新</a></li>
+                          </ul>
+                    </li>
+                    <li class={{ips_active}}><a href="{%url 'ips'%}">IP地址库</a></li>
                     {%if perms.wzauth.can_manage_area %}
                     <!-- <li class={{area_active}}><a href="{%url 'areas'%}">区域管理</a></li> -->
                     {%endif%}
                     {%if perms.wzauth.can_see_log%}
                     <li class={{logs_active}}><a href="{%url 'logs'%}">系统日志</a></li>
                     {%endif%}
-                    <li ><a href="http://fs.teabox.cc:9092/logtail/bing%3Aip_bing">实时扫描</a></li>
                   </ul>
                 </div>
                 <!-- 主要内容 -->
