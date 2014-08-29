@@ -37,6 +37,7 @@
                 {%endif%}
                 <li><a href="#">当前用户：{{USER_NAME}}</a></li>
                 <li><a href="#">当前IP：{{USER_IP}}</a></li>
+                <li><a href="#">上次登录时间：{{user.last_login|date:"Y-m-d H:i"}}</a></li>
                 <li><a href="{%url 'logoff'%}">退出</a></li>
               </ul>
             </div>
@@ -57,7 +58,12 @@
                             <li><a href="/data/?icpno=&state=6&cate=&ip=">域名更新</a></li>
                           </ul>
                     </li>
-                    <li class={{ips_active}}><a href="{%url 'ips'%}">IP地址库</a></li>
+                    <li class={{ips_active}}>
+                        <a href="{%url 'ips'%}">IP地址库</a>
+                        <ul class="nav snav">
+                            <li><a href="{%url 'ips_config'%}">IP导入</a></li>
+                        </ul>
+                    </li>
                     {%if perms.wzauth.can_manage_area %}
                     <!-- <li class={{area_active}}><a href="{%url 'areas'%}">区域管理</a></li> -->
                     {%endif%}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{%block mod_content%}
+<h3 class="page-header"> 导入IP</h3>
+<form action="{%url 'add_ips' %}" method="POST">
+    {%csrf_token%}
+    <textarea class="form-control" rows="10"  name="ips_text" placeholder="格式：127.0.0.1-127.0.0.9|本地,122.228.192.0-122.228.192.255|瑞安"></textarea>
+    <br>
+    <button class="btn btn-default ">提交</button>
+</form>
+
+{%endblock%}

@@ -16,12 +16,17 @@ urlpatterns = patterns('',
     # url(r'^error/permissions$', TemplateView.as_view() , {'template': 'error_perms.html'}, name="error_perms"),
     url(r'^login$', LoginView.as_view() , name="login"),
     url(r'^logoff$', logoff , name="logoff"),
+    
     url(r'^keywords$', views.show_kwords, name="keywords"),
     url(r'^ips$', views.show_ips, name="ips"),
     url(r'^result$', views.show_result, name="result"),
     url(r'^areas$', views.show_areas, name="areas"),
     url(r'^areas/manage$', views.manage_area, name="manage_area"),
+
     url(r'^ip/search$', views.search_ip, name="search_ip"),
+    url(r'^ip/config$', views.ips_config, name="ips_config"),
+    url(r'^ip/add$', views.add_ips, name="add_ips"),
+
     url(r'^data/$', views.show_data, name="data"),
     url(r'^$', views.show_home, name="home"),
     url(r'^data/detail/(?P<pk>\d+)$', views.show_data_detail, name="detail"),

@@ -207,14 +207,14 @@ def BuildHostRange(strHost):
     except Exception, e:
         print e
         return [0,0]
-    print realStartIP, realEndIP
     return [realStartIP,realEndIP]
 
 def build_area_ip(area_name=u'其他'):
     def put_ip(x,):
         curip = socket.inet_ntoa(struct.pack('I',socket.htonl(x)))
         area, created = Area.objects.get_or_create(name=area_name)
-        obj, cred = Ips.objects.get_or_create(ip=curip, area=area)
+        obj, cred = Ips.objects.get_or_create(ip=curip, defaults=dict(area=area))
+        # print "created ip %s ? %s" % (obj.ip, cred)
     return put_ip
 
 def put_into_ippool(ips, area_name=u'其他'):

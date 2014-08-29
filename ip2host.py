@@ -127,7 +127,6 @@ def getIp(domain):
 
 if __name__ == '__main__':
     Ips.objects.filter(active='1').update(active='0')
-    # put_into_ippool(result, u"龙湾")
     main()
     datas = Data.objects.filter(cate=None).exclude(state="-1")
     makeup_info_bulk(datas)    

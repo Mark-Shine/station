@@ -34,7 +34,7 @@ from wzauth.models import WzUser
 from cohost.signals import action_message
 from cohost.models import DataActionRecord
 from cohost.models import Ips
-
+from cohost.utils import put_into_ippool
 
 PAGE_SIZE = 10
 
@@ -352,6 +352,35 @@ def api_get_ip_info(request=None):
         raise e
     json_data = json.dumps({'ip': ip_str, "domains": domains_str})
     return HttpResponse(json_data)
+
+
+def ips_config(request):
+    """ip导入"""
+    template = "cohost/ips_config.html"
+    context = {}
+    return render(request, template, context)
+
+def add_ips(request):
+    """IP导入动作"""
+    ips_text = request.POST.get('ips_text')
+    if ips_text:
+        try:
+            ip_area_list  = set(ips_text.split(','))
+            ip_area_set = [set(o.split('|')) for o in ip_area_list ]
+            ips_dict = {}
+            for area, ip in ip_area_set:
+                ips_dict.setdefault(area, []).append(ip)
+            for area, ips in ips_dict.items():
+                put_into_ippool(ips, area)
+            return HttpResponseRedirect(reverse('ips_config'))
+        except Exception, e:
+            print e
+            raise e
+            return HttpResponse("参数错误")
+    else:
+        return HttpResponse(u"缺少参数")
+
+
 
 
 
