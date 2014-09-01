@@ -332,6 +332,7 @@ def count_for_data():
         
 import json
 import xmlrpclib
+import math
 def api_get_ip_info(request=None):
     server = xmlrpclib.Server('http://fs.teabox.cc:9092/RPC2')
     rawdata = server.supervisor.tailProcessStdoutLog('bing:ip_bing', 0, 1000)
@@ -350,7 +351,11 @@ def api_get_ip_info(request=None):
     except Exception, e:
         print e
         raise e
-    json_data = json.dumps({'ip': ip_str, "domains": domains_str})
+    total_ips = Ips.objects.all()
+    scanned_ips = total_ips.filter(active="1")
+    rate = float(scanned_ips.count()) / total_ips.count()
+    rate_num = int(rate * 100)
+    json_data = json.dumps({'ip': ip_str, "domains": domains_str, "rate_num": rate_num})
     return HttpResponse(json_data)
 
 
