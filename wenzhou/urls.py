@@ -32,6 +32,6 @@ urlpatterns = patterns('',
     url(r'^data/detail/(?P<pk>\d+)$', views.show_data_detail, name="detail"),
     url(r'^data/detail/(?P<pk>\d+)/editform$', views.edit_data, name="edit_data"),
     url(r'^data/(?P<pk>\d+)/edit$', views.change_detail, name="change_detail"),
-
+    url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls), ),
 )

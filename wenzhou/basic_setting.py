@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    "grappelli",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,8 +44,10 @@ INSTALLED_APPS = (
     "cohost",
     "wzauth",
     "crispy_forms",
-    # "djcelery",
 )
+
+GRAPPELLI_ADMIN_TITLE='后台管理系统'
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -70,7 +73,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "cohost.context_processors.common",
+    "django.core.context_processors.request",
     )
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+)
 
 
 ROOT_URLCONF = 'wenzhou.urls'
