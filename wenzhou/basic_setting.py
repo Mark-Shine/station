@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     "cohost",
     "wzauth",
     "crispy_forms",
-    "djcelery",
+    # "djcelery",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,6 +57,9 @@ MIDDLEWARE_CLASSES = (
     "django.middleware.locale.LocaleMiddleware",
 )
 
+TEMPLATE_LOADER = (
+    "django.template.loaders.filesystem.Loader",
+    )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
