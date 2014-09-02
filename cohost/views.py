@@ -359,6 +359,20 @@ def api_get_ip_info(request=None):
     return HttpResponse(json_data)
 
 
+def new_api_get_ip_info(request=None):
+    total_ips = Ips.objects.all()
+    scanned_ips = total_ips.filter(active="1")
+    rate = float(scanned_ips.count()) / total_ips.count()
+    rate_num = rate * 100
+
+    ips_q = scanned_ips.reverse()
+    ips = ips_q and ips_q[:20]
+    raw_dict = {ip_o.id: {"domains": [d.uri for d in ip_o.data_set.all()], "ip": ip_o.ip} for ip_o in ips}
+    raw_dict.update(rate_num=rate_num)
+    json_data = json.dumps(raw_dict)
+    return HttpResponse(json_data)
+
+
 def ips_config(request):
     """ip导入"""
     template = "cohost/ips_config.html"
