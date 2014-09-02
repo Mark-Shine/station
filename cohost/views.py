@@ -371,9 +371,9 @@ def add_ips(request):
     if ips_text:
         try:
             ip_area_list  = set(ips_text.split(','))
-            ip_area_set = [set(o.split('|')) for o in ip_area_list ]
+            ip_area_set = [o.split('|') for o in ip_area_list ]
             ips_dict = {}
-            for area, ip in ip_area_set:
+            for ip, area in ip_area_set:
                 ips_dict.setdefault(area, []).append(ip)
             for area, ips in ips_dict.items():
                 put_into_ippool(ips, area)
