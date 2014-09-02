@@ -364,8 +364,7 @@ def new_api_get_ip_info(request=None):
     scanned_ips = total_ips.filter(active="1")
     rate = float(scanned_ips.count()) / total_ips.count()
     rate_num = rate * 100
-
-    ips_q = scanned_ips.reverse()
+    ips_q = scanned_ips.order_by('-id')
     ips = ips_q and ips_q[:20]
     raw_dict = {ip_o.id: {"domains": [d.uri for d in ip_o.data_set.all()], "ip": ip_o.ip} for ip_o in ips}
     raw_dict.update(rate_num=rate_num)
